@@ -9,7 +9,7 @@ lala = Map(10,8,1)
 
 b = window(lala.refresh)
 
-for i in range(5):
+for i in range(6):
     b.placePoint(lala.cities[i][0],lala.cities[i][1])
 
 
