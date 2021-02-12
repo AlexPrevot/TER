@@ -22,8 +22,13 @@ class window:
         tab = function()
         self.canvas.delete("all")
         self.canvas.create_rectangle(0, 0, 500, 500, fill='white')
+        
         for i in range(len(tab)):
             self.placePoint(tab[i][0],tab[i][1])
+            
+        for j in range(len(tab)):
+            if (j+1)<len(tab):
+                self.bindPoint(tab[j][0],tab[j][1],tab[j+1][0],tab[j+1][1])
         
     def __init__(self,function):
         self.root = Tk(className='Voyageur de Commerce - Bourmaud Paul, Prevot Alexandre')
