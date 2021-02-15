@@ -102,7 +102,7 @@ class window:
         self.buttPath.pack()
         
         #Map creation
-        self.actualMap = Map(3,500,0) 
+        self.actualMap = Map(200,500,0) 
 
 
 
