@@ -8,6 +8,7 @@ Created on Sat Feb  6 22:39:59 2021
 from tkinter import *
 from functools import partial
 from Map import Map
+from math import *
 import random
 
 class window:
@@ -42,6 +43,12 @@ class window:
         return tab
     
     
+    #----------------------calcul point bind 
+    def bindCalc(self,coX1,coY1,coX2,coY2):
+        return sqrt((coX2-coX1)**2 + ((coY2-coY1)**2 ))
+    
+ 
+    
     #----------------------action of the buttons
     
     
@@ -60,6 +67,7 @@ class window:
         tab = self.actualMap.cities
         self.canvas.delete("all")
         self.canvas.create_rectangle(0, 0, 500, 500, fill='white')
+        distanceChemin=0
         
         for i in range(len(tab)):
             self.placePoint(tab[i][0],tab[i][1])
@@ -69,6 +77,8 @@ class window:
         for j in range(len(tab)):
             if (j+1)<len(tab):
                 self.bindPoint(tab[j][0],tab[j][1],tab[j+1][0],tab[j+1][1])
+                distanceChemin += self.bindCalc(tab[j][0],tab[j][1],tab[j+1][0],tab[j+1][1])
+        print("distance total chemin:"+str(distanceChemin))
         
         
     #-------------------------------------------(!) OBJECT INSTANCIATION (!)
@@ -92,7 +102,7 @@ class window:
         self.buttPath.pack()
         
         #Map creation
-        self.actualMap = Map(200,500,0) 
+        self.actualMap = Map(3,500,0) 
 
 
 
