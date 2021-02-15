@@ -36,8 +36,8 @@ class Map:
         cityTab = []
         #--randomly made
         for i in range(size):
-            coX = randint(MIN,MAX) * 50
-            coY = randint(MIN,MAX) * 50
+            coX = randint(MIN,MAX)
+            coY = randint(MIN,MAX)
             cityTab.append([coX,coY])
         return cityTab
     
@@ -50,7 +50,8 @@ class Map:
     
     
     #------------------------------------------ (!) OBJECT INSTANCIATION (!)
-    #--We check any irregularities before going on with 'errorCheck' fct
+    #--We check any irregularities before continue with 'errorCheck' fct
+    #--We can create only a single map, it is a singleton
     
     def __init__(self,size,MAX,MIN):
         Map.count += 1
