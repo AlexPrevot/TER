@@ -8,6 +8,7 @@ Created on Sat Feb  6 20:52:13 2021
 from Error import error
 from random import seed
 from random import randint
+import random
 
 
 class Map:
@@ -48,6 +49,13 @@ class Map:
         self.cities = self.createMap()
         return self.cities
     
+    #------------------------------------------find a random path
+    
+    def randomPath(self):
+        path = self.cities
+        random.shuffle(path)
+        return path
+        
     
     #------------------------------------------ (!) OBJECT INSTANCIATION (!)
     #--We check any irregularities before continue with 'errorCheck' fct
