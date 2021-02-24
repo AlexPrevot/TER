@@ -36,6 +36,36 @@ def bestPath(nbrPath,Map):
     print(distMini)
     return smallestPath    
          
+def selectionPath(nbrPath, Map):
+    cityTab = Map.cities
+    tabPath =[]
+    tabBestPath =[]
+    
+    for i in range(nbrPath):
+        cityTab = Map.randomPath()
+        distanceChemin = 0
+        for j in range(len(cityTab)):
+            if (j+1)<len(cityTab):
+                distanceChemin += pointDist(cityTab[j][0],
+                                            cityTab[j][1],
+                                            cityTab[j+1][0],
+                                            cityTab[j+1][1])
+        
+        tabPath.append([cityTab,distanceChemin])
+    
+   
+    
+    tabPath.sort(key=lambda x:x[1])
+    print(tabPath)
+    
+    #print("tabPath trié : " + tabPath)
+    
+    tabBestPath = tabPath[0:3]
+    
+    print(tabBestPath)
+    
+    return tabBestPath
+    
         
     
     
