@@ -5,7 +5,7 @@ Created on Tue Feb 16 17:23:27 2021
 @author: User
 """
 from math import *
-
+from Error import error
 
 def pointDist(cX1,cY1,cX2,cY2):
     return sqrt((cX2-cX1)**2 + ((cY2-cY1)**2 ))
@@ -14,7 +14,7 @@ def pointDist(cX1,cY1,cX2,cY2):
 
 
 
-def bestPath(nbrPath,Map):
+"""def bestPath(nbrPath,Map):
     cityTab = Map.cities
     distMini = float(inf)
     smallestPath = [[]]
@@ -34,12 +34,17 @@ def bestPath(nbrPath,Map):
             distMini = distanceChemin
             smallestPath = cityTab
     print(distMini)
-    return smallestPath    
+    return smallestPath    """
+
          
-def selectionPath(nbrPath, Map):
+def selectionPath(nbrPath, Map, bestElementsSize):
+    if (bestElementsSize > nbrPath):
+        error("bestElementsSize supperior to nbrPath")
+        
     cityTab = Map.cities
     tabPath =[]
     tabBestPath =[]
+    
     
     for i in range(nbrPath):
         cityTab = Map.randomPath()
@@ -56,13 +61,8 @@ def selectionPath(nbrPath, Map):
    
     
     tabPath.sort(key=lambda x:x[1])
-    print(tabPath)
     
-    #print("tabPath trié : " + tabPath)
-    
-    tabBestPath = tabPath[0:3]
-    
-    print(tabBestPath)
+    tabBestPath = tabPath[0:bestElementsSize]
     
     return tabBestPath
     

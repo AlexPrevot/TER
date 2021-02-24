@@ -60,7 +60,7 @@ class window:
         for i in range(len(tab)):
             self.placePoint(tab[i][0],tab[i][1])
         
-        tab = slt.selectionPath(10,self.actualMap)
+        tab = slt.selectionPath(10,self.actualMap,5)
         
         for j in range(len(tab)):
             if (j+1)<len(tab):
