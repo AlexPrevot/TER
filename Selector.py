@@ -5,6 +5,7 @@ Created on Tue Feb 16 17:23:27 2021
 @author: User
 """
 from math import *
+import random
 
 
 def pointDist(cX1,cY1,cX2,cY2):
@@ -53,8 +54,6 @@ def selectionPath(nbrPath, Map):
         
         tabPath.append([cityTab,distanceChemin])
     
-   
-    
     tabPath.sort(key=lambda x:x[1])
     print(tabPath)
     
@@ -65,6 +64,40 @@ def selectionPath(nbrPath, Map):
     print(tabBestPath)
     
     return tabBestPath
+ 
+
+#croisement entre 2 chemins   
+def crossOverPath(nbrElementTab1,tabPath1, tabPath2):
+    newTabPathCO=[]
+    for i in range(nbrElementTab1):
+        newTabPath= newTabPath.append(tabPath1[i])
+        
+    for i in range(np.size(tabPath2)):
+        if tabPath2[i] not in newTabPath():
+            newTabPath=newTabPath.append(tabPath2[i])
+
+
+#mutation d'un chemin
+def mutationPath(tabPath):
+    newTabPathMutation=tabPath
+    element1 = random.sample(range(0 , np.size(tabPath)),1)
+    element2 = random.sample(range(0 , np.size(tabPath)),1)
+    
+    swapPositions(tabPath, element1, element2)
+    
+    return newTabPathMutation
+   
+    
+# Swap function 
+def swapPositions(list, pos1, pos2): 
+      
+    list[pos1], list[pos2] = list[pos2], list[pos1] 
+    return list
+    
+
+   
+    
+    
     
         
     
