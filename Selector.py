@@ -75,6 +75,8 @@ def crossOverPath(nbrElementTab1,tabPath1, tabPath2):
     for i in range(np.size(tabPath2)):
         if tabPath2[i] not in newTabPath():
             newTabPath=newTabPath.append(tabPath2[i])
+    
+    return newTabPathCO
 
 
 #mutation d'un chemin
