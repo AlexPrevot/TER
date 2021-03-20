@@ -16,7 +16,7 @@ import numpy as np
 
 
 #note : changer le deuxième for car complexité de n², on peut transformer en n
-def crossOverPath(nbrElementTab1,tabPath1, tabPath2):
+def crossOverPath2(nbrElementTab1,tabPath1, tabPath2):
     newTabPathCO=[]
     for i in range(nbrElementTab1):
         newTabPathCO.append(tabPath1[i])
@@ -25,6 +25,38 @@ def crossOverPath(nbrElementTab1,tabPath1, tabPath2):
         if tabPath2[i] not in newTabPathCO:
             newTabPathCO.append(tabPath2[i])
 
+    return newTabPathCO
+
+#note : sous forme n et non n^2
+def crossOverPath(nbrElementTab1,tabPath1, tabPath2):
+    newTabPathCO=tabPath2.copy()
+    tabVu=[]
+    tabMiss=[]
+    tab=[-1]*len(tabPath1)
+    
+    for i in range(nbrElementTab1):
+        newTabPathCO.append(tabPath1[i])
+
+    for i in range(len(newTabPathCO)):
+        if tab[newTabPathCO[i]] == -1:
+            tab[newTabPathCO[i]]=i
+            
+        else:
+            tabVu.append(i)
+    
+    for i in range(len(tab)):
+        if tab[i] == -1 :
+            tabMiss.append(i)
+            
+    inc = 0
+    for i in range(nbrElementTab1):
+        if i == tab[inc]:
+            newTabPathCO[i]=tabMiss[inc]
+            inc +=1
+        
+    print ("newTabPathCO :")
+    print (newTabPathCO)
+    error("ALEXANDRE A FAIT DE LA MERDE")
     return newTabPathCO
 
 def crossOverLoop(nbrPath, tab):
@@ -88,7 +120,7 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     m = m/len(tabPath)
     print("moyenne de : " + str(m))
             
-    for k in range(30):
+    for k in range(10):
                         
         tabPath.sort(key=lambda x:x[1])
         
