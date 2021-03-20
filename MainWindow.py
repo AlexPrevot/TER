@@ -23,6 +23,7 @@ class window:
 
 
     #----------------------function to bind points with their coordon
+    #note : le truc ne marche pas pour l'instant
     def bindPoint(self,coX1,coY1,coX2,coY2):
         self.canvas.create_line(coX1,coY1,coX2,coY2)
     
@@ -54,11 +55,11 @@ class window:
         
     def buttonPath(self):
         tab = self.actualMap.randomPath()
+        cities = self.actualMap.cities
         self.canvas.delete("all")
         self.canvas.create_rectangle(0, 0, 500, 500, fill='white')
-        
         for i in range(len(tab)):
-            self.placePoint(tab[i][0],tab[i][1])
+            self.placePoint(cities[tab[i]][0],cities[tab[i]][1])
         
         tab = slt.selectionPath(10,self.actualMap,5)
         
@@ -89,6 +90,7 @@ class window:
         
         #Map creation
         self.actualMap = Map(4,500,0) 
+    
 
 
 

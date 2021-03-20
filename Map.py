@@ -10,6 +10,8 @@ from random import seed
 from random import randint
 import random
 
+from math import *
+
 
 class Map:
     count = 0
@@ -51,10 +53,30 @@ class Map:
     
     #------------------------------------------find a random path
     
+    #note : CHANGER CA AVEC LA CREATION DU TABLEAU PAR NUMPY SINON CA SERA LENT
     def randomPath(self):
-        path = self.cities
-        random.shuffle(path)
-        return path
+        newPath = []
+        for i in range(self.size):
+            newPath.append(i)
+        random.shuffle(newPath)
+        return newPath
+    
+    #------------------------------------------get the score of a path
+    
+    def pointDist(self,cX1,cY1,cX2,cY2):
+        return sqrt((cX2-cX1)**2 + ((cY2-cY1)**2 ))
+    
+
+    def pathLength(self, intTab):
+        distanceChemin = 0
+        cities = self.cities
+        for i in intTab:
+            if (i+1)<len(cities):
+                distanceChemin += self.pointDist(cities[intTab[i]][0],
+                                            cities[intTab[i]][1],
+                                            cities[intTab[i+1]][0],
+                                            cities[intTab[i+1]][1])
+        return distanceChemin
         
     
     #------------------------------------------ (!) OBJECT INSTANCIATION (!)
