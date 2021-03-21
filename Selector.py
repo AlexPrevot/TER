@@ -16,7 +16,7 @@ import numpy as np
 
 
 #note : changer le deuxième for car complexité de n², on peut transformer en n
-def crossOverPath(nbrElementTab1,tabPath1, tabPath2):
+def crossOverPath3(nbrElementTab1,tabPath1, tabPath2):
     newTabPathCO=[]
     for i in range(nbrElementTab1):
         newTabPathCO.append(tabPath1[i])
@@ -59,7 +59,7 @@ def crossOverPath3(nbr,path1, path2):
 
 
 #note : sous forme n et non n^2
-def crossOverPath3(nbr,path1, path2):
+def crossOverPath(nbr,path1, path2):
     #child from the cross_over
     child=path2.copy()
     #tab of already present values (but only their coordinates)
@@ -111,42 +111,34 @@ def crossOverLoop(nbrPath, tab):
 
 #mutation d'un chemin
 def mutationPath(tabPath):
-    newTabPathMutation=tabPath
     element1 = randint(0 , len(tabPath)-1)
     element2 = randint(0 , len(tabPath)-1)
-    
-    t = tabPath.copy()
-    newTabPathMutation = swapPositions(t, element1, element2)
-    
-    if randint(0, 4) > 3:
-        return newTabPathMutation
-    else:
-        return tabPath
+    swapPositions(tabPath, element1, element2)
+    return tabPath
+
 
 
 def mutationLoop(tab):
-    mutant = []
-    for i in tab:
-        mutant.append(mutationPath(i))
-    return mutant
+    for i in range(len(tab)):
+        if randint(0,4) > 3:
+            tab[i] = mutationPath(tab[i])
+    return tab
 
 # Swap function 
 def swapPositions(tab, pos1, pos2):
     tab[pos1], tab[pos2] = tab[pos2], tab[pos1] 
-    return tab
 
 
 
 
 
-def selectionPath(nbrPath, Map, bestElementsSize):
+def selectionPath2(nbrPath, Map, bestElementsSize):
     cityTab = Map.cities
     tabPath =[]
     tabBestPath =[]
     print("NOUVELLE SELECTION")
     import time
     start = time.process_time()
-    # your code here    
     
     
     for i in range(nbrPath):
@@ -159,19 +151,97 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     
     m = m/len(tabPath)
     print("moyenne de : " + str(m))
+    
+    generation = 0
+    bestScore = float('inf')
+    iteration = 0
+    while (iteration < 30):
+        generation += 1
+        tabPath.sort(key=lambda x:x[1])
+        
+        tabBestPath = []
+        
+        for i in range(bestElementsSize):
+            tabBestPath.append(tabPath[i][0])
+
+        
+        genCrossed = crossOverLoop(nbrPath, tabBestPath)
+        genMutated = mutationLoop(tabBestPath[1:])
+        
+        tabBestPath = genMutated + genCrossed
+        
+        tabPath = []
+        
+        for i in tabBestPath:
+            tabPath.append([i,Map.pathLength(i)])
+        
+        if tabPath[0][1] < bestScore:
+            iteration = 0
+            bestScore = tabPath[0][1]
+        else:
+            iteration +=1
+        
+    
+    tabPath.sort(key=lambda x:x[1])
+    print("RESULTAT FINAL")
+    print(tabPath[0][0])
+    print(tabPath[0][1])
+    print("TEMPS")
+    print(time.process_time() - start)
+    print("Nombre de Generation : ")
+    print(generation)
+    return tabPath[0][0]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def selectionPath(nbrPath, Map, bestElementsSize):
+    cityTab = Map.cities
+    tabPath =[]
+    tabBestPath =[]
+    print("NOUVELLE SELECTION")
+    import time
+    start = time.process_time()
+    
+    
+    for i in range(nbrPath):
+            cityTab = Map.randomPath()
+            tabPath.append([cityTab,Map.pathLength(cityTab)])
             
+    m = 0
+    for j in tabPath:
+        m += j[1]
+    
+    m = m/len(tabPath)
+    print("moyenne de : " + str(m))
+    
+    
     for k in range(30):
                         
         tabPath.sort(key=lambda x:x[1])
         
         tabBestPath = []
         
-        for i in range(len(tabPath)):
+        for i in range(bestElementsSize):
             tabBestPath.append(tabPath[i][0])
-        
-        
-        
-        tabBestPath = tabBestPath[0:bestElementsSize]
+
         
         genCrossed = crossOverLoop(nbrPath, tabBestPath)
         genMutated = mutationLoop(tabBestPath[1:])

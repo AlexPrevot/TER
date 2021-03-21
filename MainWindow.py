@@ -61,7 +61,7 @@ class window:
         for i in range(len(tab)):
             self.placePoint(cities[tab[i]][0],cities[tab[i]][1])
         
-        tab = slt.selectionPath(100,self.actualMap,20)
+        tab = slt.selectionPath(1000,self.actualMap,200)
         cities = self.actualMap.cities
         for j in range(len(tab)):
             if (j+1)<len(tab):
@@ -97,7 +97,7 @@ class window:
         self.buttPath.pack()
         
         #Map creation
-        self.actualMap = Map(5,500,0) 
+        self.actualMap = Map(80,500,0) 
     
 
 
