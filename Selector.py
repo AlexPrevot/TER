@@ -74,7 +74,7 @@ def crossOverLoop(nbrPath, tab):
             if(iteration + len(tab) < nbrPath):                
                 iteration += 1
                 crossedTabs.append(
-                                    crossOverPath(floor(len(tab[0])/2),tab[i],tab[j]))
+                                    crossOverPath2(floor(len(tab[0])/2),tab[i],tab[j]))
             else:
                 if crossedTabs:
                     return crossedTabs
