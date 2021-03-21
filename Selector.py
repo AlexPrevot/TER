@@ -27,8 +27,8 @@ def crossOverPath(nbrElementTab1,tabPath1, tabPath2):
 
     return newTabPathCO
 
-
-def crossOverPath3(nbr,path1, path2):
+#prendre 1 sur 2
+def crossOverPath2(nbr,path1, path2):
     child = []
     seen = []
     temp = [-1]*len(path1)
@@ -100,7 +100,7 @@ def crossOverLoop(nbrPath, tab):
             if(iteration + len(tab) < nbrPath):                
                 iteration += 1
                 crossedTabs.append(
-                                    crossOverPath(floor(len(tab[0])/2),tab[i],tab[j]))
+                                    crossOverPath2(floor(len(tab[0])/2),tab[i],tab[j]))
             else:
                 if crossedTabs:
                     return crossedTabs
@@ -109,7 +109,7 @@ def crossOverLoop(nbrPath, tab):
     return crossedTabs
         
 
-#mutation d'un chemin
+#mutation d'un chemin avec proba davoir mutation sur chemin
 def mutationPath(tabPath):
     newTabPathMutation=tabPath
     element1 = randint(0 , len(tabPath)-1)
@@ -160,7 +160,7 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     m = m/len(tabPath)
     print("moyenne de : " + str(m))
             
-    for k in range(30):
+    for k in range(100):
                         
         tabPath.sort(key=lambda x:x[1])
         
