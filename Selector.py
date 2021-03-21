@@ -16,7 +16,7 @@ import numpy as np
 
 
 #note : changer le deuxième for car complexité de n², on peut transformer en n
-def crossOverPath2(nbrElementTab1,tabPath1, tabPath2):
+def crossOverPath(nbrElementTab1,tabPath1, tabPath2):
     newTabPathCO=[]
     for i in range(nbrElementTab1):
         newTabPathCO.append(tabPath1[i])
@@ -27,37 +27,44 @@ def crossOverPath2(nbrElementTab1,tabPath1, tabPath2):
 
     return newTabPathCO
 
-#note : sous forme n et non n^2
-def crossOverPath(nbrElementTab1,tabPath1, tabPath2):
-    newTabPathCO=tabPath2.copy()
-    tabVu=[]
-    tabMiss=[]
-    tab=[-1]*len(tabPath1)
-    
-    for i in range(nbrElementTab1):
-        newTabPathCO.append(tabPath1[i])
 
-    for i in range(len(newTabPathCO)):
-        if tab[newTabPathCO[i]] == -1:
-            tab[newTabPathCO[i]]=i
-            
-        else:
-            tabVu.append(i)
+
+#note : sous forme n et non n^2
+def crossOverPath2(nbr,path1, path2):
+
+    #child from the cross_over
+    child=path2.copy()
+    #tab of already present values (but only their coordinates)
+    seen=[]
+    temp = [-1]*len(path1)
+    #tab of missing value in the order of path2
+    miss = []
     
-    for i in range(len(tab)):
-        if tab[i] == -1 :
-            tabMiss.append(i)
-            
-    inc = 0
-    for i in range(nbrElementTab1):
-        if i == tab[inc]:
-            newTabPathCO[i]=tabMiss[inc]
-            inc +=1
-        
-    print ("newTabPathCO :")
-    print (newTabPathCO)
-    error("ALEXANDRE A FAIT DE LA MERDE")
-    return newTabPathCO
+    
+    
+    #copy piece of path1 in path2
+    for i in range(nbr):
+        child[i] = path1[i]
+
+    #find already seen value
+    for i in range(len(temp)):
+        if temp[child[i]] == -1:
+            temp[child[i]] = i
+        else:
+            seen.append(i)
+    
+    for i in range(len(temp)):
+        if temp[path2[i]] == -1:
+            miss.append(path2[i])
+    
+    for i in range(len(seen)):
+        child[seen[i]] = miss[i]
+    
+    return child
+
+
+
+
 
 def crossOverLoop(nbrPath, tab):
     crossedTabs = []
@@ -108,6 +115,10 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     tabPath =[]
     tabBestPath =[]
     print("NOUVELLE SELECTION")
+    import time
+    start = time.process_time()
+    # your code here    
+    
     
     for i in range(nbrPath):
             cityTab = Map.randomPath()
@@ -120,7 +131,7 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     m = m/len(tabPath)
     print("moyenne de : " + str(m))
             
-    for k in range(10):
+    for k in range(800):
                         
         tabPath.sort(key=lambda x:x[1])
         
@@ -148,6 +159,8 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     print("RESULTAT FINAL")
     print(tabPath[0][0])
     print(tabPath[0][1])
+    print("TEMPS")
+    print(time.process_time() - start)
     return tabPath[0][0]
         
         
