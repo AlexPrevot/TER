@@ -28,10 +28,38 @@ def crossOverPath(nbrElementTab1,tabPath1, tabPath2):
     return newTabPathCO
 
 
+def crossOverPath3(nbr,path1, path2):
+    child = []
+    seen = []
+    temp = [-1]*len(path1)
+    miss = []
+    
+    l = len(path1)
+    for i in range(0,l,2):
+        if i < l:
+            child.append(path1[i])
+        if i+1 < l:
+            child.append(path2[i+1])
+    
+    #find already seen value
+    for i in range(len(temp)):
+        if temp[child[i]] == -1:
+            temp[child[i]] = i
+        else:
+            seen.append(i)
+    
+    for i in range(len(temp)):
+        if temp[path2[i]] == -1:
+            miss.append(path2[i])
+    
+    for i in range(len(seen)):
+        child[seen[i]] = miss[i]
+    
+    return child
+
 
 #note : sous forme n et non n^2
-def crossOverPath2(nbr,path1, path2):
-
+def crossOverPath3(nbr,path1, path2):
     #child from the cross_over
     child=path2.copy()
     #tab of already present values (but only their coordinates)
@@ -39,8 +67,6 @@ def crossOverPath2(nbr,path1, path2):
     temp = [-1]*len(path1)
     #tab of missing value in the order of path2
     miss = []
-    
-    
     
     #copy piece of path1 in path2
     for i in range(nbr):
@@ -74,7 +100,7 @@ def crossOverLoop(nbrPath, tab):
             if(iteration + len(tab) < nbrPath):                
                 iteration += 1
                 crossedTabs.append(
-                                    crossOverPath2(floor(len(tab[0])/2),tab[i],tab[j]))
+                                    crossOverPath(floor(len(tab[0])/2),tab[i],tab[j]))
             else:
                 if crossedTabs:
                     return crossedTabs
@@ -92,7 +118,10 @@ def mutationPath(tabPath):
     t = tabPath.copy()
     newTabPathMutation = swapPositions(t, element1, element2)
     
-    return newTabPathMutation
+    if randint(0, 4) > 3:
+        return newTabPathMutation
+    else:
+        return tabPath
 
 
 def mutationLoop(tab):
@@ -131,7 +160,7 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     m = m/len(tabPath)
     print("moyenne de : " + str(m))
             
-    for k in range(800):
+    for k in range(30):
                         
         tabPath.sort(key=lambda x:x[1])
         
@@ -164,53 +193,6 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     return tabPath[0][0]
         
         
-        
-        
-
-
-def selectionPath2(nbrPath, Map, bestElementsSize):
-    if (bestElementsSize > nbrPath):
-        error("bestElementsSize supperior to nbrPath")
-        
-    cityTab = Map.cities
-    tabPath =[]
-    tabBestPath =[]
-        
     
-    for i in range(nbrPath):
-        cityTab = Map.randomPath()
-        distanceChemin = 0
-        tabPath.append([cityTab,Map.pathLength(cityTab)])
-    
-    
-    tabPath.sort(key=lambda x:x[1])
-    
-    
-    tabBestPath = []
-    
-    for i in tabPath:
-        tabBestPath.append(i[0])
-        
-    
-    tabBestPath = tabBestPath[0:bestElementsSize]
-    
-    newGenerationCO = []
-    newGenerationM  = []
-    
-    print(tabBestPath)
-    
-    
-    newGenerationCO.append(crossOverPath(2, tabBestPath[0], tabBestPath[2]))
-    newGenerationM.append(mutationPath(tabBestPath[0]))
-    
-    print("tabBestPath")
-    print(tabBestPath)
-    print("newnewGenerationCO")
-    print(newGenerationCO)
-    print("newGenerationM")
-    print(newGenerationM)
-    return tabBestPath
-    
-        
     
     

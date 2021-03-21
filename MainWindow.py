@@ -61,11 +61,19 @@ class window:
         for i in range(len(tab)):
             self.placePoint(cities[tab[i]][0],cities[tab[i]][1])
         
-        tab = slt.selectionPath(1000,self.actualMap,100)
+        tab = slt.selectionPath(100,self.actualMap,20)
         cities = self.actualMap.cities
         for j in range(len(tab)):
             if (j+1)<len(tab):
-                self.bindPoint(cities[tab[j]][0],cities[tab[j]][1],cities[tab[j+1]][0],cities[tab[j+1]][1])
+                self.bindPoint(cities[tab[j]][0],
+                               cities[tab[j]][1],
+                               cities[tab[j+1]][0],
+                               cities[tab[j+1]][1])
+                
+        self.bindPoint(cities[tab[0]][0],
+                               cities[tab[0]][1],
+                               cities[tab[len(tab)-1]][0],
+                               cities[tab[len(tab)-1]][1])
         
         
     #-------------------------------------------(!) OBJECT INSTANCIATION (!)
@@ -89,7 +97,7 @@ class window:
         self.buttPath.pack()
         
         #Map creation
-        self.actualMap = Map(200,500,0) 
+        self.actualMap = Map(5,500,0) 
     
 
 
