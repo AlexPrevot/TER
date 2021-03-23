@@ -117,12 +117,20 @@ def mutationPath(tabPath):
     return tabPath
 
 
-
+#mutation boucle sur le tab (only 2 elements)
 def mutationLoop(tab):
     for i in range(len(tab)):
-        if randint(0,4) > 3:
-            tab[i] = mutationPath(tab[i])
+        for j in range(len(tab[i])):
+            if randint(0,99) < 21:
+                tab[i] = mutationGen(tab[i], j)
     return tab
+
+
+#proba mutation sur un gene du tab
+def mutationGen(tabPath , element):
+    element2 = randint(0 , len(tabPath)-1)
+    swapPositions(tabPath, element, element2)
+    return tabPath
 
 # Swap function 
 def swapPositions(tab, pos1, pos2):
@@ -155,7 +163,7 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     generation = 0
     bestScore = float('inf')
     iteration = 0
-    while (iteration < 70):
+    while (iteration < 300):
         generation += 1
         tabPath.sort(key=lambda x:x[1])
         
@@ -165,10 +173,14 @@ def selectionPath(nbrPath, Map, bestElementsSize):
             tabBestPath.append(tabPath[i][0])
 
         
-        genCrossed = crossOverLoop(nbrPath, tabBestPath)
+        #genCrossed = crossOverLoop(nbrPath, tabBestPath)
         genMutated = mutationLoop(tabBestPath[1:])
+        tabBestPath = genMutated #+ genCrossed
         
-        tabBestPath = genMutated + genCrossed
+        for i in range (bestElementsSize,nbrPath):
+            cityTab = Map.randomPath()
+            tabBestPath.append(cityTab)
+        
         
         tabPath = []
         
@@ -226,10 +238,10 @@ def selectionPath2(nbrPath, Map, bestElementsSize):
             tabBestPath.append(tabPath[i][0])
 
         
-        genCrossed = crossOverLoop(nbrPath, tabBestPath)
+        #genCrossed = crossOverLoop(nbrPath, tabBestPath)
         genMutated = mutationLoop(tabBestPath[1:])
         
-        tabBestPath = genMutated + genCrossed
+        tabBestPath = genMutated #+ genCrossed
         
         tabPath = []
         
