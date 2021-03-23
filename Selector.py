@@ -132,7 +132,7 @@ def swapPositions(tab, pos1, pos2):
 
 
 
-def selectionPath2(nbrPath, Map, bestElementsSize):
+def selectionPath(nbrPath, Map, bestElementsSize):
     cityTab = Map.cities
     tabPath =[]
     tabBestPath =[]
@@ -155,7 +155,7 @@ def selectionPath2(nbrPath, Map, bestElementsSize):
     generation = 0
     bestScore = float('inf')
     iteration = 0
-    while (iteration < 30):
+    while (iteration < 70):
         generation += 1
         tabPath.sort(key=lambda x:x[1])
         
@@ -195,24 +195,7 @@ def selectionPath2(nbrPath, Map, bestElementsSize):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-def selectionPath(nbrPath, Map, bestElementsSize):
+def selectionPath2(nbrPath, Map, bestElementsSize):
     cityTab = Map.cities
     tabPath =[]
     tabBestPath =[]
