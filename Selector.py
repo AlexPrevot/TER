@@ -93,6 +93,51 @@ def crossOverPath(nbr,path1, path2):
     return child	
 
 
+#crossover ERO 
+def matriceConversion(path1,path2):
+    mat1 = [-1]*len(path1)
+    mat2 = [-1]*len(path2)
+    matFinal = []
+  
+    #mat1[path1[0]] = [path1[len(path1)-2],path1[1]]
+    #mat2[path2[0]] = [path2[len(path2)-2],path2[1]]
+    
+    #mat1.append([path1[len(path1)-1],path1[1]])
+    #mat2.append([path2[len(path2)-1],path2[1]])
+    
+    for i in range(len(path1)):
+        if i== (len(path1))-1:
+            #mat1.append([path1[len(path1)-1],path1[0]])
+            #mat2.append([path2[len(path2)-1],path2[0]])
+            mat1[path1[i]] = [path1[len(path1)-2],path1[0]]
+            mat2[path2[i]] = [path2[len(path2)-2],path2[0]]
+            
+        else :
+            #mat1.append([path1[i],path1[i+1]])
+            #mat2.append([path2[i],path2[i+1]])
+            mat1[path1[i]] = [path1[i-1],path1[i+1]]
+            mat2[path2[i]] = [path2[i-1],path2[i+1]]
+  
+    for i in range(len(path1)):
+        matFinal.append(matriceUnion(mat1[i], mat2[i]))
+    
+    
+    
+    print("matrice 1")
+    print (mat1)
+    
+    print("matrice 2")
+    print (mat2)
+    
+    print("matrice Final")
+    print (matFinal)
+    
+            
+            
+def matriceUnion(mat1,mat2):
+    final_mat = list(set(mat1) | set(mat2))
+    return final_mat
+
 
 
 
@@ -160,6 +205,11 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     generation = 0
     bestScore = float('inf')
     iteration = 0
+    
+    print("Chemin initial")
+    print (tabPath[0][0])
+    print (tabPath[1][0])
+    matriceConversion(tabPath[0][0] , tabPath[1][0])
     
     
     while (iteration < 30):
