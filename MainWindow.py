@@ -14,12 +14,8 @@ import Selector as slt
 
 class window:
     #----------------------function to place points
-    def placePoint(self,coX,coY,premier):
-        if premier:
-            self.canvas.create_rectangle(coX + 0, coY + 0, coX + 5, coY + 5, fill='red')
-            
-        else:
-            self.canvas.create_rectangle(coX + 0, coY + 0, coX + 5, coY + 5, fill='black')
+    def placePoint(self,coX,coY):
+        self.canvas.create_rectangle(coX + 0, coY + 0, coX + 5, coY + 5, fill='black')
 
 
 
@@ -52,7 +48,7 @@ class window:
         self.canvas.create_rectangle(0, 0, 500, 500, fill='white')
         
         for i in range(len(tab)):
-            self.placePoint(tab[i][0],tab[i][1],False)
+            self.placePoint(tab[i][0],tab[i][1])
             
         
     #--------
@@ -63,11 +59,7 @@ class window:
         self.canvas.delete("all")
         self.canvas.create_rectangle(0, 0, 500, 500, fill='white')
         for i in range(len(tab)):
-            if i==0:
-                self.placePoint(cities[tab[i]][0],cities[tab[i]][1],True)
-                
-            else:
-                self.placePoint(cities[tab[i]][0],cities[tab[i]][1],False)
+            self.placePoint(cities[tab[i]][0],cities[tab[i]][1])
         
         tab = slt.selectionPath(1000,self.actualMap,200)
         cities = self.actualMap.cities
@@ -105,7 +97,7 @@ class window:
         self.buttPath.pack()
         
         #Map creation
-        self.actualMap = Map(20,500,0) 
+        self.actualMap = Map(80,500,0) 
     
 
 
