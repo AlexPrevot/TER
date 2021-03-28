@@ -239,7 +239,7 @@ std::vector<int> Calgogen(std::vector<std::tuple<int,int>> &coordCities, int nbr
 
 
 		//std::chrono::steady_clock::time_point mutS = std::chrono::steady_clock::now();
-		for (int i = nbrPaths/2; i < nbrPaths; i++)
+		for (int i = 1; i < nbrPaths; i++)
 			mutation(chemins[i], 2);
 		//std::chrono::steady_clock::time_point mutE = std::chrono::steady_clock::now();
 
