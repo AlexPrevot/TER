@@ -15,6 +15,10 @@ import random
 import numpy as np
 
 
+
+import myModule
+
+
 #note : changer le deuxième for car complexité de n², on peut transformer en n
 def crossOverPath3(nbrElementTab1,tabPath1, tabPath2):
     newTabPathCO=[]
@@ -86,7 +90,7 @@ def crossOverPath(nbr,path1, path2):
     for i in range(len(seen)):
         child[seen[i]] = miss[i]
     
-    return child
+    return child	
 
 
 
@@ -117,20 +121,12 @@ def mutationPath(tabPath):
     return tabPath
 
 
-#mutation boucle sur le tab (only 2 elements)
+
 def mutationLoop(tab):
     for i in range(len(tab)):
-        for j in range(len(tab[i])):
-            if randint(0,99) < 21:
-                tab[i] = mutationGen(tab[i], j)
+        if randint(0,4) > 3:
+            tab[i] = mutationPath(tab[i])
     return tab
-
-
-#proba mutation sur un gene du tab
-def mutationGen(tabPath , element):
-    element2 = randint(0 , len(tabPath)-1)
-    swapPositions(tabPath, element, element2)
-    return tabPath
 
 # Swap function 
 def swapPositions(tab, pos1, pos2):
@@ -149,6 +145,7 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     start = time.process_time()
     
     
+    
     for i in range(nbrPath):
             cityTab = Map.randomPath()
             tabPath.append([cityTab,Map.pathLength(cityTab)])
@@ -163,7 +160,9 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     generation = 0
     bestScore = float('inf')
     iteration = 0
-    while (iteration < 300):
+    
+    
+    while (iteration < 30):
         generation += 1
         tabPath.sort(key=lambda x:x[1])
         
@@ -173,14 +172,10 @@ def selectionPath(nbrPath, Map, bestElementsSize):
             tabBestPath.append(tabPath[i][0])
 
         
-        #genCrossed = crossOverLoop(nbrPath, tabBestPath)
+        genCrossed = crossOverLoop(nbrPath, tabBestPath)
         genMutated = mutationLoop(tabBestPath[1:])
-        tabBestPath = genMutated #+ genCrossed
         
-        for i in range (bestElementsSize,nbrPath):
-            cityTab = Map.randomPath()
-            tabBestPath.append(cityTab)
-        
+        tabBestPath = genMutated + genCrossed
         
         tabPath = []
         
@@ -192,7 +187,7 @@ def selectionPath(nbrPath, Map, bestElementsSize):
             bestScore = tabPath[0][1]
         else:
             iteration +=1
-        
+    
     
     tabPath.sort(key=lambda x:x[1])
     print("RESULTAT FINAL")
@@ -202,7 +197,34 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     print(time.process_time() - start)
     print("Nombre de Generation : ")
     print(generation)
+    
+    """
+    print("RESULTAT FINAL")
+    resultat = myModule.genalgo(Map.cities, nbrPath)
+    print(resultat)
+    print(Map.pathLength(resultat))
+    print("TEMPS")
+    print(time.process_time() - start)
+    """
     return tabPath[0][0]
+    #return resultat
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -212,6 +234,9 @@ def selectionPath2(nbrPath, Map, bestElementsSize):
     tabPath =[]
     tabBestPath =[]
     print("NOUVELLE SELECTION")
+    
+    
+    
     import time
     start = time.process_time()
     
@@ -219,6 +244,10 @@ def selectionPath2(nbrPath, Map, bestElementsSize):
     for i in range(nbrPath):
             cityTab = Map.randomPath()
             tabPath.append([cityTab,Map.pathLength(cityTab)])
+    
+    
+    
+    
             
     m = 0
     for j in tabPath:
@@ -238,10 +267,10 @@ def selectionPath2(nbrPath, Map, bestElementsSize):
             tabBestPath.append(tabPath[i][0])
 
         
-        #genCrossed = crossOverLoop(nbrPath, tabBestPath)
+        genCrossed = crossOverLoop(nbrPath, tabBestPath)
         genMutated = mutationLoop(tabBestPath[1:])
         
-        tabBestPath = genMutated #+ genCrossed
+        tabBestPath = genMutated + genCrossed
         
         tabPath = []
         
@@ -249,12 +278,18 @@ def selectionPath2(nbrPath, Map, bestElementsSize):
             tabPath.append([i,Map.pathLength(i)])
         
     
+    
+    
+    
     tabPath.sort(key=lambda x:x[1])
     print("RESULTAT FINAL")
     print(tabPath[0][0])
     print(tabPath[0][1])
     print("TEMPS")
     print(time.process_time() - start)
+    
+   
+    
     return tabPath[0][0]
         
         
