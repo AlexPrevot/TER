@@ -18,7 +18,7 @@
 
 std::shared_ptr<std::vector<int>> cross(std::vector<int>& path1, std::vector<int>& path2)
 {
-	std::shared_ptr<std::vector<int>> child =  std::make_shared<std::vector<int>>();
+	std::shared_ptr<std::vector<int>> child = std::make_shared<std::vector<int>>();
 
 	int size = path1.size();
 	
@@ -102,10 +102,12 @@ float getFitness(std::vector<std::tuple<int, int>>& coord,
 
 
 
+
 void sortByFitness(std::vector<std::tuple<int,int>> &paths)
 {
 	std::sort(paths.begin(), paths.end());
 }
+
 
 //NOTE : Améliorer le sqrt pour augmenter les performances peut être utile ?
 std::shared_ptr<std::vector<int>[]> fitness(std::vector<std::tuple<int,int>>		& coord,
@@ -137,7 +139,7 @@ std::shared_ptr<std::vector<int>[]> fitness(std::vector<std::tuple<int,int>>		& 
 
 
 
-//CHANGER LE POINTEUR POUR UN SMART POINTER
+
 std::shared_ptr<std::vector<int>[]> generatePopulation(int pop, int nbrCity)
 {
 	srand(unsigned(time(NULL)));
@@ -159,11 +161,44 @@ std::shared_ptr<std::vector<int>[]> generatePopulation(int pop, int nbrCity)
 	return population;
 }
 
+void mutation(std::vector<int>& chemin, int chance)
+{
+	for (int i = 0; i < chemin.size(); i++)
+	{
+		if (chance > rand() % 100)
+		{
+			short place = rand() % chemin.size();
+			short tmp1 = chemin.at(i);
+			chemin.at(i) = chemin.at(place);
+			chemin.at(place) = tmp1;
+		}
+	}
+}
 
 
 
+void BENCHtest(std::vector<std::tuple<int, int>>& co, std::shared_ptr<std::vector<int>[]>& chemins, int nbrPaths, int iteration)
+{
+
+	std::cout << " ------------------- " << std::endl;
+	std::cout << "ITERATION  " << iteration << std::endl;
+	std::cout << " " << std::endl;
+
+	for (int i = 0; i < nbrPaths; i++)
+	{
+		std::cout << "[";
+		for (int j = 0; j < co.size(); j++)
+		{
+			std::cout << chemins[i][j];
+			std::cout << ", ";
+		}
+		std::cout << " ]   FITNESS : ";
+
+		std::cout << getFitness(co, chemins[i]) << std::endl;
 
 
+	}
+}
 
 
 
@@ -181,27 +216,70 @@ std::vector<int> Calgogen(std::vector<std::tuple<int,int>> &coordCities, int nbr
 
 	std::shared_ptr<std::vector<int>[]> chemins = generatePopulation(nbrPaths, nbrCities);
 	chemins = fitness(coordCities, chemins, nbrPaths);
-	float best = -1;
+
+	float best = getFitness(coordCities, chemins[0]);
+
 	int iterations = 0;
+
+	//int BENCHtestIt = 0;
+	
+	//BENCHtest(coordCities, chemins, nbrCities, BENCHtestIt);
+	/*std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
+
+	std::chrono::steady_clock::time_point cross = std::chrono::steady_clock::now();
+	std::chrono::steady_clock::time_point mut = std::chrono::steady_clock::now();
+	std::chrono::steady_clock::time_point fit = std::chrono::steady_clock::now();*/
 
 	while (iterations < 30)
 	{
-		cross_over(chemins, nbrPaths, nbrCities/2);
-		chemins = fitness(coordCities, chemins, nbrPaths);
 		
+		//std::chrono::steady_clock::time_point crossS = std::chrono::steady_clock::now();
+		cross_over(chemins, nbrPaths, nbrPaths/2);
+		//std::chrono::steady_clock::time_point crossE = std::chrono::steady_clock::now();
+
+
+		//std::chrono::steady_clock::time_point mutS = std::chrono::steady_clock::now();
+		for (int i = nbrPaths/2; i < nbrPaths; i++)
+			mutation(chemins[i], 2);
+		//std::chrono::steady_clock::time_point mutE = std::chrono::steady_clock::now();
+
+
+		//std::chrono::steady_clock::time_point fitS = std::chrono::steady_clock::now();
+		chemins = fitness(coordCities, chemins, nbrPaths);
+		//std::chrono::steady_clock::time_point fitE = std::chrono::steady_clock::now();
 
 		float currentBest = getFitness(coordCities, chemins[0]);
 
 
-		if (best < currentBest || best == -1)
+		if (currentBest < best)
 			best = currentBest;
 		else
 			iterations++;
+
+
+		//cross += crossE - crossS;
+		//mut += mutE - mutS;
+		//fit += fitE - fitS;
+
+		//BENCHtestIt += 1;
+		//BENCHtest(coordCities, chemins, nbrPaths, BENCHtestIt);
 	}
 
 
+
+
+	//std::cout << "TEMPS CROSS = " << std::chrono::duration_cast<std::chrono::microseconds>(cross - start).count() << "[µs]" << std::endl;
+	//std::cout << "TEMPS MUTATION= " << std::chrono::duration_cast<std::chrono::microseconds>(mut - start).count() << "[µs]" << std::endl;
+	//std::cout << "TEMPS FITNESS= " << std::chrono::duration_cast<std::chrono::microseconds>(fit- start).count() << "[µs]" << std::endl;
+
 	return chemins[0];
 }
+
+
+
+
+
+
 
 //-----------------------------------------------------------
 // send nbrPaths before
