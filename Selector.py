@@ -210,13 +210,13 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     
     m = m/len(tabPath)
     print("moyenne de : " + str(m))
-    """
+    
     generation = 0
     bestScore = float('inf')
     iteration = 0
+    '''
     
-    
-    while (iteration < 30):
+    while (iteration < 80):
         generation += 1
         tabPath.sort(key=lambda x:x[1])
         
@@ -225,11 +225,14 @@ def selectionPath(nbrPath, Map, bestElementsSize):
         for i in range(bestElementsSize):
             tabBestPath.append(tabPath[i][0])
 
-        
+        best = tabBestPath[0]
         genCrossed = crossOverLoop(nbrPath, tabBestPath)
         genMutated = mutationLoop(tabBestPath[1:])
         
+       
         tabBestPath = genMutated + genCrossed
+        tabBestPath.insert(0, best)
+       
         
         tabPath = []
         
@@ -251,8 +254,9 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     print(time.process_time() - start)
     print("Nombre de Generation : ")
     print(generation)
-    """
+    return tabPath[0][0]
     
+    '''
     print("RESULTAT FINAL")
     resultat = myModule.genalgo(Map.cities, nbrPath)
     print(resultat)
@@ -260,7 +264,7 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     print("TEMPS")
     print(time.process_time() - start)
     
-    #return tabPath[0][0]
+    
     return resultat
 
 
