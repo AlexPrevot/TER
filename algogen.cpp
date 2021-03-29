@@ -229,18 +229,26 @@ std::vector<int> Calgogen(std::vector<std::tuple<int,int>> &coordCities, int nbr
 	std::chrono::steady_clock::time_point cross = std::chrono::steady_clock::now();
 	std::chrono::steady_clock::time_point mut = std::chrono::steady_clock::now();
 	std::chrono::steady_clock::time_point fit = std::chrono::steady_clock::now();*/
+	int generation = 0;
+
+	
+	/*std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
+
+	std::chrono::steady_clock::time_point cross = std::chrono::steady_clock::now();
+	std::chrono::steady_clock::time_point mut = std::chrono::steady_clock::now();
+	std::chrono::steady_clock::time_point fit = std::chrono::steady_clock::now();*/
 
 	while (iterations < 30)
 	{
 		
 		//std::chrono::steady_clock::time_point crossS = std::chrono::steady_clock::now();
-		cross_over(chemins, nbrPaths, nbrPaths/2);
+		cross_over(chemins, nbrPaths, 0.2*nbrPaths);
 		//std::chrono::steady_clock::time_point crossE = std::chrono::steady_clock::now();
 
 
 		//std::chrono::steady_clock::time_point mutS = std::chrono::steady_clock::now();
-		for (int i = 1; i < nbrPaths; i++)
-			mutation(chemins[i], 2);
+		for (int i = 1; i < 0.2*nbrPaths; i++)
+			mutation(chemins[i], 1);
 		//std::chrono::steady_clock::time_point mutE = std::chrono::steady_clock::now();
 
 
@@ -251,11 +259,17 @@ std::vector<int> Calgogen(std::vector<std::tuple<int,int>> &coordCities, int nbr
 		float currentBest = getFitness(coordCities, chemins[0]);
 
 
+	
+
 		if (currentBest < best)
+		{
 			best = currentBest;
+			iterations = 0;
+		}
 		else
 			iterations++;
 
+		generation++;
 
 		//cross += crossE - crossS;
 		//mut += mutE - mutS;
@@ -265,6 +279,14 @@ std::vector<int> Calgogen(std::vector<std::tuple<int,int>> &coordCities, int nbr
 		//BENCHtest(coordCities, chemins, nbrPaths, BENCHtestIt);
 	}
 
+	//std::cout <<"generation"  <<generation<< std::endl;
+
+
+	//std::cout << "TEMPS CROSS = " << std::chrono::duration_cast<std::chrono::microseconds>(cross - start).count() << "[µs]" << std::endl;
+	//std::cout << "TEMPS MUTATION= " << std::chrono::duration_cast<std::chrono::microseconds>(mut - start).count() << "[µs]" << std::endl;
+	//std::cout << "TEMPS FITNESS= " << std::chrono::duration_cast<std::chrono::microseconds>(fit- start).count() << "[µs]" << std::endl;
+
+	return chemins[0];
 
 
 
