@@ -177,6 +177,20 @@ void mutation(std::vector<int>& chemin, int chance)
 
 
 
+void mutation2(std::vector<int>& chemin, int chance)
+{
+	if (chance > rand() % 100)
+	{
+		short place1 = rand() % chemin.size();
+		short place2 = rand() % chemin.size();
+		short tmp1 = chemin.at(place1);
+		chemin.at(place1) = chemin.at(place2);
+		chemin.at(place2) = tmp1;
+	}
+}
+
+
+
 void BENCHtest(std::vector<std::tuple<int, int>>& co, std::shared_ptr<std::vector<int>[]>& chemins, int nbrPaths, int iteration)
 {
 
@@ -247,7 +261,7 @@ std::vector<int> Calgogen(std::vector<std::tuple<int,int>> &coordCities, int nbr
 
 
 		//std::chrono::steady_clock::time_point mutS = std::chrono::steady_clock::now();
-		for (int i = 1; i < 0.2*nbrPaths; i++)
+		for (int i = 1; i < nbrPaths; i++)
 			mutation(chemins[i], 1);
 		//std::chrono::steady_clock::time_point mutE = std::chrono::steady_clock::now();
 
@@ -288,13 +302,6 @@ std::vector<int> Calgogen(std::vector<std::tuple<int,int>> &coordCities, int nbr
 
 	return chemins[0];
 
-
-
-	//std::cout << "TEMPS CROSS = " << std::chrono::duration_cast<std::chrono::microseconds>(cross - start).count() << "[µs]" << std::endl;
-	//std::cout << "TEMPS MUTATION= " << std::chrono::duration_cast<std::chrono::microseconds>(mut - start).count() << "[µs]" << std::endl;
-	//std::cout << "TEMPS FITNESS= " << std::chrono::duration_cast<std::chrono::microseconds>(fit- start).count() << "[µs]" << std::endl;
-
-	return chemins[0];
 }
 
 

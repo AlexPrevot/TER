@@ -207,10 +207,10 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     m = 0
     for j in tabPath:
         m += j[1]
-    """
+    
     m = m/len(tabPath)
     print("moyenne de : " + str(m))
-    
+    """
     generation = 0
     bestScore = float('inf')
     iteration = 0
