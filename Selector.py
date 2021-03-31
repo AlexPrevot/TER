@@ -63,7 +63,7 @@ def crossOverPath3(nbr,path1, path2):
 
 
 #note : sous forme n et non n^2
-def crossOverPath(nbr,path1, path2):
+def crossOverPath2(nbr,path1, path2):
     #child from the cross_over
     child=path2.copy()
     #tab of already present values (but only their coordinates)
@@ -93,10 +93,48 @@ def crossOverPath(nbr,path1, path2):
     return child	
 
 
+#cross over hasardeux
+def crossOverPath(nbr,path1, path2):
+    #child from the cross_over
+    child=path2.copy()
+    #tab of already present values (but only their coordinates)
+    seen=[]
+    temp = [-1]*len(path1)
+    #tab of missing value in the order of path2
+    miss = []
+    
+    p1 = randint(0,len(path1))
+    p2 = randint(0,len(path1))
+    
+    if (p1 > p2):
+        tmp = p1
+        p1 = p2
+        p2 = tmp
+        
+    
+    
+    #copy piece of path1 in path2
+    for i in range(p1,p2):
+        child[i] = path1[i]
+
+    #find already seen value
+    for i in range(len(temp)):
+        if temp[child[i]] == -1:
+            temp[child[i]] = i
+        else:
+            seen.append(i)
+    
+    for i in range(len(temp)):
+        if temp[path2[i]] == -1:
+            miss.append(path2[i])
+    
+    for i in range(len(seen)):
+        child[seen[i]] = miss[i]
+    
+    return child
 
 
-
-def crossOverLoop(nbrPath, tab):
+def crossOverLoop1(nbrPath, tab):
     crossedTabs = []
     iteration = 0
     for i in range(nbrPath - len(tab)):
@@ -113,7 +151,12 @@ def crossOverLoop(nbrPath, tab):
     return crossedTabs
         
 
-
+def crossOverLoop(nbrPath, tab):
+    crossedTabs = []
+    iteration = 0
+    for i in range(nbrPath - len(tab)):
+         crossedTabs.append(crossOverPath(floor(len(tab[0])/2),tab[randint(0, len(tab)-1)],tab[randint(0, len(tab)-1)]))
+    return crossedTabs
 
 
 #crossover ERO 
@@ -165,7 +208,9 @@ def matriceUnion(mat1,mat2):
 
 def calcProbaMuta(distMoy, distMin,k):
     
-    proba= 1-((distMoy-distMin)/distMin)**k
+    proba= (1-((distMoy-distMin)/distMoy))**k
+    #print("la proba mec :")
+    #print (proba)
     return proba
 
 
@@ -188,7 +233,7 @@ def mutationLoop(tab,Map):
     moyenDist = moyenDist/len(tab)
     
     for i in range(len(tab)):
-        if random.random() < calcProbaMuta(moyenDist, Map.pathLength(tab[0]), 1):
+        if random.random() < calcProbaMuta(moyenDist, Map.pathLength(tab[0]), 24):
             tab[i] = mutationPath(tab[i])
     return tab
 
@@ -226,7 +271,7 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     iteration = 0
 
     
-    while (iteration < 80):
+    while (iteration < 300):
         generation += 1
         tabPath.sort(key=lambda x:x[1])
         
