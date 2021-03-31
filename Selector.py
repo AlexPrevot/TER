@@ -214,7 +214,7 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     generation = 0
     bestScore = float('inf')
     iteration = 0
-    '''
+    
     
     while (iteration < 80):
         generation += 1
@@ -267,7 +267,7 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     
     return resultat
 
-
+    '''
 
 
 

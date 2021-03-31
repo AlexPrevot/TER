@@ -110,7 +110,7 @@ class window:
         
         
         #Map creation
-        self.actualMap = Map(70,500,0) 
+        self.actualMap = Map(20,500,0) 
     
 
 
