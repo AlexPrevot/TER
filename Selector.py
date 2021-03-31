@@ -163,7 +163,10 @@ def matriceUnion(mat1,mat2):
 
 
 
-
+def calcProbaMuta(distMoy, distMin,k):
+    
+    proba= 1-((distMoy-distMin)/distMin)**k
+    return proba
 
 
 
@@ -176,9 +179,16 @@ def mutationPath(tabPath):
 
 
 
-def mutationLoop(tab):
+def mutationLoop(tab,Map):
+    
+    moyenDist = 0
+    for j in tab:
+        moyenDist += Map.pathLength(j)
+    
+    moyenDist = moyenDist/len(tab)
+    
     for i in range(len(tab)):
-        if randint(0,4) > 3:
+        if random.random() < calcProbaMuta(moyenDist, Map.pathLength(tab[0]), 1):
             tab[i] = mutationPath(tab[i])
     return tab
 
@@ -214,7 +224,7 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     generation = 0
     bestScore = float('inf')
     iteration = 0
-    '''
+
     
     while (iteration < 80):
         generation += 1
@@ -227,7 +237,7 @@ def selectionPath(nbrPath, Map, bestElementsSize):
 
         best = tabBestPath[0]
         genCrossed = crossOverLoop(nbrPath, tabBestPath)
-        genMutated = mutationLoop(tabBestPath[1:])
+        genMutated = mutationLoop(tabBestPath,Map)
         
        
         tabBestPath = genMutated + genCrossed
@@ -267,7 +277,7 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     
     return resultat
 
-
+    '''
 
 
 
