@@ -18,6 +18,8 @@ import numpy as np
 
 import myModule
 
+import pylab
+
 
 #note : changer le deuxième for car complexité de n², on peut transformer en n
 def crossOverPath3(nbrElementTab1,tabPath1, tabPath2):
@@ -63,7 +65,7 @@ def crossOverPath3(nbr,path1, path2):
 
 
 #note : sous forme n et non n^2
-def crossOverPath2(nbr,path1, path2):
+def crossOverPath(nbr,path1, path2):
     #child from the cross_over
     child=path2.copy()
     #tab of already present values (but only their coordinates)
@@ -94,7 +96,7 @@ def crossOverPath2(nbr,path1, path2):
 
 
 #cross over hasardeux
-def crossOverPath(nbr,path1, path2):
+def crossOverPath2(path1, path2):
     #child from the cross_over
     child=path2.copy()
     #tab of already present values (but only their coordinates)
@@ -134,7 +136,9 @@ def crossOverPath(nbr,path1, path2):
     return child
 
 
-def crossOverLoop1(nbrPath, tab):
+
+#force brute
+def crossOverLoopLALALA(nbrPath, tab):
     crossedTabs = []
     iteration = 0
     for i in range(nbrPath - len(tab)):
@@ -142,21 +146,48 @@ def crossOverLoop1(nbrPath, tab):
             if(iteration + len(tab) < nbrPath):                
                 iteration += 1
                 crossedTabs.append(
-                                    crossOverPath(floor(len(tab[0])/2),tab[i],tab[j]))
+                                        crossOverPath2(tab[i],tab[j]))
             else:
                 if crossedTabs:
                     return crossedTabs
                 else:
                     error("Le cross_over ne s'est fait pas fait")
+                
     return crossedTabs
-        
 
+
+
+#par pair au hasard
 def crossOverLoop(nbrPath, tab):
     crossedTabs = []
     iteration = 0
     for i in range(nbrPath - len(tab)):
-         crossedTabs.append(crossOverPath(floor(len(tab[0])/2),tab[randint(0, len(tab)-1)],tab[randint(0, len(tab)-1)]))
+         crossedTabs.append(
+                             crossOverPath2(tab[randint(0, len(tab)-1)],tab[randint(0, len(tab)-1)]))
     return crossedTabs
+
+
+
+#par random
+def crossOverLoopRAND(nbrPath, tab):
+    crossedTabs = []
+    iteration = 0
+    for i in range(len(tab)):
+        if(randint(0,len(tab)) > i +3):
+            for j in range(i,len(tab)):
+                if(iteration + len(tab) < nbrPath):                
+                    iteration += 1
+                    crossedTabs.append(
+                                        crossOverPath2(tab[i],tab[j]))
+                else:
+                    if crossedTabs:
+                        return crossedTabs
+                    else:
+                        error("Le cross_over ne s'est fait pas fait")
+    return crossedTabs
+        
+
+
 
 
 #crossover ERO 
@@ -206,12 +237,42 @@ def matriceUnion(mat1,mat2):
 
 
 
-def calcProbaMuta(distMoy, distMin,k):
+
+
+#mega mutation
+def mutation(population,P):
+    mutant = []
+    for i in population:
+        for j in range(len(i)):
+            l = random.random()*100
+            #print("---")
+            #print(P)
+            #print(l)
+            if (10*P >= l):
+                #print("mutation")
+                pos = randint(0,len(i)-1)
+                swapPositions(i, j, pos)
+                mutant.append(i);
+
+    return mutant
     
-    proba= (1-((distMoy-distMin)/distMoy))**k
-    #print("la proba mec :")
-    #print (proba)
-    return proba
+    
+        
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -224,16 +285,9 @@ def mutationPath(tabPath):
 
 
 
-def mutationLoop(tab,Map):
-    
-    moyenDist = 0
-    for j in tab:
-        moyenDist += Map.pathLength(j)
-    
-    moyenDist = moyenDist/len(tab)
-    
+def mutationLoop(tab):
     for i in range(len(tab)):
-        if random.random() < calcProbaMuta(moyenDist, Map.pathLength(tab[0]), 24):
+        if randint(0,10) > 1:
             tab[i] = mutationPath(tab[i])
     return tab
 
@@ -269,20 +323,49 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     generation = 0
     bestScore = float('inf')
     iteration = 0
-
     
-    while (iteration < 300):
+    arrayP = []
+    arrayG = []
+    
+    while (iteration < 150):
         generation += 1
         tabPath.sort(key=lambda x:x[1])
         
+        """
+        print("nouvelle GEN")
+        for i in tabPath:
+            print(i[0])
+        print("-----------------")
+        """
+        
         tabBestPath = []
         
+        
+        chosens = 0
+        """
         for i in range(bestElementsSize):
-            tabBestPath.append(tabPath[i][0])
+            tabBestPath.append(tabPath[i][0])"""
 
+        for i in range(len(tabPath)):
+            if (chosens < bestElementsSize):
+                if(randint(0,len(tabPath)) > i):
+                    chosens += 1
+                    tabBestPath.append(tabPath[i][0])
+        
+        
+        average = 0
+        minimum = Map.pathLength(tabBestPath[0])
+        for i in tabBestPath:
+            average += Map.pathLength(i)
+        
+        average = average/len(tabBestPath)
+    
+        p = (1 - ((average - minimum)/minimum))**10
+        
+        
         best = tabBestPath[0]
         genCrossed = crossOverLoop(nbrPath, tabBestPath)
-        genMutated = mutationLoop(tabBestPath,Map)
+        genMutated = mutation(tabBestPath[1:],p)
         
        
         tabBestPath = genMutated + genCrossed
@@ -299,6 +382,15 @@ def selectionPath(nbrPath, Map, bestElementsSize):
             bestScore = tabPath[0][1]
         else:
             iteration +=1
+            
+        arrayP.append(p)
+        arrayG.append(generation)
+        
+    
+    
+    pylab.plot(arrayG, arrayP)
+    pylab.show();
+    
     
     
     tabPath.sort(key=lambda x:x[1])
@@ -320,9 +412,9 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     print(time.process_time() - start)
     
     
-    return resultat
+    return resultat'''
 
-    '''
+
 
 
 
