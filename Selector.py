@@ -239,44 +239,21 @@ def matriceUnion(mat1,mat2):
 
 
 
-#mega mutation
+#mutation 2.0
 def mutation(population,P):
     mutant = []
     for i in population:
         for j in range(len(i)):
             l = random.random()*100
-            #print("---")
-            #print(P)
-            #print(l)
             if (10*P >= l):
-                #print("mutation")
                 pos = randint(0,len(i)-1)
                 swapPositions(i, j, pos)
                 mutant.append(i);
 
     return mutant
     
-    
-        
-    
-    
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#mutation d'un chemin
+#mutation d'un chemin 1.0
 def mutationPath(tabPath):
     element1 = randint(0 , len(tabPath)-1)
     element2 = randint(0 , len(tabPath)-1)
@@ -284,7 +261,7 @@ def mutationPath(tabPath):
     return tabPath
 
 
-
+#boucle mutation
 def mutationLoop(tab):
     for i in range(len(tab)):
         if randint(0,10) > 1:
@@ -360,7 +337,7 @@ def selectionPath(nbrPath, Map, bestElementsSize):
         
         average = average/len(tabBestPath)
     
-        p = (1 - ((average - minimum)/minimum))**10
+        p = (1 - ((average - minimum)/minimum))**2
         
         
         best = tabBestPath[0]

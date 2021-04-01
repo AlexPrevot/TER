@@ -76,6 +76,11 @@ class Map:
                                             cities[intTab[i]][1],
                                             cities[intTab[i+1]][0],
                                             cities[intTab[i+1]][1])
+                
+        distanceChemin += self.pointDist(cities[intTab[0]][0],
+                                            cities[intTab[0]][1],
+                                            cities[intTab[-1]][0],
+                                            cities[intTab[-1]][1])
         return distanceChemin
         
     
