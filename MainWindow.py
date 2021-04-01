@@ -57,11 +57,14 @@ class window:
         tab = self.actualMap.randomPath()
         cities = self.actualMap.cities
         self.canvas.delete("all")
+        #self.canvasText.delete("all")
         self.canvas.create_rectangle(0, 0, 500, 500, fill='white')
         for i in range(len(tab)):
             self.placePoint(cities[tab[i]][0],cities[tab[i]][1])
         
-        tab = slt.selectionPath(100,self.actualMap,20)
+        tab = slt.selectionPath(1000,self.actualMap,200)
+        #self.textBestPath = Label(self.root, text = str(self.actualMap.pathLength(tab)))
+        self.stringVariable.set(str(self.actualMap.pathLength(tab)))
         cities = self.actualMap.cities
         for j in range(len(tab)):
             if (j+1)<len(tab):
@@ -74,6 +77,9 @@ class window:
                                cities[tab[0]][1],
                                cities[tab[len(tab)-1]][0],
                                cities[tab[len(tab)-1]][1])
+        
+    
+            
         
         
     #-------------------------------------------(!) OBJECT INSTANCIATION (!)
@@ -90,14 +96,21 @@ class window:
         self.canvas.pack()
         self.canvas.create_rectangle(0, 0, 500, 500, fill='white')
         
+        
         #the button of the window
         self.buttGeneration = Button(self.root, text = "Generation", command = self.buttonGenerate, bg = 'red')
         self.buttGeneration.pack()
-        self.buttPath = Button(self.root, text = "trouver un chemin", command = self.buttonPath, bg = 'red')
+        self.buttPath = Button(self.root, text = "Trouver un chemin", command = self.buttonPath, bg = 'red')
         self.buttPath.pack()
+        #self.canvasText = Canvas(self.root, width=500, height=500)
+        #self.canvasText.pack()
+        self.stringVariable= StringVar()
+        self.textBestPath = Label(self.root, textvariable = self.stringVariable) 
+        self.textBestPath.pack()
+        
         
         #Map creation
-        self.actualMap = Map(5,500,0) 
+        self.actualMap = Map(60,500,0) 
     
 
 
