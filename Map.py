@@ -70,13 +70,13 @@ class Map:
     def pathLength(self, intTab):
         distanceChemin = 0
         cities = self.cities
-        for i in intTab:
+        for i in range(len(intTab)):
             if (i+1)<len(cities):
                 distanceChemin += self.pointDist(cities[intTab[i]][0],
                                             cities[intTab[i]][1],
                                             cities[intTab[i+1]][0],
                                             cities[intTab[i+1]][1])
-                
+        
         distanceChemin += self.pointDist(cities[intTab[0]][0],
                                             cities[intTab[0]][1],
                                             cities[intTab[-1]][0],

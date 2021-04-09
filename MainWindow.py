@@ -62,7 +62,9 @@ class window:
         for i in range(len(tab)):
             self.placePoint(cities[tab[i]][0],cities[tab[i]][1])
         
-        tab = slt.selectionPath(1000,self.actualMap,500)
+        tab = slt.selectionPath(50,self.actualMap,25)
+
+        
         #self.textBestPath = Label(self.root, text = str(self.actualMap.pathLength(tab)))
         self.stringVariable.set(str(self.actualMap.pathLength(tab)))
         cities = self.actualMap.cities
@@ -88,7 +90,7 @@ class window:
         
     def __init__(self):
         #window creation
-        self.root = Tk(className= " Voyageur De Commerce - Bourmaud Paul, Prevot Alexandre" )
+        self.root = Tk(className='Voyageur de Commerce - Bourmaud Paul, Prevot Alexandre')
         self.root.geometry("700x600")
         
         #we set a canvas where we'll put useful things
@@ -110,7 +112,7 @@ class window:
         
         
         #Map creation
-        self.actualMap = Map(75,500,0) 
+        self.actualMap = Map(40,500,0) 
     
 
 
