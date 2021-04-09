@@ -292,16 +292,24 @@ def crossOverLoopBRUT(nbrPath, tab):
 
 
 
-
+#-------------------------------------ESSAYEZ EN SUPPRIMANT LA GENERATION PRECEDENTE
+#-------------------------------------EN NE GARDANT QUE LES ENFANTS 
 def crossOverLoop1(nbrPath, tab,Map):
     crossedTabs = []
     iteration = 0
     for i in range(nbrPath - len(tab)):
          parent1 = tab[randint(0, len(tab)-1)]
          parent2 =tab[randint(0, len(tab)-1)]
-            
+         
+         child1 = crossOverPath2(parent1, parent2)
+         child2 = crossOverPath2(parent2, parent1)
+         child = []
+         if Map.pathLength(child1) < Map.pathLength(child2):
+            child = child1
+         else:
+            child = child2 
              
-         crossedTabs.append(crossOverPath2(parent1, parent2))
+         crossedTabs.append(child)
     return crossedTabs
 
 
@@ -315,13 +323,7 @@ def crossOverLoop(nbrPath, tab):
     for i in range(nbrPath - len(tab)):
          parent1 = tab[randint(0, len(tab)-1)]
          parent2 =tab[randint(0, len(tab)-1)]
-         child1 = crossOverPath2(parent1, parent2)
-         child2 = crossOverPath2(parent2, parent1)
-         child = []
-         if Map.pathLength(child1) < Map.pathLength(child2):
-            child = child1
-         else:
-            child = child2 
+
          
          crossedTabs.append(child)
     return crossedTabs
