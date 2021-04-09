@@ -268,7 +268,7 @@ def crossOverLoopBRUT(nbrPath, tab):
             if(iteration + len(tab) < nbrPath):                
                 iteration += 1
                 crossedTabs.append(
-                                        crossOverPath(floor(len(tab[0])/2),tab[i],tab[j]))
+                                        crossOverPath2(tab[i],tab[j]))
             else:
                 if crossedTabs:
                     return crossedTabs
@@ -293,14 +293,15 @@ def crossOverLoopBRUT(nbrPath, tab):
 
 
 
-def crossOverLoop1(nbrPath, tab):
+def crossOverLoop1(nbrPath, tab,Map):
     crossedTabs = []
     iteration = 0
     for i in range(nbrPath - len(tab)):
          parent1 = tab[randint(0, len(tab)-1)]
          parent2 =tab[randint(0, len(tab)-1)]
-         crossedTabs.append(
-                             crossOverPath2(parent1, parent2))
+            
+             
+         crossedTabs.append(crossOverPath2(parent1, parent2))
     return crossedTabs
 
 
@@ -314,8 +315,15 @@ def crossOverLoop(nbrPath, tab):
     for i in range(nbrPath - len(tab)):
          parent1 = tab[randint(0, len(tab)-1)]
          parent2 =tab[randint(0, len(tab)-1)]
-         crossedTabs.append(
-                              crossOverERO(parent1, parent2))
+         child1 = crossOverPath2(parent1, parent2)
+         child2 = crossOverPath2(parent2, parent1)
+         child = []
+         if Map.pathLength(child1) < Map.pathLength(child2):
+            child = child1
+         else:
+            child = child2 
+         
+         crossedTabs.append(child)
     return crossedTabs
 
 
@@ -376,12 +384,13 @@ def mutation(population,P, Map):
     return mutant
     
     
-def mutation2(population,P, Map):
+def mutation1(population,P, Map):
     mutant = []
     best = Map.pathLength(population[0])
     prob = 0
     for i in population[1:]:
-        prob = Map.pathLength(i)/best
+        prob = best/Map.pathLength(i)
+        #print(prob)
         for j in range(len(i)):
             l = random.random()*100
             if (100*prob >= l):
@@ -433,7 +442,7 @@ def swapPositions(tab, pos1, pos2):
 
 
 #selection
-def FUSS2(paths,nbr):
+def FUSS(paths,nbr):
     final = []
     chunk = floor(len(paths)/5)
     prop = floor(0.5*chunk)
@@ -455,7 +464,7 @@ def FUSS2(paths,nbr):
 from bisect import bisect_left
 
 #selection
-def FUSS(paths,nbr):
+def FUSS2(paths,nbr):
     final = []
     mini = paths[0][1]
     maxi = paths[-1][1]
@@ -533,23 +542,26 @@ def selectionPath(nbrPath, Map, bestElementsSize):
                 if(randint(0,len(tabPath)) > i):
                     chosens += 1
                     tabBestPath.append(tabPath[i][0])
-                    
+         
+        """for i in range(bestElementsSize):
+            tabBestPath.append(tabPath[i][0])"""
+         
         #tabBestPath = FUSS(tabPath,bestElementsSize)
         
        #RAPPEL faire la mutation APRES le crossover et la descendanse (!) (!)
         average = 0
-        minimum = tabPath[0][1]
+        minimum = Map.pathLength(tabBestPath[0])
         
-        for i in tabPath:
-            average += i[1]
+        for i in tabBestPath:
+            average += Map.pathLength(i)
         
-        average = average/len(tabPath)
+        average = average/len(tabBestPath)
     
         p = (1 - ((average - minimum)/minimum))**5
         
+
         
-        
-        genCrossed = crossOverLoop1(nbrPath, tabBestPath)
+        genCrossed = crossOverLoop1(nbrPath, tabBestPath,Map)
 
         newSet = tabBestPath[1:]
         
@@ -557,11 +569,12 @@ def selectionPath(nbrPath, Map, bestElementsSize):
    
         
        
-        tabBestPath = genMutated  + genCrossed
+        tabBestPath = genMutated + genCrossed
         tabBestPath.append(best)
        
         
         tabPath = []
+        
         
         
         
@@ -745,21 +758,21 @@ def algoGene(nbrPath, Map,tabPath, bestElementsSize,array,selector,crossOver):
         
         best = tabPath[0][0]
 
-        """
+        
         chosens = 0
 
         for i in range(len(tabPath)):
             if (chosens < bestElementsSize):
                 if(randint(0,len(tabPath)) > i):
                     chosens += 1
-                    tabBestPath.append(tabPath[i][0])"""
+                    tabBestPath.append(tabPath[i][0])
                     
-        tabBestPath = selector(tabPath,bestElementsSize)
+        #tabBestPath = selector(tabPath,bestElementsSize)
         
        
         
         
-        genCrossed = crossOver(nbrPath, tabBestPath)
+        genCrossed = crossOverRAND(nbrPath, tabBestPath)
 
         newSet = tabBestPath[1:] 
         
