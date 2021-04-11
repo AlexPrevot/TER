@@ -552,7 +552,11 @@ def hardSelector(paths,nbr,props):
                 tab.append(paths[i][0])
     return tab
         
-
+def brutSelector(paths,nbr,props):
+    tab = []
+    for i in range(nbr):
+        tab.append(paths[i][0])
+    return tab
 
 
 def selectionPath(nbrPath, Map, bestElementsSize):
@@ -829,35 +833,139 @@ def selectionPath1(nbrPath,Map,bestElementsSize):
 
 
 
-
+def test(nbrPath,Map,bestElementsSize):
+    arr = []
+    score = [] #faire la moyenne dessus
+    
+    generation = 0
+    bestScore = float('inf')
+    iteration = 0
+    
+    tabPath = []
+    
+    for i in range(nbrPath):
+            cityTab = Map.randomPath()
+            tabPath.append([cityTab,Map.pathLength(cityTab)])
+            
+    m = 0
+    for j in tabPath:
+        m += j[1]
+    
+    m = m/len(tabPath)
+    print("moyenne de : " + str(m))
+                
+    for i in range(20):
+        print("tamere")
+        newScore = [] #mettre le nouveau score dedans et après l'intégrer dans currentScore
+        arr.append(algoGene(nbrPath, Map, tabPath, bestElementsSize, 
+                            newScore,FUSS2, crossOverLoop))
+        #score.append(newScore)
+        
+        for k in range(len(newScore)):
+            if(k < len(score)):
+                score[k] += newScore[k]
+            else:
+                score.append(newScore[k])
+        
+    for k in range(len(score)):
+        score[k] = score[k]/20
+        
+        
+       
+        """
+        m = 0
+        for k in score:
+            if len(k) > m:
+                m = len(k)
+                        
+                        
+        for k in score:
+            if len(k) < m:
+                best = k[-1]
+                for j in range(len(k),m-len(k)):
+                    k.append(best)"""
+    make_graph(len(score),score,'black')
+    pylab.show()
+        
 
 
 
 def etude(nbrPath,Map,bestElementsSize):
     #ne pas oublier de supprimer le crossOverLoop1 que ne sert à rien
-    trieur = [hardSelector,crossOverLoop,crossOverLoopBrut,crossOverLoopRAND,FUSS]
-    combinateur = [singlePoint,crossOverERO,crossOverPath2] #ajouter le cycle cross over
-    mutateur = [mutation,mutationReferentiel,mutationClassique]
+    #trieur = [hardSelector,crossOverLoop,crossOverLoopBrut,crossOverLoopRAND,FUSS]
+    #combinateur = [singlePoint,crossOverERO,crossOverPath2] #ajouter le cycle cross over
+    #mutateur = [mutation,mutationReferentiel,mutationClassique]
     
+    trieur = [brutSelector, FUSS2]
+    combinateur = [crossOverLoop1,crossOverLoop] #ajouter le cycle cross over
+    mutateur = [mutation]
+    
+    
+    
+    generation = 0
+    bestScore = float('inf')
+    iteration = 0
+    
+    tabPath = []
+    
+    for i in range(nbrPath):
+            cityTab = Map.randomPath()
+            tabPath.append([cityTab,Map.pathLength(cityTab)])
+            
+    m = 0
+    for j in tabPath:
+        m += j[1]
+    
+    m = m/len(tabPath)
+    print("moyenne de : " + str(m))
+    
+    n = 5
     for tri in trieur:
         for combi in combinateur:
             for mut in mutateur :
                 arr = []
-                currentScore = [] #faire la moyenne dessus
-                newScore = [] #mettre le nouveau score dedans et après l'intégrer dans currentScore
-                for i in range(20):
-                    print("tamere")
+                score = [0] #faire la moyenne dessus
+                
+                for i in range(n):
+                    print(i)
+                    newScore = [] #mettre le nouveau score dedans et après l'intégrer dans currentScore
                     arr.append(algoGene(nbrPath, Map, tabPath, bestElementsSize, 
-                                                    newScore,mutateur, tri, combi))
+                                        newScore,tri, combi))
+
+                    
+                    while len(score) < len(newScore):
+                        score.append(score[-1])
+                        
+                    while len(score) > len(newScore):
+                        newScore.append(newScore[-1])
+                      
+                    for k in range(len(score)):
+                        score[k] += newScore[k]
+                   
+                for k in range(len(score)):
+                    score[k] = score[k]/n
+                
+                print(score[-1])
+                
+                print("mutateur")
+                print(mut.__name__)
+                print("combinateur")
+                print(combi.__name__)
+                print("trieur")
+                print(tri.__name__)
+                make_graph(len(score),score,'black')
                 #faire la moyenne de arr et après le plot
                     
-    
+    pylab.show()
     #faire 10 simulations pour chaque possibilités
     #mettre les fonctions de crossover (pas les loop) en paramètre des crossoverloop
 
 
 
-def make_graph(x,y,c):
+def make_graph(nbrGen,y,c):
+    x = []
+    for i in range(nbrGen):
+        x.append(i)
     pylab.plot(x, y, color= 'black' )
 
 
@@ -950,8 +1058,8 @@ def algoGene(nbrPath, Map,tabPath, bestElementsSize,array,selector,crossOver):
         
         average = average/len(tabBestPath)
     
-        p = (1 - ((average - minimum)/minimum))**5
-        
+        #p = (1 - ((average - minimum)/minimum))**5
+        p = 0
         
         
         genCrossed = crossOver(nbrPath, tabBestPath,Map)
