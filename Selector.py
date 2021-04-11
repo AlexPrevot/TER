@@ -65,7 +65,7 @@ def crossOverPath3(nbr,path1, path2):
 
 
 #note : sous forme n et non n^2
-def crossOverPath(nbr,path1, path2):
+def singlePoint(nbr,path1, path2):
     #child from the cross_over
     child=path2.copy()
     #tab of already present values (but only their coordinates)
@@ -232,7 +232,7 @@ def crossOverERO(parent1, parent2):
 
 
 
-
+    
 
 
 
@@ -291,9 +291,6 @@ def crossOverLoopBRUT(nbrPath, tab):
 
 
 
-
-#-------------------------------------ESSAYEZ EN SUPPRIMANT LA GENERATION PRECEDENTE
-#-------------------------------------EN NE GARDANT QUE LES ENFANTS 
 def crossOverLoop1(nbrPath, tab,Map):
     crossedTabs = []
     iteration = 0
@@ -303,13 +300,27 @@ def crossOverLoop1(nbrPath, tab,Map):
          
          child1 = crossOverPath2(parent1, parent2)
          child2 = crossOverPath2(parent2, parent1)
+
          child = []
          if Map.pathLength(child1) < Map.pathLength(child2):
             child = child1
          else:
-            child = child2 
-             
-         crossedTabs.append(child)
+            child = child2
+        
+         
+         
+         for j in range(len(child)):
+            l = random.random()*100
+            #print("---")
+            #print(P)
+            #print(l)
+            if ( l < 1):
+                #print("mutation")
+                pos = randint(0,len(child)-1)
+                swapPositions(child, j, pos)
+
+         crossedTabs.append(child)    
+         
     return crossedTabs
 
 
@@ -317,15 +328,31 @@ def crossOverLoop1(nbrPath, tab,Map):
 
 
 #par pair au hasard
-def crossOverLoop(nbrPath, tab):
+def crossOverLoop(nbrPath, tab,Map):
     crossedTabs = []
     iteration = 0
     for i in range(nbrPath - len(tab)):
          parent1 = tab[randint(0, len(tab)-1)]
          parent2 =tab[randint(0, len(tab)-1)]
+         
+         child = crossOverERO(parent1, parent2)
+         
+         
+         for j in range(len(child)):
+            l = random.random()*100
+            #print("---")
+            #print(P)
+            #print(l)
+            if (l < 1):
+                #print("mutation")
+                pos = randint(0,len(child)-1)
+                swapPositions(child, j, pos)
+                
+
+         crossedTabs.append(child)
 
          
-         crossedTabs.append(child)
+         
     return crossedTabs
 
 
@@ -363,7 +390,7 @@ def crossOverLoopRAND(nbrPath, tab):
 
 
  
-
+    
 
 
 
@@ -386,7 +413,7 @@ def mutation(population,P, Map):
     return mutant
     
     
-def mutation1(population,P, Map):
+def mutationReferentiel(population,P, Map):
     mutant = []
     best = Map.pathLength(population[0])
     prob = 0
@@ -408,7 +435,23 @@ def mutation1(population,P, Map):
 
 
 
+#mega mutation
+def mutationClassique(population,P, Map):
+    mutant = []
+    for i in population:
+        for j in range(len(i)):
+            l = random.random()*100
+            #print("---")
+            #print(P)
+            #print(l)
+            if (0.02 >= l):
+                #print("mutation")
+                pos = randint(0,len(i)-1)
+                swapPositions(i, j, pos)
+        mutant.append(i);
+                
 
+    return mutant
 
 
 
@@ -444,10 +487,12 @@ def swapPositions(tab, pos1, pos2):
 
 
 #selection
-def FUSS(paths,nbr):
+def FUSS(paths,nbr,props):
     final = []
-    chunk = floor(len(paths)/5)
-    prop = floor(0.5*chunk)
+    chunk = floor(len(paths)/10)
+    s = nbr/len(paths)
+    #prop = ceil(s*chunk)*2 #le x2 ici vient du fait qu'on prend que la moitié de tous les chunks
+    prop = ceil(0.5*chunk)
 
     for i in range(5):
         for j in range(prop):
@@ -455,10 +500,11 @@ def FUSS(paths,nbr):
         #l = random.sample(range(chunk*i, chunk*i + chunk),prop) #sans double essayer avec prob = 1/2
         #for i in l:
             #final.append(paths[i][0])
+    
             
             
-            
-        
+    #print("proportion")
+    #print(prop)
     #print("taille")
     #print(len(final))
     return final
@@ -466,24 +512,37 @@ def FUSS(paths,nbr):
 from bisect import bisect_left
 
 #selection
-def FUSS2(paths,nbr):
+def FUSS2(paths,nbr,props):
     final = []
-    mini = paths[0][1]
-    maxi = paths[-1][1]
-    intervalle = maxi-mini
-    
-    keys = [r[1] for r in paths]
-    
-    for i in range(floor(len(paths)/2)):
-        l = random.uniform(mini, maxi)
-        final.append(paths[bisect_left(keys,l)][0])
-      
-
+    chunks = len(paths)/10
+   
+        
+    for i in range(nbr):
+         index = random.choice(props)
+         start = int(index*chunks)
+         end = int((index+1)*chunks)
+         l = []
+         if index + 1 < 10:
+             l = paths[start:end]
+         else:
+             l = paths[start:len(paths)-1]
+         element = random.choice(l)
+         final.append(element[0])
         
     return final
 
+#ESSAYER LE FUSS CLASSIQUE SANS MUTATION
+def FUSS3(paths,nbr,props):
+    final = []
+    chunks = len(paths)/10
+   
+        
+    for i in range(nbr):
+        final.append(random.choice(paths)[0])
+        
+    return final
 
-def hardSelector(paths,nbr):
+def hardSelector(paths,nbr,props):
     chosens = 0
     tab = []
     for i in range(len(paths)):
@@ -503,6 +562,40 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     print("NOUVELLE SELECTION")
     import time
     start = time.process_time()
+    
+    
+    
+    
+    props = []
+    for i in range(40):
+        props.append(0)
+    
+    for i in range(20):
+        props.append(1)
+    
+    for i in range(10):
+        props.append(2)
+    
+    for i in range(8):
+        props.append(3)
+        
+    for i in range(7):
+        props.append(4)
+        
+    for i in range(5):
+        props.append(5)
+    
+    for i in range(4):
+        props.append(6)
+    
+    for i in range(3):
+        props.append(7)
+        
+    for i in range(2):
+        props.append(8)
+        
+    for i in range(1):
+        props.append(9)
     
     
     
@@ -536,19 +629,19 @@ def selectionPath(nbrPath, Map, bestElementsSize):
         
         best = tabPath[0][0]
 
-        
+        """
         chosens = 0
 
         for i in range(len(tabPath)):
             if (chosens < bestElementsSize):
                 if(randint(0,len(tabPath)) > i):
                     chosens += 1
-                    tabBestPath.append(tabPath[i][0])
+                    tabBestPath.append(tabPath[i][0])"""
          
         """for i in range(bestElementsSize):
             tabBestPath.append(tabPath[i][0])"""
          
-        #tabBestPath = FUSS(tabPath,bestElementsSize)
+        tabBestPath = FUSS2(tabPath,bestElementsSize,props)
         
        #RAPPEL faire la mutation APRES le crossover et la descendanse (!) (!)
         average = 0
@@ -559,13 +652,18 @@ def selectionPath(nbrPath, Map, bestElementsSize):
         
         average = average/len(tabBestPath)
     
-        p = (1 - ((average - minimum)/minimum))**5
+        #p = (1 - ((average - minimum)/minimum))**5
+        p = 0
         
+        
+        genCrossed = crossOverLoop(nbrPath, tabBestPath,Map)
 
         
-        genCrossed = crossOverLoop1(nbrPath, tabBestPath,Map)
-
+        #print(len(genCrossed))
         newSet = tabBestPath[1:]
+        
+        
+        
         
         genMutated = mutation(newSet,p,Map)
    
@@ -699,9 +797,9 @@ def selectionPath1(nbrPath,Map,bestElementsSize):
     g1 = []
     g2 = []
     
-    gen1 = algoGene(nbrPath,Map,tabPath,bestElementsSize,arrayERO,FUSS,crossOverLoop1)
+    gen1 = algoGene(nbrPath,Map,tabPath,bestElementsSize,arrayERO,FUSS2,crossOverLoop1)
     print("fin 1")
-    gen2 = algoGene(nbrPath,Map,tabPath,bestElementsSize,arrayRC,hardSelector,crossOverLoop1)
+    gen2 = algoGene(nbrPath,Map,tabPath,bestElementsSize,arrayRC,FUSS,crossOverLoop1)
     
     for i in range(gen1):
         g1.append(i)
@@ -727,12 +825,89 @@ def selectionPath1(nbrPath,Map,bestElementsSize):
 
 
 
+
+
+
+
+
+
+
+
+def etude(nbrPath,Map,bestElementsSize):
+    #ne pas oublier de supprimer le crossOverLoop1 que ne sert à rien
+    trieur = [hardSelector,crossOverLoop,crossOverLoopBrut,crossOverLoopRAND,FUSS]
+    combinateur = [singlePoint,crossOverERO,crossOverPath2] #ajouter le cycle cross over
+    mutateur = [mutation,mutationReferentiel,mutationClassique]
+    
+    for tri in trieur:
+        for combi in combinateur:
+            for mut in mutateur :
+                arr = []
+                currentScore = [] #faire la moyenne dessus
+                newScore = [] #mettre le nouveau score dedans et après l'intégrer dans currentScore
+                for i in range(20):
+                    print("tamere")
+                    arr.append(algoGene(nbrPath, Map, tabPath, bestElementsSize, 
+                                                    newScore,mutateur, tri, combi))
+                #faire la moyenne de arr et après le plot
+                    
+    
+    #faire 10 simulations pour chaque possibilités
+    #mettre les fonctions de crossover (pas les loop) en paramètre des crossoverloop
+
+
+
+def make_graph(x,y,c):
+    pylab.plot(x, y, color= 'black' )
+
+
+
+
+
+
+
+
+
+
+
+
 def algoGene(nbrPath, Map,tabPath, bestElementsSize,array,selector,crossOver):
     cityTab = Map.cities
     tabBestPath =[]
     print("NOUVELLE SELECTION")
-
     
+    
+    
+    props = []
+    for i in range(60):
+        props.append(0)
+    
+    for i in range(9):
+        props.append(1)
+    
+    for i in range(8):
+        props.append(2)
+    
+    for i in range(7):
+        props.append(3)
+        
+    for i in range(6):
+        props.append(4)
+        
+    for i in range(5):
+        props.append(5)
+    
+    for i in range(4):
+        props.append(6)
+    
+    for i in range(3):
+        props.append(7)
+        
+    for i in range(2):
+        props.append(8)
+        
+    for i in range(1):
+        props.append(9)
 
     generation = 0
     bestScore = float('inf')
@@ -745,38 +920,48 @@ def algoGene(nbrPath, Map,tabPath, bestElementsSize,array,selector,crossOver):
         
         
         tabBestPath = []
-     
         
-        #RAPPEL faire la mutation APRES le crossover et la descendanse (!) (!)
-        average = 0
-        minimum = tabPath[0][1]
         
-        for i in tabPath:
-            average += i[1]
         
-        average = average/len(tabPath)
-    
-        p = (1 - ((average - minimum)/minimum))**10
+        
         
         best = tabPath[0][0]
 
-        
+        """
         chosens = 0
 
         for i in range(len(tabPath)):
             if (chosens < bestElementsSize):
                 if(randint(0,len(tabPath)) > i):
                     chosens += 1
-                    tabBestPath.append(tabPath[i][0])
-                    
-        #tabBestPath = selector(tabPath,bestElementsSize)
+                    tabBestPath.append(tabPath[i][0])"""
+         
+        """for i in range(bestElementsSize):
+            tabBestPath.append(tabPath[i][0])"""
+         
+        tabBestPath = selector(tabPath,bestElementsSize,props)
         
-       
+       #RAPPEL faire la mutation APRES le crossover et la descendanse (!) (!)
+        average = 0
+        minimum = Map.pathLength(tabBestPath[0])
+        
+        for i in tabBestPath:
+            average += Map.pathLength(i)
+        
+        average = average/len(tabBestPath)
+    
+        p = (1 - ((average - minimum)/minimum))**5
         
         
-        genCrossed = crossOverRAND(nbrPath, tabBestPath)
+        
+        genCrossed = crossOver(nbrPath, tabBestPath,Map)
 
-        newSet = tabBestPath[1:] 
+        
+        #print(len(genCrossed))
+        newSet = tabBestPath[1:]
+        
+        
+        
         
         genMutated = mutation(newSet,p,Map)
    
