@@ -159,7 +159,7 @@ void cross(popvect& pop, int position,std::vector<int>& path1, std::vector<int>&
 		N = smallest;
 	}
 	
-	mutation(child, 0.01);
+	mutation(child, 0.08);
 	
 	std::get<1>(pop[position]) = child;
 	//std::cout << "faire matrice fin -----------" << std::endl;
@@ -424,19 +424,19 @@ std::vector<int> Calgogen(std::vector<std::tuple<int,int>> &coordCities, int nbr
 
 	std::vector<int> props;
 
-	for (int i = 0; i < 40; i++)
+	for (int i = 0; i < 60; i++)
 		props.push_back(0);
 
-	for (int i = 0; i < 20; i++)
+	for (int i = 0; i < 9; i++)
 		props.push_back(1);
 
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 8; i++)
 		props.push_back(2);
 
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < 7; i++)
 		props.push_back(3);
 
-	for (int i = 0; i < 7; i++)
+	for (int i = 0; i < 6; i++)
 		props.push_back(4);
 
 	for (int i = 0; i < 5; i++)
@@ -506,7 +506,7 @@ std::vector<int> Calgogen(std::vector<std::tuple<int,int>> &coordCities, int nbr
 
 
 		//std::chrono::steady_clock::time_point mutS = std::chrono::steady_clock::now();
-		/*for (int i = 1; i < nbrPaths; i++)
+		/*for (int i = 1; i < 0.5*nbrPaths; i++)
 			mutation(std::get<1>((*chemins)[i]), 0);*/
 		//std::chrono::steady_clock::time_point mutE = std::chrono::steady_clock::now();
 

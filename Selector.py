@@ -343,7 +343,7 @@ def crossOverLoop(nbrPath, tab,Map):
             #print("---")
             #print(P)
             #print(l)
-            if (l < 1):
+            if (l < 2):
                 #print("mutation")
                 pos = randint(0,len(child)-1)
                 swapPositions(child, j, pos)
@@ -588,7 +588,7 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     
     
     
-    """
+    
     props = []
     for i in range(40):
         props.append(0)
@@ -632,7 +632,7 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     
     m = m/len(tabPath)
     print("moyenne de : " + str(m))
-    
+    """
     generation = 0
     bestScore = float('inf')
     iteration = 0
@@ -650,19 +650,9 @@ def selectionPath(nbrPath, Map, bestElementsSize):
         
         
         
-        best = tabPath[0][0]
+        #best = tabPath[0][0]
 
         
-        chosens = 0
-
-        for i in range(len(tabPath)):
-            if (chosens < bestElementsSize):
-                if(randint(0,len(tabPath)) > i):
-                    chosens += 1
-                    tabBestPath.append(tabPath[i][0])
-         
-        for i in range(bestElementsSize):
-            tabBestPath.append(tabPath[i][0])
          
         tabBestPath = FUSS2(tabPath,bestElementsSize,props)
         
@@ -693,7 +683,7 @@ def selectionPath(nbrPath, Map, bestElementsSize):
         
        
         tabBestPath = genMutated + genCrossed
-        tabBestPath.append(best)
+        #tabBestPath.append(best)
        
         
         tabPath = []
@@ -730,11 +720,11 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     print(time.process_time() - start)
     print("Nombre de Generation : ")
     print(generation)
-    return path"""
+    return path
 
     
     
-    
+    """
     print("RESULTAT FINAL")
     resultat = myModule.genalgo(Map.cities, nbrPath)
     print(resultat)

@@ -62,7 +62,7 @@ class window:
         for i in range(len(tab)):
             self.placePoint(cities[tab[i]][0],cities[tab[i]][1])
         
-        tab = slt.selectionPath(500,self.actualMap,250)
+        tab = slt.selectionPath(500,self.actualMap,100)
 
         
         #self.textBestPath = Label(self.root, text = str(self.actualMap.pathLength(tab)))
@@ -112,7 +112,7 @@ class window:
         
         
         #Map creation
-        self.actualMap = Map(80,500,0) 
+        self.actualMap = Map(100,500,0) 
     
 
 
