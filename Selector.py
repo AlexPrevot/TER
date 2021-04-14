@@ -588,7 +588,7 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     
     
     
-    
+    """
     props = []
     for i in range(40):
         props.append(0)
@@ -652,17 +652,17 @@ def selectionPath(nbrPath, Map, bestElementsSize):
         
         best = tabPath[0][0]
 
-        """
+        
         chosens = 0
 
         for i in range(len(tabPath)):
             if (chosens < bestElementsSize):
                 if(randint(0,len(tabPath)) > i):
                     chosens += 1
-                    tabBestPath.append(tabPath[i][0])"""
+                    tabBestPath.append(tabPath[i][0])
          
-        """for i in range(bestElementsSize):
-            tabBestPath.append(tabPath[i][0])"""
+        for i in range(bestElementsSize):
+            tabBestPath.append(tabPath[i][0])
          
         tabBestPath = FUSS2(tabPath,bestElementsSize,props)
         
@@ -730,11 +730,11 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     print(time.process_time() - start)
     print("Nombre de Generation : ")
     print(generation)
-    return path
+    return path"""
 
     
     
-    '''
+    
     print("RESULTAT FINAL")
     resultat = myModule.genalgo(Map.cities, nbrPath)
     print(resultat)
@@ -743,7 +743,7 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     print(time.process_time() - start)
     
     
-    return resultat'''
+    return resultat
 
 
 

@@ -1,6 +1,5 @@
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
-
 #include <stdio.h>
 #include <iostream>
 #include <vector>
@@ -163,7 +162,7 @@ void cross(popvect& pop, int position,std::vector<int>& path1, std::vector<int>&
 	mutation(child, 0.01);
 	
 	std::get<1>(pop[position]) = child;
-	std::cout << "faire matrice fin -----------" << std::endl;
+	//std::cout << "faire matrice fin -----------" << std::endl;
 	/*
 	std::shared_ptr<std::vector<int>> child = std::make_shared<std::vector<int>>();
 
@@ -339,7 +338,7 @@ void mutation(std::vector<int>& chemin, float chance)
 {
 	for (int i = 0; i < chemin.size(); i++)
 	{
-		if (chance > rand() % 100)
+		if (chance >= rand() % 100)
 		{
 			short place = rand() % chemin.size();
 			short tmp1 = chemin.at(i);
@@ -393,15 +392,21 @@ void BENCHtest(std::vector<std::tuple<int, int>>& co, std::shared_ptr<std::vecto
 
 void FUSS(popvect& population, int nbr, std::vector<int>& props)
 {
-	int chunk = population.size() / 10;
-	
+	float chunk = population.size() / 10;
+	popvect v(nbr);
+	//ça ne marche pas ici car on risque de copier le même plusieurs fois
 	for (int i = 0; i < nbr; i++)
 	{
 		int index = props.at(rand() % 100);
-		int a = (index + 1) * chunk;
-		int b = index * chunk;
-		int element = rand() % (a - b) + b;
-		population[i] = population[element];
+		float a = (index + 1) * chunk;
+		float b = index * chunk;
+		int element = rand() % int((a - b) + b);
+		v[i] = population[element];
+		//population[i] = population[element];
+	}
+	for (int i = 0; i < nbr; i++)
+	{
+		population[i] = v[i];
 	}
 }
 
@@ -501,8 +506,8 @@ std::vector<int> Calgogen(std::vector<std::tuple<int,int>> &coordCities, int nbr
 
 
 		//std::chrono::steady_clock::time_point mutS = std::chrono::steady_clock::now();
-		/*for (int i = 1; i < 0.2*nbrPaths; i++)
-			mutation(chemins[i], 1);*/
+		/*for (int i = 1; i < nbrPaths; i++)
+			mutation(std::get<1>((*chemins)[i]), 0);*/
 		//std::chrono::steady_clock::time_point mutE = std::chrono::steady_clock::now();
 
 
@@ -537,8 +542,24 @@ std::vector<int> Calgogen(std::vector<std::tuple<int,int>> &coordCities, int nbr
 		//BENCHtestIt += 1;
 		//BENCHtest(coordCities, chemins, nbrPaths, BENCHtestIt);
 	}
+	/*
+	std::cout <<"generation : "  <<generation<< std::endl;
 
-	//std::cout <<"generation : "  <<generation<< std::endl;
+
+	for (int i = 0; i < 5; i++)
+	{
+		std::cout << "[";
+		for (int j = 0; j < 20; j++)
+		{
+			std::cout << std::get<1>(chemins->at(i)).at(j);
+			std::cout << ",";
+
+		}
+		std::cout << "] FITNESs :";
+		std::cout << getFitness(coordCities, champion) << std::endl;
+	}
+
+	std::cout <<"" << std::endl;*/
 
 
 	//std::cout << "----" << std::endl;
