@@ -492,7 +492,7 @@ std::vector<int> Calgogen(std::vector<std::tuple<int,int>> &coordCities, int nbr
 
 	
 	// je test sans me soucier de si le meilleur est dedans ou non
-	while (iterations < 200)
+	while (iterations < 500)
 	{
 		
 		
