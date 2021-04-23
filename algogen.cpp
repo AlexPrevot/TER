@@ -159,7 +159,7 @@ void cross(popvect& pop, int position,std::vector<int>& path1, std::vector<int>&
 		N = smallest;
 	}
 	
-	mutation(child, 0.08);
+	mutation(child, 0.01);
 	
 	std::get<1>(pop[position]) = child;
 	//std::cout << "faire matrice fin -----------" << std::endl;
@@ -390,11 +390,46 @@ void BENCHtest(std::vector<std::tuple<int, int>>& co, std::shared_ptr<std::vecto
 	}
 }
 
+//assume that population is already sort by fitness
 void FUSS(popvect& population, int nbr, std::vector<int>& props)
 {
+	int size = population.size();
 	float chunk = population.size() / 10;
 	popvect v(nbr);
-	//ça ne marche pas ici car on risque de copier le même plusieurs fois
+
+	float intervalle = (std::get<0>(population.back()) - std::get<0>(population[0]))/10;
+	std::vector<int> fitnessGroup(10,-1);
+
+	int count = 0;
+	for (int i = 0; i < size; i++)
+	{
+		if (std::get<0>(population[i]) >= intervalle * count)
+		{
+			fitnessGroup[count] = i;
+			count++;
+		}
+
+		if (count > 9)
+			break;
+	}
+	
+	for (int i = 0; i < nbr; i++)
+	{
+		//std::cout << "dernier for : " << i << std::endl;
+		
+		int index = props.at(rand() % 100);
+		float a;
+		if (index + 1 > 9)
+			a = size - 1;
+		else
+			a = fitnessGroup[index + 1];
+		float b = fitnessGroup[index];
+		int element = rand() % int((a - b) + b);
+		v[i] = population[element];
+		//population[i] = population[element];
+	}
+
+	/*
 	for (int i = 0; i < nbr; i++)
 	{
 		int index = props.at(rand() % 100);
@@ -403,7 +438,7 @@ void FUSS(popvect& population, int nbr, std::vector<int>& props)
 		int element = rand() % int((a - b) + b);
 		v[i] = population[element];
 		//population[i] = population[element];
-	}
+	}*/
 	for (int i = 0; i < nbr; i++)
 	{
 		population[i] = v[i];
@@ -424,19 +459,19 @@ std::vector<int> Calgogen(std::vector<std::tuple<int,int>> &coordCities, int nbr
 
 	std::vector<int> props;
 
-	for (int i = 0; i < 60; i++)
+	for (int i = 0; i < 40; i++)
 		props.push_back(0);
 
-	for (int i = 0; i < 9; i++)
+	for (int i = 0; i < 20; i++)
 		props.push_back(1);
 
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < 10; i++)
 		props.push_back(2);
 
-	for (int i = 0; i < 7; i++)
+	for (int i = 0; i < 8; i++)
 		props.push_back(3);
 
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i < 7; i++)
 		props.push_back(4);
 
 	for (int i = 0; i < 5; i++)
@@ -492,7 +527,7 @@ std::vector<int> Calgogen(std::vector<std::tuple<int,int>> &coordCities, int nbr
 
 	
 	// je test sans me soucier de si le meilleur est dedans ou non
-	while (iterations < 500)
+	while (iterations < 200)
 	{
 		
 		
@@ -506,7 +541,7 @@ std::vector<int> Calgogen(std::vector<std::tuple<int,int>> &coordCities, int nbr
 
 
 		//std::chrono::steady_clock::time_point mutS = std::chrono::steady_clock::now();
-		/*for (int i = 1; i < 0.5*nbrPaths; i++)
+		/*for (int i = 1; i < nbrPaths; i++)
 			mutation(std::get<1>((*chemins)[i]), 0);*/
 		//std::chrono::steady_clock::time_point mutE = std::chrono::steady_clock::now();
 
@@ -569,7 +604,6 @@ std::vector<int> Calgogen(std::vector<std::tuple<int,int>> &coordCities, int nbr
 
 	return champion;
 }
-
 
 
 //-----------------------------------------------------------

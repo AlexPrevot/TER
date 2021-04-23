@@ -20,6 +20,8 @@ import myModule
 
 import pylab
 
+from Map import Map
+
 
 #note : changer le deuxième for car complexité de n², on peut transformer en n
 def crossOverPath5(nbrElementTab1,tabPath1, tabPath2):
@@ -838,8 +840,36 @@ def selectionPath1(nbrPath,Map,bestElementsSize):
 
 
 
-
-
+def mesurePerformance(nbrPath,Map1,bestElementsSize):
+    
+    #algoGene(nbrPath, Map,tabPath, bestElementsSize,array,mutator,selector,crossOver):
+   
+    pylab.figure(figsize=(20,10))
+    n = 1
+    
+    count = 0
+    arr = []
+    maxIteration = 60
+    nbr = maxIteration - 4
+    
+    for i in range(4,maxIteration):
+        tabPath = []
+        map2 = Map(i,500,0)
+        for j in range(nbrPath):
+            cityTab = map2.randomPath()
+            tabPath.append([cityTab,map2.pathLength(cityTab)])
+        newScore = []
+        nbrGeneration = 0
+        for j in range(n):
+            nbrGeneration += algoGene(nbrPath, map2, tabPath, bestElementsSize, 
+                                newScore,mutationNull,FUSS2, crossOverLoop)
+            count += 1
+            prop = (count/(nbr*n))*100
+            print("proportion fait : " + str(prop))
+        nbrGeneration = nbrGeneration / n
+        arr.append(nbrGeneration)
+        
+    make_graph(nbr,arr,"courbe", "courbe")
 
 
 def etude(nbrPath,Map,bestElementsSize):

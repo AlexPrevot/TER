@@ -26,8 +26,8 @@ class Map:
             error("Map creation : MIN is a " + str(type(MIN)) + ": To create a map you need an int")
         if(MIN > MAX):
             error("Map creation : MIN is a greater than MAX")
-        if(Map.count >= 2):
-            error("Map creation call : You can't create more than one map")
+        #if(Map.count >= 2):
+            #error("Map creation call : You can't create more than one map")
     
     
     #------------------------------------------Map Creation
