@@ -5,7 +5,10 @@
 #include <math.h>
 
 //liste de tuples le premier element est le score, le deuxième élement est l'ordre des villes
-typedef std::vector<std::tuple<int, std::vector<int>>> popvect;
+typedef std::vector<std::tuple<int, std::vector<int>>> popvect; //je devrais l'appeler subpop mais c'est trop tard
+typedef std::vector<popvect> surpop;
+typedef std::vector<int> individuV;
+typedef std::tuple<int, std::vector<int>> individuV2;
 
 std::vector<int> Calgogen(std::vector<std::tuple<int, int>>& coordCities, int nbrPaths);
 

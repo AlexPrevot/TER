@@ -767,7 +767,7 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     
     
     
-    
+    """
     props = []
     for i in range(40):
         props.append(0)
@@ -917,7 +917,7 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     print(time.process_time() - start)
     
     
-    return resultat """
+    return resultat 
 
 
 

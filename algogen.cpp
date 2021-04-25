@@ -159,7 +159,7 @@ void cross(popvect& pop, int position,std::vector<int>& path1, std::vector<int>&
 		N = smallest;
 	}
 	
-	mutation(child, 0.01);
+	mutation(child, 0.02);
 	
 	std::get<1>(pop[position]) = child;
 	//std::cout << "faire matrice fin -----------" << std::endl;
@@ -454,6 +454,8 @@ void FUSS(popvect& population, int nbr, std::vector<int>& props)
 //map position
 std::vector<int> Calgogen(std::vector<std::tuple<int,int>> &coordCities, int nbrPaths)
 {
+	srand(unsigned(time(NULL)));
+
 	int nbrCities = coordCities.size();
 
 
@@ -490,73 +492,64 @@ std::vector<int> Calgogen(std::vector<std::tuple<int,int>> &coordCities, int nbr
 	for (int i = 0; i < 1; i++)
 		props.push_back(9);
 
-	std::shared_ptr<popvect> chemins = generatePopulation(coordCities,nbrPaths, nbrCities);
-
-	int BENCHtestIt = 0;
 
 
-	sortByFitness(*chemins);
+
+
+	//std::shared_ptr<popvect> chemins = generatePopulation(coordCities,nbrPaths, nbrCities);
+	//sortByFitness(*chemins);
+	//---------------------------------
+	std::shared_ptr<surpop> chemins(new surpop(10));
+
+	for (int i = 0; i < 10; i++)
+	{
+		(*chemins)[i] = *generatePopulation(coordCities, nbrPaths, nbrCities);
+		sortByFitness((*chemins)[i]);
+	}
+	
+	std::vector<int> champion = std::get<1>((*chemins)[0][0]);
+	float best = getFitness(coordCities, champion);
+	
+	for (int i = 0; i < 10; i++)
+	{
+		if ((std::get<0>((*chemins)[i][0])) < best)
+		{
+			best = std::get<0>((*chemins)[i][0]);
+			champion = std::get<1>((*chemins)[i][0]);
+		}
+	}
+
+	//-------------------------------
 	
 
-	//BENCHtest(coordCities, chemins, nbrPaths, BENCHtestIt);
-
-	//chemins = fitness(coordCities, chemins, nbrPaths);
-	std::vector<int> champion = std::get<1>((*chemins)[0]);
-	float best = getFitness(coordCities, champion);
+	
+	//std::vector<int> champion = std::get<1>((*chemins)[0]);
+	//float best = getFitness(coordCities, champion);
 	
 	int iterations = 0;
 
 	int generation = 0;
 
-	
-	/*std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
+	int subPopSize = nbrPaths / 10;
 
-	std::chrono::steady_clock::time_point cross = std::chrono::steady_clock::now();
-	std::chrono::steady_clock::time_point mut = std::chrono::steady_clock::now();
-	std::chrono::steady_clock::time_point fit = std::chrono::steady_clock::now();*/
+	int selectionSize = (0.5 * nbrPaths) / 10;
 
-	/*
-	std::cout << "les scores " << std::endl;
-	float m = 0;
-	for (int i = 0; i < nbrPaths; i++)
-		m += std::get<0>((*chemins)[i]);
-
-	
-
-	std::cout << "moyenne de : " << m / chemins->size() << std::endl;*/
-
-	
-	// je test sans me soucier de si le meilleur est dedans ou non
+	std::vector<individuV> tmpMigrant(selectionSize);
 	while (iterations < 200)
 	{
 		
-		
-		FUSS(*chemins, 0.25 * nbrPaths, props);
-		
-		//std::chrono::steady_clock::time_point crossS = std::chrono::steady_clock::now();
-		
-		cross_over(coordCities, *chemins, 0.25*nbrPaths);
-		
-		//std::chrono::steady_clock::time_point crossE = std::chrono::steady_clock::now();
 
+		/*FUSS(*chemins, 0.5 * nbrPaths, props);
 
-		//std::chrono::steady_clock::time_point mutS = std::chrono::steady_clock::now();
-		/*for (int i = 1; i < nbrPaths; i++)
-			mutation(std::get<1>((*chemins)[i]), 0);*/
-		//std::chrono::steady_clock::time_point mutE = std::chrono::steady_clock::now();
+		cross_over(coordCities, *chemins, 0.5 * nbrPaths);
 
-
-		//std::chrono::steady_clock::time_point fitS = std::chrono::steady_clock::now();
-		//chemins = fitness(coordCities, chemins, nbrPaths);
-		//std::chrono::steady_clock::time_point fitE = std::chrono::steady_clock::now();
-		
 		sortByFitness(*chemins);
-		
+			
+			
+			
+			
 		std::vector<int> currentChampion = std::get<1>((*chemins)[0]);
 		float currentBest = getFitness(coordCities, currentChampion);
-
-
-		
 
 		if (currentBest < best)
 		{
@@ -569,41 +562,79 @@ std::vector<int> Calgogen(std::vector<std::tuple<int,int>> &coordCities, int nbr
 			iterations++;
 
 		generation++;
-
-		//cross += crossE - crossS;
-		//mut += mutE - mutS;
-		//fit += fitE - fitS;
-
-		//BENCHtestIt += 1;
-		//BENCHtest(coordCities, chemins, nbrPaths, BENCHtestIt);
-	}
-	/*
-	std::cout <<"generation : "  <<generation<< std::endl;
+			
+			*/
 
 
-	for (int i = 0; i < 5; i++)
-	{
-		std::cout << "[";
-		for (int j = 0; j < 20; j++)
+		//-------------------------
+		for (int i = 0; i < 10; i++)
 		{
-			std::cout << std::get<1>(chemins->at(i)).at(j);
-			std::cout << ",";
+
+			FUSS((*chemins)[i], 0.5 * nbrPaths, props);
+
+			cross_over(coordCities, (*chemins)[i], 0.5 * nbrPaths);
+
+			sortByFitness((*chemins)[i]);
 
 		}
-		std::cout << "] FITNESs :";
-		std::cout << getFitness(coordCities, champion) << std::endl;
+
+		std::vector<int> currentChampion(nbrCities);
+		float currentBest = std::get<0>((*chemins)[0][subPopSize-1]);
+
+		for (int i = 0; i < 10; i++)
+		{
+			if ((std::get<0>((*chemins)[i][0])) < best)
+			{
+				currentBest = std::get<0>((*chemins)[i][0]);
+				currentChampion = std::get<1>((*chemins)[i][0]);
+			}
+		}
+
+
+
+		
+
+		if (currentBest < best)
+		{
+			best = currentBest;
+			champion = currentChampion;
+			iterations = 0;
+
+		}
+		else
+			iterations++;
+
+		generation++;
+
+		if (generation % 50 == 0)
+		{
+			
+			std::vector<int> tmp(selectionSize);
+			for (int i = 0; i < selectionSize; i++)
+				tmp[i] = rand() % (subPopSize);
+
+			for (int i = 0; i < 10; i++)
+			{
+				short ind = rand() % 10;
+				for (int j = 0; j < selectionSize; j++)
+				{
+					individuV2 mem = (*chemins)[i][tmp[j]];
+					(*chemins)[i][tmp[j]] = (*chemins)[ind][tmp[j]];
+					(*chemins)[ind][tmp[j]] = mem;
+				}
+			}
+		}
+
+
+		for(int i = 0; i < 10; i++)
+			sortByFitness((*chemins)[i]);
+
+		
 	}
-
-	std::cout <<"" << std::endl;*/
-
-
-	//std::cout << "----" << std::endl;
-	//std::cout << "TEMPS CROSS = " << std::chrono::duration_cast<std::chrono::microseconds>(cross - start).count() << "[µs]" << std::endl;
-	//std::cout << "TEMPS MUTATION= " << std::chrono::duration_cast<std::chrono::microseconds>(mut - start).count() << "[µs]" << std::endl;
-	//std::cout << "TEMPS FITNESS= " << std::chrono::duration_cast<std::chrono::microseconds>(fit- start).count() << "[µs]" << std::endl;
-
+	
 	return champion;
 }
+
 
 
 //-----------------------------------------------------------
