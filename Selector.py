@@ -333,7 +333,7 @@ def crossOverLoop1(nbrPath, tab,Map):
             #print("---")
             #print(P)
             #print(l)
-            if ( l < p):
+            if ( l < 2):
                 #print("mutation")
                 pos = randint(0,len(child)-1)
                 swapPositions(child, j, pos)
@@ -849,7 +849,7 @@ def selectionPath(nbrPath, Map, bestElementsSize):
         #p = 0
         
         
-        genCrossed = crossOverLoop(nbrPath, tabBestPath,Map)
+        genCrossed = crossOverLoop1(nbrPath, tabBestPath,Map)
 
         
         #print(len(genCrossed))
