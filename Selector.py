@@ -309,8 +309,35 @@ def crossOverLoopClassique(nbrPath, tab, Map):
 
 
 
+def combinaisonPointSingulier(nbrPath, tab,Map):
+    crossedTabs = []
+    iteration = 0
+    size = floor(len(tab[0])/2)
+    for i in range(nbrPath - len(tab)):
+         parent1 = tab[randint(0, len(tab)-1)]
+         parent2 =tab[randint(0, len(tab)-1)]
+         
+         child = singlePoint(size,parent1, parent2)
 
-def crossOverLoop1(nbrPath, tab,Map):
+   
+        
+         
+         
+         for j in range(len(child)):
+            l = random.random()*100
+            #print("---")
+            #print(P)
+            #print(l)
+            if ( l < 2):
+                #print("mutation")
+                pos = randint(0,len(child)-1)
+                swapPositions(child, j, pos)
+
+         crossedTabs.append(child)    
+         
+    return crossedTabs
+
+def RandomCrossMapping(nbrPath, tab,Map):
     crossedTabs = []
     iteration = 0
     for i in range(nbrPath - len(tab)):
@@ -333,7 +360,7 @@ def crossOverLoop1(nbrPath, tab,Map):
             #print("---")
             #print(P)
             #print(l)
-            if ( l < p):
+            if ( l < 2):
                 #print("mutation")
                 pos = randint(0,len(child)-1)
                 swapPositions(child, j, pos)
@@ -347,7 +374,7 @@ def crossOverLoop1(nbrPath, tab,Map):
 
 
 #par pair au hasard
-def crossOverLoop(nbrPath, tab,Map):
+def EdgeRecombination(nbrPath, tab,Map):
     crossedTabs = []
     iteration = 0
     for i in range(nbrPath - len(tab)):
@@ -443,7 +470,7 @@ def mutationDynamique(Map,tabBestPath):
     return p
     
     
-def mutationNull(Map,tabBestPath):
+def mutationStatique(Map,tabBestPath):
     return 0
 
 
@@ -525,7 +552,7 @@ def swapPositions(tab, pos1, pos2):
 
 
 #selection
-def FUSS(paths,nbr,props):
+def FUSS4(paths,nbr,props):
     final = []
     chunk = floor(len(paths)/10)
     s = nbr/len(paths)
@@ -550,7 +577,7 @@ def FUSS(paths,nbr,props):
 from bisect import bisect_left
 
 #selection
-def FUSS2(paths,nbr,props):
+def FUSSPonderer(paths,nbr,props):
     final = []
     chunks = len(paths)/10
    
@@ -570,7 +597,7 @@ def FUSS2(paths,nbr,props):
     return final
 
 #ESSAYER LE FUSS CLASSIQUE SANS MUTATION
-def FUSS3(paths,nbr,props):
+def FUSS(paths,nbr,props):
     final = []
     chunks = len(paths)/10
    
@@ -590,7 +617,7 @@ def hardSelector(paths,nbr,props):
                 tab.append(paths[i][0])
     return tab
         
-def brutSelector(paths,nbr,props):
+def selectionBrute(paths,nbr,props):
     tab = []
     for i in range(nbr):
         tab.append(paths[i][0])
@@ -1056,19 +1083,17 @@ def mesurePerformance(nbrPath,Map1,bestElementsSize):
     make_graph(nbr,arr,"courbe", "courbe")
     pylab.show()
 
+
 def etude(nbrPath,Map,bestElementsSize):
     #ne pas oublier de supprimer le crossOverLoop1 que ne sert à rien
     #trieur = [hardSelector,crossOverLoop,crossOverLoopBrut,crossOverLoopRAND,FUSS]
     #combinateur = [singlePoint,crossOverERO,crossOverPath2] #ajouter le cycle cross over
     #mutateur = [mutation,mutationReferentiel,mutationClassique]
     
-    #trieur = [brutSelector, FUSS3, FUSS2]
-    #combinateur = [crossOverLoop1,crossOverLoop] #ajouter le cycle cross over
-    #mutateur = [mutationDynamique,mutationNull]
-    
-    trieur = [brutSelector]
-    combinateur = [crossOverLoopClassique] #ajouter le cycle cross over
-    mutateur = [mutationNull]
+    trieur = [selectionBrute, FUSSPonderer, FUSS]
+    combinateur = [RandomCrossMapping,EdgeRecombination,combinaisonPointSingulier] #ajouter le cycle cross over
+    mutateur = [mutationDynamique,mutationStatique]
+
     
     
     generation = 0
@@ -1090,9 +1115,11 @@ def etude(nbrPath,Map,bestElementsSize):
     pylab.figure(figsize=(20,10))
     pylab.grid()
     pylab.title("Comparaison")
-    n = 5
+    n = 15
     total = n * len(trieur)*len(combinateur)*len(mutateur)
     count = 0
+    c = 0
+    
     for tri in trieur:
         for combi in combinateur:
             for mut in mutateur :
@@ -1124,22 +1151,25 @@ def etude(nbrPath,Map,bestElementsSize):
                 name += tri.__name__
                 print(name)
                 
-                make_graph(len(score),score,'black',name)
+                c = (c + 1)%4
+                make_graph(len(score),score,c,name)
                 #faire la moyenne de arr et après le plot
     pylab.legend(fontsize=15)
+    pylab.xlabel("Nombre de génération")
+    pylab.ylabel("Score du meilleur individu")
     pylab.show()
     #faire 10 simulations pour chaque possibilités
     #mettre les fonctions de crossover (pas les loop) en paramètre des crossoverloop
-
 
 
 def make_graph(nbrGen,y,c,name):
     x = []
     for i in range(nbrGen):
         x.append(i)
-    pylab.plot(x, y,label = name )
+        
+    linestyles = ['-', '--', '-.', ':']
+    pylab.plot(x, y,linestyle = linestyles[c], label = name )
     
-
 
 
 
