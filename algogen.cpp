@@ -531,11 +531,11 @@ std::vector<int> Calgogen(std::vector<std::tuple<int,int>> &coordCities, int nbr
 	{
 		
 		
-		FUSS(*chemins, 0.5 * nbrPaths, props);
+		FUSS(*chemins, 0.25 * nbrPaths, props);
 		
 		//std::chrono::steady_clock::time_point crossS = std::chrono::steady_clock::now();
 		
-		cross_over(coordCities, *chemins, 0.5*nbrPaths);
+		cross_over(coordCities, *chemins, 0.25*nbrPaths);
 		
 		//std::chrono::steady_clock::time_point crossE = std::chrono::steady_clock::now();
 

@@ -287,7 +287,24 @@ def crossOverLoopBRUT(nbrPath, tab):
 
 
 
-
+#force brute
+def crossOverLoopClassique(nbrPath, tab, Map):
+    crossedTabs = []
+    iteration = 0
+    nbr = floor(0.5*len(tab[0]))
+    for i in range(nbrPath - len(tab)):
+        for j in range(i,len(tab)):
+            if(iteration + len(tab) < nbrPath):                
+                iteration += 1
+                crossedTabs.append(
+                                        singlePoint(nbr,tab[i],tab[j]))
+            else:
+                if crossedTabs:
+                    return crossedTabs
+                else:
+                    error("Le cross_over ne s'est fait pas fait")
+                
+    return crossedTabs
 
 
 
@@ -316,7 +333,7 @@ def crossOverLoop1(nbrPath, tab,Map):
             #print("---")
             #print(P)
             #print(l)
-            if ( l < 1):
+            if ( l < p):
                 #print("mutation")
                 pos = randint(0,len(child)-1)
                 swapPositions(child, j, pos)
@@ -641,7 +658,8 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     
     path = []
     
-    
+    arrayProb = []
+    tabPath.sort(key=lambda x:x[1])
     while (iteration < 200):
         generation += 1
         
@@ -650,7 +668,16 @@ def selectionPath(nbrPath, Map, bestElementsSize):
         
         
         
+        #RAPPEL faire la mutation APRES le crossover et la descendanse (!) (!)
+        average = 0
+        minimum = Map.pathLength(tabPath[0][0])
         
+        for i in tabPath:
+            average += Map.pathLength(i[0])
+        
+        average = average/len(tabPath)
+    
+        p = (1 - ((average - minimum)/minimum))
         
         #best = tabPath[0][0]
 
@@ -658,17 +685,8 @@ def selectionPath(nbrPath, Map, bestElementsSize):
          
         tabBestPath = FUSS2(tabPath,bestElementsSize,props)
         
-       #RAPPEL faire la mutation APRES le crossover et la descendanse (!) (!)
-        average = 0
-        minimum = Map.pathLength(tabBestPath[0])
-        
-        for i in tabBestPath:
-            average += Map.pathLength(i)
-        
-        average = average/len(tabBestPath)
-    
-        #p = (1 - ((average - minimum)/minimum))**5
-        p = 0
+       
+        #p = 0
         
         
         genCrossed = crossOverLoop(nbrPath, tabBestPath,Map)
@@ -679,8 +697,8 @@ def selectionPath(nbrPath, Map, bestElementsSize):
         
         
         
-        
-        genMutated = mutation(newSet,p,Map)
+       
+        genMutated = mutation(newSet,0,Map)
    
         
        
@@ -704,7 +722,8 @@ def selectionPath(nbrPath, Map, bestElementsSize):
             path = tabPath[0][0].copy()
         else:
             iteration +=1
-    
+        
+        arrayProb.append(p*100)
         
     
 
@@ -722,6 +741,9 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     print(time.process_time() - start)
     print("Nombre de Generation : ")
     print(generation)
+    
+    make_graph(generation, arrayProb, "lla", "lala")
+    pylab.show()
     return path
 
     
@@ -735,7 +757,7 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     print(time.process_time() - start)
     
     
-    return resultat
+    return resultat 
 
 
 
@@ -849,9 +871,11 @@ def mesurePerformance(nbrPath,Map1,bestElementsSize):
     
     count = 0
     arr = []
-    maxIteration = 60
+    maxIteration = 10
     nbr = maxIteration - 4
     
+    pylab.grid()
+    pylab.title("Croissance de la complexité")
     for i in range(4,maxIteration):
         tabPath = []
         map2 = Map(i,500,0)
@@ -878,10 +902,13 @@ def etude(nbrPath,Map,bestElementsSize):
     #combinateur = [singlePoint,crossOverERO,crossOverPath2] #ajouter le cycle cross over
     #mutateur = [mutation,mutationReferentiel,mutationClassique]
     
-    trieur = [brutSelector, FUSS3, FUSS2]
-    combinateur = [crossOverLoop1,crossOverLoop] #ajouter le cycle cross over
-    mutateur = [mutationDynamique,mutationNull]
+    #trieur = [brutSelector, FUSS3, FUSS2]
+    #combinateur = [crossOverLoop1,crossOverLoop] #ajouter le cycle cross over
+    #mutateur = [mutationDynamique,mutationNull]
     
+    trieur = [brutSelector]
+    combinateur = [crossOverLoopClassique] #ajouter le cycle cross over
+    mutateur = [mutationNull]
     
     
     generation = 0
@@ -901,6 +928,8 @@ def etude(nbrPath,Map,bestElementsSize):
     m = m/len(tabPath)
     print("moyenne de : " + str(m))
     pylab.figure(figsize=(20,10))
+    pylab.grid()
+    pylab.title("Comparaison")
     n = 5
     total = n * len(trieur)*len(combinateur)*len(mutateur)
     count = 0
@@ -929,15 +958,6 @@ def etude(nbrPath,Map,bestElementsSize):
                    
                 for k in range(len(score)):
                     score[k] = score[k]/n
-                """
-                print(score[-1])
-                
-                print("mutateur")
-                print(mut.__name__)
-                print("combinateur")
-                print(combi.__name__)
-                print("trieur")
-                print(tri.__name__)"""
                 name = ""
                 name += mut.__name__ + " "
                 name += combi.__name__ + " "
