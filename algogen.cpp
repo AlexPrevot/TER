@@ -105,7 +105,7 @@ void cross(popvect& pop, int position,std::vector<int>& path1, std::vector<int>&
 	{
 
 		//push the node
-		auto &currVec = matrice.at(N);
+		std::vector<int> &currVec = matrice.at(N);
 
 		child.at(i) = N;
 
@@ -128,7 +128,7 @@ void cross(popvect& pop, int position,std::vector<int>& path1, std::vector<int>&
 
 			for(int j = 0; j < currVec.size() ; j++)
 			{
-				auto& vec = matrice.at(currVec.at(j));
+				std::vector<int>& vec = matrice.at(currVec.at(j));
 
 				if ((vec.size() < smallestNbr) && (vec.size() != 0))
 				{
@@ -503,7 +503,7 @@ std::vector<int> Calgogen(std::vector<std::tuple<int,int>> &coordCities, int nbr
 
 	for (int i = 0; i < 10; i++)
 	{
-		(*chemins)[i] = *generatePopulation(coordCities, nbrPaths, nbrCities);
+		(*chemins)[i] = *generatePopulation(coordCities, nbrPaths/10, nbrCities);
 		sortByFitness((*chemins)[i]);
 	}
 	
@@ -570,15 +570,15 @@ std::vector<int> Calgogen(std::vector<std::tuple<int,int>> &coordCities, int nbr
 		for (int i = 0; i < 10; i++)
 		{
 
-			FUSS((*chemins)[i], 0.5 * nbrPaths, props);
+			FUSS((*chemins)[i], selectionSize, props);
 
-			cross_over(coordCities, (*chemins)[i], 0.5 * nbrPaths);
+			cross_over(coordCities, (*chemins)[i], selectionSize);
 
 			sortByFitness((*chemins)[i]);
 
 		}
 
-		std::vector<int> currentChampion(nbrCities);
+		std::vector<int> currentChampion;//(nbrCities);
 		float currentBest = std::get<0>((*chemins)[0][subPopSize-1]);
 
 		for (int i = 0; i < 10; i++)
@@ -623,11 +623,13 @@ std::vector<int> Calgogen(std::vector<std::tuple<int,int>> &coordCities, int nbr
 					(*chemins)[ind][tmp[j]] = mem;
 				}
 			}
+
+			for(int i = 0; i < 10; i++)
+				sortByFitness((*chemins)[i]);
 		}
 
 
-		for(int i = 0; i < 10; i++)
-			sortByFitness((*chemins)[i]);
+		
 
 		
 	}

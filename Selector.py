@@ -1031,12 +1031,12 @@ def mesurePerformance(nbrPath,Map1,bestElementsSize):
     
     count = 0
     arr = []
-    maxIteration = 10
-    nbr = maxIteration - 4
+    nbrVilleMax = 60
+    nbr = nbrVilleMax - 4
     
     pylab.grid()
     pylab.title("Croissance de la complexité")
-    for i in range(4,maxIteration):
+    for i in range(4,nbrVilleMax):
         tabPath = []
         map2 = Map(i,500,0)
         for j in range(nbrPath):
@@ -1054,7 +1054,7 @@ def mesurePerformance(nbrPath,Map1,bestElementsSize):
         arr.append(nbrGeneration)
         
     make_graph(nbr,arr,"courbe", "courbe")
-
+    pylab.show()
 
 def etude(nbrPath,Map,bestElementsSize):
     #ne pas oublier de supprimer le crossOverLoop1 que ne sert à rien
