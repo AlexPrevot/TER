@@ -597,6 +597,166 @@ def brutSelector(paths,nbr,props):
     return tab
 
 
+
+def selectionPathGENITOR(nbrPath, Map, bestElementsSize):
+    cityTab = Map.cities
+    tabPath =[]
+    tabBestPath =[]
+    print("NOUVELLE SELECTION")
+    import time
+    start = time.process_time()
+    
+    
+    
+    
+    props = []
+    for i in range(40):
+        props.append(0)
+    
+    for i in range(20):
+        props.append(1)
+    
+    for i in range(10):
+        props.append(2)
+    
+    for i in range(8):
+        props.append(3)
+        
+    for i in range(7):
+        props.append(4)
+        
+    for i in range(5):
+        props.append(5)
+    
+    for i in range(4):
+        props.append(6)
+    
+    for i in range(3):
+        props.append(7)
+        
+    for i in range(2):
+        props.append(8)
+        
+    for i in range(1):
+        props.append(9)
+    
+    
+    
+    for m in range(10):
+        tabPath.append([])
+        for i in range(floor(nbrPath/10)):
+                cityTab = Map.randomPath()
+                tabPath[m].append([cityTab,Map.pathLength(cityTab)])
+            
+    
+    generation = 0
+    bestScore = float('inf')
+    iteration = 0
+    
+    path = []
+    
+    arrayProb = []
+    tabPath.sort(key=lambda x:x[1])
+    tabBestPath = [-1]*10
+    
+    print("nbrPath : 10")
+    print(nbrPath/10)
+    print("bestElementsSize:10")
+    print(bestElementsSize/10)
+    while (iteration < 200):
+        generation += 1
+        for m in range(10):
+    
+            
+            
+            
+            tabBestPath[m] = []
+            
+            
+        
+             
+            tabBestPath[m] = FUSS2(tabPath[m],floor(bestElementsSize/10),props)
+            
+   
+            genCrossed = crossOverLoop(floor(nbrPath/10), tabBestPath[m],Map)
+    
+            
+            
+            newSet = tabBestPath[m]
+            
+            
+            
+           
+            genMutated = mutation(newSet,0,Map)
+       
+            
+           
+            tabBestPath[m] = genMutated + genCrossed
+            
+           
+            
+            tabPath[m] = []
+
+            
+            for i in tabBestPath[m]:
+                tabPath[m].append([i,Map.pathLength(i)])
+                
+            tabPath[m].sort(key=lambda x:x[1])
+            
+            #print("taille de la pop numéro : ", m)
+            #print(len(tabPath[m]))
+        
+        
+        currBest = []
+        currBestScore = float('inf')
+        for m in range(10):
+            if tabPath[m][0][1] < currBestScore:
+                currBestScore = tabPath[m][0][1]
+                currBest = tabPath[m][0][0].copy()
+        
+        
+        #vérifier le meilleur de chaque sous pop(!) (!) (!)
+        if currBestScore < bestScore:
+            iteration = 0
+            bestScore = currBestScore
+            path = currBest.copy()
+        else:
+            iteration +=1
+            
+        if (generation % 200 == 0):
+            element = []
+            for p in range(floor(bestElementsSize/10)):
+                element.append(randint(0,floor((nbrPath/10)-1)))
+            
+            for p in range(10):
+                subpop = randint(0,9)
+                
+                for q in element:
+                    mem = tabPath[p][q]
+                    tabPath[p][q] = tabPath[subpop][q]
+                    tabPath[subpop][q]= mem
+                
+            
+        for p in range(10):
+            tabPath[m].sort(key=lambda x:x[1])
+    
+    print("RESULTAT FINAL")
+    print(path)
+    print(bestScore)
+    print("TEMPS")
+    print(time.process_time() - start)
+    print("Nombre de Generation : ")
+    print(generation)
+    return path
+         
+    
+        
+        
+    
+
+
+
+
 def selectionPath(nbrPath, Map, bestElementsSize):
     cityTab = Map.cities
     tabPath =[]
@@ -651,7 +811,7 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     
     m = m/len(tabPath)
     print("moyenne de : " + str(m))
-    """
+    
     generation = 0
     bestScore = float('inf')
     iteration = 0
@@ -742,8 +902,8 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     print("Nombre de Generation : ")
     print(generation)
     
-    make_graph(generation, arrayProb, "lla", "lala")
-    pylab.show()
+    #make_graph(generation, arrayProb, "lla", "lala")
+    #pylab.show()
     return path
 
     
@@ -757,7 +917,7 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     print(time.process_time() - start)
     
     
-    return resultat 
+    return resultat """
 
 
 
