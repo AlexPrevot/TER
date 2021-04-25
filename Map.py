@@ -57,6 +57,7 @@ class Map:
             coY=250+r*math.sin((i*2*math.pi)/size)
             cityTab.append([coX,coY]) 
             
+        self.cities = cityTab    
         return cityTab
     
     #------------------------------------------Map redefinition
