@@ -9,6 +9,7 @@ from Error import error
 from random import seed
 from random import randint
 import random
+import math
 
 from math import *
 
@@ -44,6 +45,19 @@ class Map:
             cityTab.append([coX,coY])
         return cityTab
     
+    def creatMapCircle(self):
+        size = self.size
+        MAX = self.MAX
+        MIN = self.MIN
+        r=2*size
+        cityTab = []
+        #--creation ville en forme de cercle
+        for i in range(size):
+            coX=250+r*math.cos((i*2*math.pi)/size)
+            coY=250+r*math.sin((i*2*math.pi)/size)
+            cityTab.append([coX,coY]) 
+            
+        return cityTab
     
     #------------------------------------------Map redefinition
     

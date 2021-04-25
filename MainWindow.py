@@ -50,6 +50,15 @@ class window:
         for i in range(len(tab)):
             self.placePoint(tab[i][0],tab[i][1])
             
+            
+    def buttonGenerateCircle(self):
+        tab = self.actualMap.creatMapCircle()
+        self.canvas.delete("all")
+        self.canvas.create_rectangle(0, 0, 500, 500, fill='white')
+        
+        for i in range(len(tab)):
+            self.placePoint(tab[i][0],tab[i][1])
+            
         
     #--------
         
@@ -100,8 +109,10 @@ class window:
         
         
         #the button of the window
-        self.buttGeneration = Button(self.root, text = "Generation", command = self.buttonGenerate, bg = 'red')
-        self.buttGeneration.pack()
+        self.buttGenerationR = Button(self.root, text = "Generation Random", command = self.buttonGenerate, bg = 'red')
+        self.buttGenerationR.pack()
+        self.buttGenerationC = Button(self.root, text = "Generation Circle", command = self.buttonGenerateCircle, bg = 'red')
+        self.buttGenerationC.pack()
         self.buttPath = Button(self.root, text = "Trouver un chemin", command = self.buttonPath, bg = 'red')
         self.buttPath.pack()
         #self.canvasText = Canvas(self.root, width=500, height=500)
