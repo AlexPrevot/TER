@@ -393,6 +393,7 @@ void BENCHtest(std::vector<std::tuple<int, int>>& co, std::shared_ptr<std::vecto
 //assume that population is already sort by fitness
 void FUSS(popvect& population, int nbr, std::vector<int>& props)
 {
+	
 	int size = population.size();
 	float chunk = population.size() / 10;
 	popvect v(nbr);
@@ -438,7 +439,8 @@ void FUSS(popvect& population, int nbr, std::vector<int>& props)
 		int element = rand() % int((a - b) + b);
 		v[i] = population[element];
 		//population[i] = population[element];
-	}*/
+	}
+	*/
 	for (int i = 0; i < nbr; i++)
 	{
 		population[i] = v[i];
@@ -461,13 +463,13 @@ std::vector<int> Calgogen(std::vector<std::tuple<int,int>> &coordCities, int nbr
 
 	std::vector<int> props;
 
-	for (int i = 0; i < 40; i++)
+	for (int i = 0; i < 61; i++)
 		props.push_back(0);
 
-	for (int i = 0; i < 20; i++)
+	for (int i = 0; i < 10; i++)
 		props.push_back(1);
 
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 9; i++)
 		props.push_back(2);
 
 	for (int i = 0; i < 8; i++)
@@ -496,52 +498,59 @@ std::vector<int> Calgogen(std::vector<std::tuple<int,int>> &coordCities, int nbr
 
 
 
-	//std::shared_ptr<popvect> chemins = generatePopulation(coordCities,nbrPaths, nbrCities);
-	//sortByFitness(*chemins);
+	std::shared_ptr<popvect> chemins = generatePopulation(coordCities,nbrPaths, nbrCities);
+	sortByFitness(*chemins);
+	
+	
+	
 	//---------------------------------
-	std::shared_ptr<surpop> chemins(new surpop(10));
+	int k = 10;
+	/*
+	std::shared_ptr<surpop> chemins(new surpop(k));
 
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < k; i++)
 	{
-		(*chemins)[i] = *generatePopulation(coordCities, nbrPaths/10, nbrCities);
+		(*chemins)[i] = *generatePopulation(coordCities, nbrPaths/k, nbrCities);
 		sortByFitness((*chemins)[i]);
 	}
 	
 	std::vector<int> champion = std::get<1>((*chemins)[0][0]);
 	float best = getFitness(coordCities, champion);
 	
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < k; i++)
 	{
 		if ((std::get<0>((*chemins)[i][0])) < best)
 		{
 			best = std::get<0>((*chemins)[i][0]);
 			champion = std::get<1>((*chemins)[i][0]);
 		}
-	}
+	}*/
 
 	//-------------------------------
 	
+	
+	
+	std::vector<int> champion = std::get<1>((*chemins)[0]);
+	float best = getFitness(coordCities, champion);
+	
+	
 
-	
-	//std::vector<int> champion = std::get<1>((*chemins)[0]);
-	//float best = getFitness(coordCities, champion);
-	
 	int iterations = 0;
 
 	int generation = 0;
 
-	int subPopSize = nbrPaths / 10;
+	int subPopSize = nbrPaths / k;
 
-	int selectionSize = (0.5 * nbrPaths) / 10;
+	int selectionSize = (0.5 * nbrPaths) / k;
 
 	std::vector<individuV> tmpMigrant(selectionSize);
 	while (iterations < 200)
 	{
 		
+		
+		//FUSS(*chemins, 0.5 * nbrPaths, props);
 
-		/*FUSS(*chemins, 0.5 * nbrPaths, props);
-
-		cross_over(coordCities, *chemins, 0.5 * nbrPaths);
+		cross_over(coordCities, *chemins, 0.25 * nbrPaths);
 
 		sortByFitness(*chemins);
 			
@@ -562,12 +571,11 @@ std::vector<int> Calgogen(std::vector<std::tuple<int,int>> &coordCities, int nbr
 			iterations++;
 
 		generation++;
-			
-			*/
-
-
+		
+		
 		//-------------------------
-		for (int i = 0; i < 10; i++)
+		/*
+		for (int i = 0; i < k; i++)
 		{
 
 			FUSS((*chemins)[i], selectionSize, props);
@@ -581,7 +589,7 @@ std::vector<int> Calgogen(std::vector<std::tuple<int,int>> &coordCities, int nbr
 		std::vector<int> currentChampion;//(nbrCities);
 		float currentBest = std::get<0>((*chemins)[0][subPopSize-1]);
 
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < k; i++)
 		{
 			if ((std::get<0>((*chemins)[i][0])) < best)
 			{
@@ -606,16 +614,16 @@ std::vector<int> Calgogen(std::vector<std::tuple<int,int>> &coordCities, int nbr
 
 		generation++;
 
-		if (generation % 50 == 0)
+		if ((iterations % 100 == 0) && (iterations != 0))
 		{
 			
 			std::vector<int> tmp(selectionSize);
 			for (int i = 0; i < selectionSize; i++)
 				tmp[i] = rand() % (subPopSize);
 
-			for (int i = 0; i < 10; i++)
+			for (int i = 0; i < k; i++)
 			{
-				short ind = rand() % 10;
+				short ind = rand() % k;
 				for (int j = 0; j < selectionSize; j++)
 				{
 					individuV2 mem = (*chemins)[i][tmp[j]];
@@ -624,9 +632,13 @@ std::vector<int> Calgogen(std::vector<std::tuple<int,int>> &coordCities, int nbr
 				}
 			}
 
-			for(int i = 0; i < 10; i++)
+			for(int i = 0; i < k; i++)
 				sortByFitness((*chemins)[i]);
 		}
+
+			
+		*/
+		
 
 
 		
