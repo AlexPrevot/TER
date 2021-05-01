@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sat Feb  6 20:52:13 2021
-
-@author: User
-"""
-
 from Error import error
 from random import seed
 from random import randint
@@ -32,7 +25,7 @@ class Map:
     
     
     #------------------------------------------Map Creation
-    
+    #place les points de maniere aléatoire
     def createMap(self):
         size = self.size
         MAX = self.MAX
@@ -45,6 +38,7 @@ class Map:
             cityTab.append([coX,coY])
         return cityTab
     
+    #place les points en cercle a la meme  distance
     def creatMapCircle(self):
         size = self.size
         MAX = self.MAX

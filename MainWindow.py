@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sat Feb  6 22:39:59 2021
-
-@author: User
-"""
-
 from tkinter import *
 from functools import partial
 from Map import Map
@@ -18,30 +11,21 @@ class window:
         self.canvas.create_rectangle(coX + 0, coY + 0, coX + 5, coY + 5, fill='black')
 
 
-
-
-
-
     #----------------------function to bind points with their coordon
     #note : le truc ne marche pas pour l'instant
     def bindPoint(self,coX1,coY1,coX2,coY2):
         self.canvas.create_line(coX1,coY1,coX2,coY2)
-    
-    
-    
-    
-    
-    
-    
+     
+  
     #----------------------function to bind points with their coordononate
     def appear(self):
         self.root.mainloop()
     
- 
+
     
     #----------------------action of the buttons
     
-    
+    #bouton positionnement des points de manière aléatoire
     def buttonGenerate(self):
         tab = self.actualMap.refresh()
         self.canvas.delete("all")
@@ -50,7 +34,7 @@ class window:
         for i in range(len(tab)):
             self.placePoint(tab[i][0],tab[i][1])
             
-            
+    #bouton positionnement des points de manière aléatoire
     def buttonGenerateCircle(self):
         tab = self.actualMap.creatMapCircle()
         self.canvas.delete("all")
@@ -61,7 +45,7 @@ class window:
             
         
     #--------
-        
+    #lance lalgo de recherche
     def buttonPath(self):
         tab = self.actualMap.randomPath()
         cities = self.actualMap.cities
@@ -124,7 +108,3 @@ class window:
         
         #Map creation
         self.actualMap = Map(100,500,0) 
-    
-
-
-

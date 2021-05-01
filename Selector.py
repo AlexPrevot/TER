@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Feb 16 17:23:27 2021
-
-@author: User
-"""
 from math import *
 from Error import error
 
