@@ -17,7 +17,7 @@ import pylab
 from Map import Map
 
 
-#note : changer le deuxième for car complexité de n², on peut transformer en n
+#note : changer le deuxieme for car complexite de n², on peut transformer en n
 def crossOverPath5(nbrElementTab1,tabPath1, tabPath2):
     newTabPathCO=[]
     for i in range(nbrElementTab1):
@@ -177,7 +177,7 @@ def matriceConversion(path1,path2):
     
     return matFinal
 
-#complexité n² voir si on peut faire mieux
+#complexite n² voir si on peut faire mieux
 def crossOverERO(parent1, parent2):
     k = []
     N = parent1[0]
@@ -550,7 +550,7 @@ def FUSS4(paths,nbr,props):
     final = []
     chunk = floor(len(paths)/10)
     s = nbr/len(paths)
-    #prop = ceil(s*chunk)*2 #le x2 ici vient du fait qu'on prend que la moitié de tous les chunks
+    #prop = ceil(s*chunk)*2 #le x2 ici vient du fait qu'on prend que la moitie de tous les chunks
     prop = ceil(0.5*chunk)
 
     for i in range(5):
@@ -724,7 +724,7 @@ def selectionPathGENITOR(nbrPath, Map, bestElementsSize):
                 
             tabPath[m].sort(key=lambda x:x[1])
             
-            #print("taille de la pop numéro : ", m)
+            #print("taille de la pop numero : ", m)
             #print(len(tabPath[m]))
         
         
@@ -736,7 +736,7 @@ def selectionPathGENITOR(nbrPath, Map, bestElementsSize):
                 currBest = tabPath[m][0][0].copy()
         
         
-        #vérifier le meilleur de chaque sous pop(!) (!) (!)
+        #verifier le meilleur de chaque sous pop(!) (!) (!)
         if currBestScore < bestScore:
             iteration = 0
             bestScore = currBestScore
@@ -1056,7 +1056,7 @@ def mesurePerformance(nbrPath,Map1,bestElementsSize):
     nbr = nbrVilleMax - 4
     
     pylab.grid()
-    pylab.title("Croissance de la complexité")
+    pylab.title("Croissance de la complexite")
     for i in range(4,nbrVilleMax):
         tabPath = []
         map2 = Map(i,500,0)
@@ -1108,7 +1108,7 @@ def etudeGENITOR(nbrPath,Map,bestElementsSize):
         score = [0]
         for i in range(n):
             count += 1
-            newScore = [] #mettre le nouveau score dedans et après l'intégrer dans currentScore
+            newScore = [] #mettre le nouveau score dedans et apres l'integrer dans currentScore
             
             if(j > 0):
                 arr.append(algoGene2(nbrPath, Map, tabPath, bestElementsSize, 
@@ -1151,7 +1151,7 @@ def etudeGENITOR(nbrPath,Map,bestElementsSize):
 
 
 def etude(nbrPath,Map,bestElementsSize):
-    #ne pas oublier de supprimer le crossOverLoop1 que ne sert à rien
+    #ne pas oublier de supprimer le crossOverLoop1 que ne sert a rien
     #trieur = [hardSelector,crossOverLoop,crossOverLoopBrut,crossOverLoopRAND,FUSS]
     #combinateur = [singlePoint,crossOverERO,crossOverPath2] #ajouter le cycle cross over
     #mutateur = [mutation,mutationReferentiel,mutationClassique]
@@ -1195,7 +1195,7 @@ def etude(nbrPath,Map,bestElementsSize):
                 
                 for i in range(n):
                     count += 1
-                    newScore = [] #mettre le nouveau score dedans et après l'intégrer dans currentScore
+                    newScore = [] #mettre le nouveau score dedans et apres l'integrer dans currentScore
                     
                     
                     arr.append(algoGene(nbrPath, Map, tabPath, bestElementsSize, 
@@ -1223,13 +1223,13 @@ def etude(nbrPath,Map,bestElementsSize):
                 
                 c = (c + 1)%4
                 make_graph(len(score),score,c,name)
-                #faire la moyenne de arr et après le plot
+                #faire la moyenne de arr et apres le plot
     pylab.legend(fontsize=15)
-    pylab.xlabel("Nombre de génération")
+    pylab.xlabel("Nombre de generation")
     pylab.ylabel("Score du meilleur individu")
     pylab.show()
-    #faire 10 simulations pour chaque possibilités
-    #mettre les fonctions de crossover (pas les loop) en paramètre des crossoverloop
+    #faire 10 simulations pour chaque possibilites
+    #mettre les fonctions de crossover (pas les loop) en parametre des crossoverloop
 
 
 def make_graph(nbrGen,y,c,name):
@@ -1466,7 +1466,7 @@ def algoGene2(nbrPath, Map,tabPath, bestElementsSize,array,mutator,selector,cros
                 
             tabPath[m].sort(key=lambda x:x[1])
             
-            #print("taille de la pop numéro : ", m)
+            #print("taille de la pop numero : ", m)
             #print(len(tabPath[m]))
         
         
@@ -1478,7 +1478,7 @@ def algoGene2(nbrPath, Map,tabPath, bestElementsSize,array,mutator,selector,cros
                 currBest = tabPath[m][0][0].copy()
         
         
-        #vérifier le meilleur de chaque sous pop(!) (!) (!)
+        #verifier le meilleur de chaque sous pop(!) (!) (!)
         if currBestScore < bestScore:
             iteration = 0
             bestScore = currBestScore

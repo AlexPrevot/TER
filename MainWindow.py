@@ -25,7 +25,7 @@ class window:
     
     #----------------------action of the buttons
     
-    #bouton positionnement des points de manière aléatoire
+    #bouton positionnement des points de maniere aleatoire
     def buttonGenerate(self):
         tab = self.actualMap.refresh()
         self.canvas.delete("all")

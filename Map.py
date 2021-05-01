@@ -25,7 +25,7 @@ class Map:
     
     
     #------------------------------------------Map Creation
-    #place les points de maniere aléatoire
+    #place les points de maniere aleatoire
     def createMap(self):
         size = self.size
         MAX = self.MAX
