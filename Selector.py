@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Feb 16 17:23:27 2021
-
-@author: User
-"""
 from math import *
 from Error import error
 
@@ -23,7 +17,7 @@ import pylab
 from Map import Map
 
 
-#note : changer le deuxième for car complexité de n², on peut transformer en n
+#note : changer le deuxieme for car complexite de n², on peut transformer en n
 def crossOverPath5(nbrElementTab1,tabPath1, tabPath2):
     newTabPathCO=[]
     for i in range(nbrElementTab1):
@@ -183,7 +177,7 @@ def matriceConversion(path1,path2):
     
     return matFinal
 
-#complexité n² voir si on peut faire mieux
+#complexite n² voir si on peut faire mieux
 def crossOverERO(parent1, parent2):
     k = []
     N = parent1[0]
@@ -309,8 +303,35 @@ def crossOverLoopClassique(nbrPath, tab, Map):
 
 
 
+def combinaisonPointSingulier(nbrPath, tab,Map):
+    crossedTabs = []
+    iteration = 0
+    size = floor(len(tab[0])/2)
+    for i in range(nbrPath - len(tab)):
+         parent1 = tab[randint(0, len(tab)-1)]
+         parent2 =tab[randint(0, len(tab)-1)]
+         
+         child = singlePoint(size,parent1, parent2)
 
-def crossOverLoop1(nbrPath, tab,Map):
+   
+        
+         
+         
+         for j in range(len(child)):
+            l = random.random()*100
+            #print("---")
+            #print(P)
+            #print(l)
+            if ( l < 2):
+                #print("mutation")
+                pos = randint(0,len(child)-1)
+                swapPositions(child, j, pos)
+
+         crossedTabs.append(child)    
+         
+    return crossedTabs
+
+def RandomCrossMapping(nbrPath, tab,Map,p):
     crossedTabs = []
     iteration = 0
     for i in range(nbrPath - len(tab)):
@@ -333,7 +354,7 @@ def crossOverLoop1(nbrPath, tab,Map):
             #print("---")
             #print(P)
             #print(l)
-            if ( l < 2):
+            if ( l < p):
                 #print("mutation")
                 pos = randint(0,len(child)-1)
                 swapPositions(child, j, pos)
@@ -347,7 +368,7 @@ def crossOverLoop1(nbrPath, tab,Map):
 
 
 #par pair au hasard
-def crossOverLoop(nbrPath, tab,Map):
+def EdgeRecombination(nbrPath, tab,Map):
     crossedTabs = []
     iteration = 0
     for i in range(nbrPath - len(tab)):
@@ -443,7 +464,7 @@ def mutationDynamique(Map,tabBestPath):
     return p
     
     
-def mutationNull(Map,tabBestPath):
+def mutationStatique(Map,tabBestPath):
     return 0
 
 
@@ -525,11 +546,11 @@ def swapPositions(tab, pos1, pos2):
 
 
 #selection
-def FUSS(paths,nbr,props):
+def FUSS4(paths,nbr,props):
     final = []
     chunk = floor(len(paths)/10)
     s = nbr/len(paths)
-    #prop = ceil(s*chunk)*2 #le x2 ici vient du fait qu'on prend que la moitié de tous les chunks
+    #prop = ceil(s*chunk)*2 #le x2 ici vient du fait qu'on prend que la moitie de tous les chunks
     prop = ceil(0.5*chunk)
 
     for i in range(5):
@@ -550,7 +571,7 @@ def FUSS(paths,nbr,props):
 from bisect import bisect_left
 
 #selection
-def FUSS2(paths,nbr,props):
+def FUSSPonderer(paths,nbr,props):
     final = []
     chunks = len(paths)/10
    
@@ -570,7 +591,7 @@ def FUSS2(paths,nbr,props):
     return final
 
 #ESSAYER LE FUSS CLASSIQUE SANS MUTATION
-def FUSS3(paths,nbr,props):
+def FUSS(paths,nbr,props):
     final = []
     chunks = len(paths)/10
    
@@ -590,7 +611,7 @@ def hardSelector(paths,nbr,props):
                 tab.append(paths[i][0])
     return tab
         
-def brutSelector(paths,nbr,props):
+def selectionBrute(paths,nbr,props):
     tab = []
     for i in range(nbr):
         tab.append(paths[i][0])
@@ -675,10 +696,10 @@ def selectionPathGENITOR(nbrPath, Map, bestElementsSize):
             
         
              
-            tabBestPath[m] = FUSS2(tabPath[m],floor(bestElementsSize/10),props)
+            tabBestPath[m] = FUSSPonderer(tabPath[m],floor(bestElementsSize/10),props)
             
    
-            genCrossed = crossOverLoop(floor(nbrPath/10), tabBestPath[m],Map)
+            genCrossed = EdgeRecombination(floor(nbrPath/10), tabBestPath[m],Map)
     
             
             
@@ -703,7 +724,7 @@ def selectionPathGENITOR(nbrPath, Map, bestElementsSize):
                 
             tabPath[m].sort(key=lambda x:x[1])
             
-            #print("taille de la pop numéro : ", m)
+            #print("taille de la pop numero : ", m)
             #print(len(tabPath[m]))
         
         
@@ -715,7 +736,7 @@ def selectionPathGENITOR(nbrPath, Map, bestElementsSize):
                 currBest = tabPath[m][0][0].copy()
         
         
-        #vérifier le meilleur de chaque sous pop(!) (!) (!)
+        #verifier le meilleur de chaque sous pop(!) (!) (!)
         if currBestScore < bestScore:
             iteration = 0
             bestScore = currBestScore
@@ -767,7 +788,7 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     
     
     
-    """
+    
     props = []
     for i in range(40):
         props.append(0)
@@ -817,7 +838,7 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     iteration = 0
     
     path = []
-    
+    """
     arrayProb = []
     tabPath.sort(key=lambda x:x[1])
     while (iteration < 200):
@@ -843,22 +864,22 @@ def selectionPath(nbrPath, Map, bestElementsSize):
 
         
          
-        tabBestPath = FUSS2(tabPath,bestElementsSize,props)
+        tabBestPath = selectionBrute(tabPath,bestElementsSize,props)
         
        
         #p = 0
         
         
-        genCrossed = crossOverLoop1(nbrPath, tabBestPath,Map)
+        genCrossed = EdgeRecombination(nbrPath, tabBestPath,Map)
 
         
         #print(len(genCrossed))
-        newSet = tabBestPath[1:]
+        newSet = tabBestPath
         
         
         
        
-        genMutated = mutation(newSet,0,Map)
+        genMutated = mutation(newSet,-1,Map)
    
         
        
@@ -902,8 +923,8 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     print("Nombre de Generation : ")
     print(generation)
     
-    #make_graph(generation, arrayProb, "lla", "lala")
-    #pylab.show()
+    make_graph(generation, arrayProb, "lla", "lala")
+    pylab.show()
     return path
 
     
@@ -1035,7 +1056,7 @@ def mesurePerformance(nbrPath,Map1,bestElementsSize):
     nbr = nbrVilleMax - 4
     
     pylab.grid()
-    pylab.title("Croissance de la complexité")
+    pylab.title("Croissance de la complexite")
     for i in range(4,nbrVilleMax):
         tabPath = []
         map2 = Map(i,500,0)
@@ -1056,20 +1077,7 @@ def mesurePerformance(nbrPath,Map1,bestElementsSize):
     make_graph(nbr,arr,"courbe", "courbe")
     pylab.show()
 
-def etude(nbrPath,Map,bestElementsSize):
-    #ne pas oublier de supprimer le crossOverLoop1 que ne sert à rien
-    #trieur = [hardSelector,crossOverLoop,crossOverLoopBrut,crossOverLoopRAND,FUSS]
-    #combinateur = [singlePoint,crossOverERO,crossOverPath2] #ajouter le cycle cross over
-    #mutateur = [mutation,mutationReferentiel,mutationClassique]
-    
-    #trieur = [brutSelector, FUSS3, FUSS2]
-    #combinateur = [crossOverLoop1,crossOverLoop] #ajouter le cycle cross over
-    #mutateur = [mutationDynamique,mutationNull]
-    
-    trieur = [brutSelector]
-    combinateur = [crossOverLoopClassique] #ajouter le cycle cross over
-    mutateur = [mutationNull]
-    
+def etudeGENITOR(nbrPath,Map,bestElementsSize):
     
     generation = 0
     bestScore = float('inf')
@@ -1089,10 +1097,96 @@ def etude(nbrPath,Map,bestElementsSize):
     print("moyenne de : " + str(m))
     pylab.figure(figsize=(20,10))
     pylab.grid()
-    pylab.title("Comparaison")
-    n = 5
+    n = 15
+
+
+    
+    n = 1
+    count = 0
+    for j in range(2):
+        arr = []
+        score = [0]
+        for i in range(n):
+            count += 1
+            newScore = [] #mettre le nouveau score dedans et apres l'integrer dans currentScore
+            
+            if(j > 0):
+                arr.append(algoGene2(nbrPath, Map, tabPath, bestElementsSize, 
+                                            newScore,mutationStatique,FUSSPonderer,RandomCrossMapping))
+            else:
+                arr.append(algoGene(nbrPath, Map, tabPath, bestElementsSize, 
+                                            newScore,mutationStatique,FUSSPonderer,RandomCrossMapping))
+                    
+            while len(score) < len(newScore):
+                score.append(score[-1])
+                            
+            while len(score) > len(newScore):
+                newScore.append(newScore[-1])
+                          
+            for k in range(len(score)):
+                score[k] += newScore[k]
+            
+                       
+            for k in range(len(score)):
+                score[k] = score[k]/n
+        
+            
+        c =1
+        make_graph(len(score),score,c,"lala")
+    pylab.show()
+    print("fini")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def etude(nbrPath,Map,bestElementsSize):
+    #ne pas oublier de supprimer le crossOverLoop1 que ne sert a rien
+    #trieur = [hardSelector,crossOverLoop,crossOverLoopBrut,crossOverLoopRAND,FUSS]
+    #combinateur = [singlePoint,crossOverERO,crossOverPath2] #ajouter le cycle cross over
+    #mutateur = [mutation,mutationReferentiel,mutationClassique]
+    """
+    trieur = [selectionBrute, FUSSPonderer, FUSS]
+    combinateur = [RandomCrossMapping,EdgeRecombination,combinaisonPointSingulier] #ajouter le cycle cross over
+    mutateur = [mutationDynamique,mutationStatique]"""
+
+    trieur = [selectionBrute]
+    combinateur = [EdgeRecombination]
+    mutateur = [mutationStatique]
+    
+    generation = 0
+    bestScore = float('inf')
+    iteration = 0
+    
+    tabPath = []
+    
+    for i in range(nbrPath):
+            cityTab = Map.randomPath()
+            tabPath.append([cityTab,Map.pathLength(cityTab)])
+            
+    m = 0
+    for j in tabPath:
+        m += j[1]
+    
+    m = m/len(tabPath)
+    print("moyenne de : " + str(m))
+    pylab.figure(figsize=(20,10))
+    pylab.grid()
+    n = 15
     total = n * len(trieur)*len(combinateur)*len(mutateur)
     count = 0
+    c = 0
+    
     for tri in trieur:
         for combi in combinateur:
             for mut in mutateur :
@@ -1101,9 +1195,12 @@ def etude(nbrPath,Map,bestElementsSize):
                 
                 for i in range(n):
                     count += 1
-                    newScore = [] #mettre le nouveau score dedans et après l'intégrer dans currentScore
+                    newScore = [] #mettre le nouveau score dedans et apres l'integrer dans currentScore
+                    
+                    
                     arr.append(algoGene(nbrPath, Map, tabPath, bestElementsSize, 
                                         newScore,mut,tri, combi))
+                    
 
                     
                     while len(score) < len(newScore):
@@ -1124,22 +1221,25 @@ def etude(nbrPath,Map,bestElementsSize):
                 name += tri.__name__
                 print(name)
                 
-                make_graph(len(score),score,'black',name)
-                #faire la moyenne de arr et après le plot
+                c = (c + 1)%4
+                make_graph(len(score),score,c,name)
+                #faire la moyenne de arr et apres le plot
     pylab.legend(fontsize=15)
+    pylab.xlabel("Nombre de generation")
+    pylab.ylabel("Score du meilleur individu")
     pylab.show()
-    #faire 10 simulations pour chaque possibilités
-    #mettre les fonctions de crossover (pas les loop) en paramètre des crossoverloop
-
+    #faire 10 simulations pour chaque possibilites
+    #mettre les fonctions de crossover (pas les loop) en parametre des crossoverloop
 
 
 def make_graph(nbrGen,y,c,name):
     x = []
     for i in range(nbrGen):
         x.append(i)
-    pylab.plot(x, y,label = name )
+        
+    linestyles = ['-', '--', '-.', ':']
+    pylab.plot(x, y,linestyle = linestyles[0])
     
-
 
 
 
@@ -1155,7 +1255,7 @@ def algoGene(nbrPath, Map,tabPath, bestElementsSize,array,mutator,selector,cross
     tabBestPath =[]
     print("NOUVELLE SELECTION")
     
-    
+    nbrCity = len(cityTab)
     
     props = []
     for i in range(60):
@@ -1205,18 +1305,6 @@ def algoGene(nbrPath, Map,tabPath, bestElementsSize,array,mutator,selector,cross
         
         
         best = tabPath[0][0]
-
-        """
-        chosens = 0
-
-        for i in range(len(tabPath)):
-            if (chosens < bestElementsSize):
-                if(randint(0,len(tabPath)) > i):
-                    chosens += 1
-                    tabBestPath.append(tabPath[i][0])"""
-         
-        """for i in range(bestElementsSize):
-            tabBestPath.append(tabPath[i][0])"""
          
         tabBestPath = selector(tabPath,bestElementsSize,props)
         
@@ -1272,21 +1360,156 @@ def algoGene(nbrPath, Map,tabPath, bestElementsSize,array,mutator,selector,cross
     
         
     
-    """
-    print("Taille population final")
-    print(len(tabPath))
+
+
+
+
+
+def algoGene2(nbrPath, Map,tabPath, bestElementsSize,array,mutator,selector,crossOver):
+    cityTab = Map.cities
+    tabPath =[]
+    tabBestPath =[]
+    print("NOUVELLE SELECTION")
+    import time
+    start = time.process_time()
+    
+    nbrCity = len(cityTab)
+    
+    
+    props = []
+    for i in range(40):
+        props.append(0)
+    
+    for i in range(20):
+        props.append(1)
+    
+    for i in range(10):
+        props.append(2)
+    
+    for i in range(8):
+        props.append(3)
+        
+    for i in range(7):
+        props.append(4)
+        
+    for i in range(5):
+        props.append(5)
+    
+    for i in range(4):
+        props.append(6)
+    
+    for i in range(3):
+        props.append(7)
+        
+    for i in range(2):
+        props.append(8)
+        
+    for i in range(1):
+        props.append(9)
+    
+    k = 5
+    
+    for m in range(k):
+        tabPath.append([])
+        for i in range(floor(nbrPath/k)):
+                cityTab = Map.randomPath()
+                tabPath[m].append([cityTab,Map.pathLength(cityTab)])
+            
+    
+    generation = 0
+    bestScore = float('inf')
+    iteration = 0
+    
+    path = []
+    
+    arrayProb = []
     tabPath.sort(key=lambda x:x[1])
-    print("RESULTAT FINAL")
-    print(path)
-    print(bestScore)
-    print("TEMPS")
-    print(time.process_time() - start)
-    print("Nombre de Generation : ")
-    print(generation)
-    return path"""
+    tabBestPath = [-1]*k
+    
+    while (iteration < 100):
+        generation += 1
+        for m in range(k):
+    
+            
+            
+            
+            tabBestPath[m] = []
+            
+            
+        
+             
+            tabBestPath[m] = FUSSPonderer(tabPath[m],floor(bestElementsSize/k),props)
+            
+   
+            genCrossed = RandomCrossMapping(floor(nbrPath/k), tabBestPath[m],Map)
+    
+            
+            
+            newSet = tabBestPath[m]
+            
+            
+            
+           
+            genMutated = mutation(newSet,0,Map)
+       
+            
+           
+            tabBestPath[m] = genMutated + genCrossed
+            
+           
+            
+            tabPath[m] = []
 
-
-
+            
+            for i in tabBestPath[m]:
+                tabPath[m].append([i,Map.pathLength(i)])
+                
+            tabPath[m].sort(key=lambda x:x[1])
+            
+            #print("taille de la pop numero : ", m)
+            #print(len(tabPath[m]))
+        
+        
+        currBest = []
+        currBestScore = float('inf')
+        for m in range(k):
+            if tabPath[m][0][1] < currBestScore:
+                currBestScore = tabPath[m][0][1]
+                currBest = tabPath[m][0][0].copy()
+        
+        
+        #verifier le meilleur de chaque sous pop(!) (!) (!)
+        if currBestScore < bestScore:
+            iteration = 0
+            bestScore = currBestScore
+            path = currBest.copy()
+        else:
+            iteration +=1
+        
+        tmp = []
+        
+        for w in range(k):
+            tmp.append([])
+            for h in range(floor((bestElementsSize/k)/2)):
+                tmp[w].append(tabPath[w][h])
+            
+        
+        if(generation % 50 == 0):
+            for p in range(k):
+                if p+1 < k:
+                    for i in range(floor((bestElementsSize/k)/2)):
+                       tabPath[p+1][i] = tmp[p][i]
+                else:
+                    for i in range(floor((bestElementsSize/k)/2)):
+                       tabPath[0][i] = tmp[p][i]
+            
+            for p in range(k):
+                tabPath[m].sort(key=lambda x:x[1])
+            
+        array.append(bestScore)
+    
+    return generation
+    
 
 
 
