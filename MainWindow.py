@@ -55,7 +55,7 @@ class window:
         for i in range(len(tab)):
             self.placePoint(cities[tab[i]][0],cities[tab[i]][1])
         
-        tab = slt.mesureTemps(100,self.actualMap,25)
+        tab = slt.selectionPath(300,self.actualMap,25)
 
         
         #self.textBestPath = Label(self.root, text = str(self.actualMap.pathLength(tab)))
