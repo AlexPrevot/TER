@@ -1,7 +1,7 @@
 from tkinter import *
 from functools import partial
 from Map import Map
-
+import tkinter
 
 import Selector as slt
 
@@ -27,6 +27,9 @@ class window:
     
     #bouton positionnement des points de maniere aleatoire
     def buttonGenerate(self):
+        self.contenueVille = self.nbreVille.get()
+        #Map creation
+        self.actualMap = Map(int(self.contenueVille,base=10),500,0) 
         tab = self.actualMap.refresh()
         self.canvas.delete("all")
         self.canvas.create_rectangle(0, 0, 500, 500, fill='white')
@@ -36,6 +39,9 @@ class window:
             
     #bouton positionnement des points de manière aléatoire
     def buttonGenerateCircle(self):
+        self.contenueVille = self.nbreVille.get()
+        #Map creation
+        self.actualMap = Map(int(self.contenueVille,base=10),500,0) 
         tab = self.actualMap.creatMapCircle()
         self.canvas.delete("all")
         self.canvas.create_rectangle(0, 0, 500, 500, fill='white')
@@ -43,7 +49,14 @@ class window:
         for i in range(len(tab)):
             self.placePoint(tab[i][0],tab[i][1])
             
+    #creation bouton de saisie nbre ville
+    def print_nbreVille(event):
+        print(entree.get())
         
+    #creation zone txt
+    def zone_text(self):
+        zone_texte = tkinter.Label (text = "zone de texte")
+    
     #--------
     #lance lalgo de recherche
     def buttonPath(self):
@@ -54,8 +67,9 @@ class window:
         self.canvas.create_rectangle(0, 0, 500, 500, fill='white')
         for i in range(len(tab)):
             self.placePoint(cities[tab[i]][0],cities[tab[i]][1])
-        
-        tab = slt.selectionPath(400,self.actualMap,200)
+            
+        self.contenuePopu = self.nbrePopu.get()
+        tab = slt.selectionPath(int(self.contenuePopu,base=10),self.actualMap,25)
 
         
         #self.textBestPath = Label(self.root, text = str(self.actualMap.pathLength(tab)))
@@ -99,11 +113,24 @@ class window:
         self.buttGenerationC.pack()
         self.buttPath = Button(self.root, text = "Trouver un chemin", command = self.buttonPath, bg = 'red')
         self.buttPath.pack()
+        #test zone saisie nbreVille
+        self.L1 = Label(self.root, text="Nombre de villes")
+        self.L1.pack( side = RIGHT)
+        self.nbreVille = Entry(self.root, bd=5)
+        self.nbreVille.pack(side=RIGHT)
+        
+        #test zone saisie nbrePopu
+        self.L1 = Label(self.root, text="Nombre de population")
+        self.L1.pack( side = RIGHT)
+        self.nbrePopu = Entry(self.root, bd=5)
+        self.nbrePopu.pack(side=RIGHT)
+        
         #self.canvasText = Canvas(self.root, width=500, height=500)
         #self.canvasText.pack()
         self.stringVariable= StringVar()
         self.textBestPath = Label(self.root, textvariable = self.stringVariable) 
         self.textBestPath.pack()
+        
         
         
         #Map creation

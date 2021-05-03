@@ -930,6 +930,8 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     
     
     """
+    print("nbrePath:")
+    print(nbrPath)
     print("RESULTAT FINAL")
     resultat = myModule.genalgo(Map.cities, nbrPath)
     print(resultat)
@@ -979,6 +981,66 @@ def selectionPath(nbrPath, Map, bestElementsSize):
 
 
 #--------------------------------------------------------- POUR FAIRE DES GRAPHES
+
+def make_graph(nbrGen,y,c,name):
+    x = []
+    for i in range(nbrGen):
+        x.append(i)
+        
+    linestyles = ['-', '--', '-.', ':']
+    pylab.plot(x, y,linestyle = linestyles[c],label = name)
+
+
+
+
+def mesureTemps(nbrPath,Map1,bestElementsSize):
+    import time
+    
+    pylab.figure(figsize=(20,10))
+    n = 1
+    
+    count = 0
+    arr = []
+    nbrVilleMax = 7
+    nbr = nbrVilleMax - 4
+    tpyth = []
+    tcpp = []
+    pylab.grid()
+    for i in range(4,nbrVilleMax):
+        tabPath = []
+        map2 = Map(i,500,0)
+        for j in range(nbrPath):
+            cityTab = map2.randomPath()
+            tabPath.append([cityTab,map2.pathLength(cityTab)])
+        newScore = []
+        nbrGeneration = 0
+        tmoyp = 0
+        tmoyc = 0
+        
+        for j in range(n):
+            start = time.process_time()
+            algoGene(nbrPath, map2, tabPath, bestElementsSize, 
+                                newScore,mutationStatique,selectionBrute, EdgeRecombination)
+            count += 1
+            prop = (count/(nbr*n))*100
+            print("proportion fait  python : " + str(prop))
+            tmoyp += time.process_time() - start
+        
+        for j in range(n):
+            start = time.process_time()
+            algogencpp(map2,nbrPath)
+            
+            tmoyc += time.process_time() - start
+        tpyth.append(tmoyp/n)
+        tcpp.append(tmoyc/n)
+    make_graph(nbr,tpyth,0,"Performance en temps du Python")
+    make_graph(nbr,tcpp,2,"Performance en temps du C++")
+    pylab.legend(fontsize=15)
+    pylab.xlabel("Nombre de villes")
+    pylab.ylabel("Temps en secondes de résolution")
+    pylab.show()
+    
+
 
 
 
@@ -1232,20 +1294,20 @@ def etude(nbrPath,Map,bestElementsSize):
     #mettre les fonctions de crossover (pas les loop) en parametre des crossoverloop
 
 
-def make_graph(nbrGen,y,c,name):
-    x = []
-    for i in range(nbrGen):
-        x.append(i)
-        
-    linestyles = ['-', '--', '-.', ':']
-    pylab.plot(x, y,linestyle = linestyles[0])
+
     
 
 
 
 
 
+def algogencpp(m,nbrPath):
+    resultat = myModule.genalgo(m.cities, nbrPath)
 
+
+    
+    
+    return resultat 
 
 
 
