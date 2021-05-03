@@ -1,7 +1,7 @@
 from tkinter import *
 from functools import partial
 from Map import Map
-
+import tkinter
 
 import Selector as slt
 
@@ -43,7 +43,14 @@ class window:
         for i in range(len(tab)):
             self.placePoint(tab[i][0],tab[i][1])
             
+    #creation bouton de saisie nbre ville
+    def print_nbreVille(event):
+        print(entree.get())
         
+    #creation zone txt
+    def zone_text(self):
+        zone_texte = tkinter.Label (text = "zone de texte")
+    
     #--------
     #lance lalgo de recherche
     def buttonPath(self):
@@ -99,11 +106,19 @@ class window:
         self.buttGenerationC.pack()
         self.buttPath = Button(self.root, text = "Trouver un chemin", command = self.buttonPath, bg = 'red')
         self.buttPath.pack()
+        #test zone saisie nbreVille
+        self.L1 = Label(self.root, text="Nombre de villes")
+        self.L1.pack( side = RIGHT)
+        self.nbreVille = Entry(self.root, bd=5)
+        self.nbreVille.pack(side=RIGHT)
+        self.contenue = self.nbreVille.get()
+        
         #self.canvasText = Canvas(self.root, width=500, height=500)
         #self.canvasText.pack()
         self.stringVariable= StringVar()
         self.textBestPath = Label(self.root, textvariable = self.stringVariable) 
         self.textBestPath.pack()
+        
         
         
         #Map creation
