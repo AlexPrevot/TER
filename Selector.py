@@ -930,6 +930,8 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     
     
     """
+    print("nbrePath:")
+    print(nbrPath)
     print("RESULTAT FINAL")
     resultat = myModule.genalgo(Map.cities, nbrPath)
     print(resultat)

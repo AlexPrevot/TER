@@ -27,6 +27,9 @@ class window:
     
     #bouton positionnement des points de maniere aleatoire
     def buttonGenerate(self):
+        self.contenueVille = self.nbreVille.get()
+        #Map creation
+        self.actualMap = Map(int(self.contenueVille,base=10),500,0) 
         tab = self.actualMap.refresh()
         self.canvas.delete("all")
         self.canvas.create_rectangle(0, 0, 500, 500, fill='white')
@@ -36,6 +39,9 @@ class window:
             
     #bouton positionnement des points de manière aléatoire
     def buttonGenerateCircle(self):
+        self.contenueVille = self.nbreVille.get()
+        #Map creation
+        self.actualMap = Map(int(self.contenueVille,base=10),500,0) 
         tab = self.actualMap.creatMapCircle()
         self.canvas.delete("all")
         self.canvas.create_rectangle(0, 0, 500, 500, fill='white')
@@ -61,8 +67,9 @@ class window:
         self.canvas.create_rectangle(0, 0, 500, 500, fill='white')
         for i in range(len(tab)):
             self.placePoint(cities[tab[i]][0],cities[tab[i]][1])
-        
-        tab = slt.selectionPath(300,self.actualMap,25)
+            
+        self.contenuePopu = self.nbrePopu.get()
+        tab = slt.selectionPath(int(self.contenuePopu,base=10),self.actualMap,25)
 
         
         #self.textBestPath = Label(self.root, text = str(self.actualMap.pathLength(tab)))
@@ -111,7 +118,12 @@ class window:
         self.L1.pack( side = RIGHT)
         self.nbreVille = Entry(self.root, bd=5)
         self.nbreVille.pack(side=RIGHT)
-        self.contenue = self.nbreVille.get()
+        
+        #test zone saisie nbrePopu
+        self.L1 = Label(self.root, text="Nombre de population")
+        self.L1.pack( side = RIGHT)
+        self.nbrePopu = Entry(self.root, bd=5)
+        self.nbrePopu.pack(side=RIGHT)
         
         #self.canvasText = Canvas(self.root, width=500, height=500)
         #self.canvasText.pack()
