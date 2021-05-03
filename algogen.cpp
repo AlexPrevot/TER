@@ -159,7 +159,7 @@ void cross(popvect& pop, int position,std::vector<int>& path1, std::vector<int>&
 		N = smallest;
 	}
 	
-	mutation(child, 0.02);
+	//mutation(child, 0);
 	
 	std::get<1>(pop[position]) = child;
 	//std::cout << "faire matrice fin -----------" << std::endl;
