@@ -209,9 +209,9 @@ void cross_over(std::vector<std::tuple<int, int>>& coord,popvect& population, in
 	int size = population.size();
 
 	
-	
-		#pragma omp for num_threads(8)
-		{
+	#pragma omp parallel
+	{
+		#pragma omp for	
 			for (int i = start + 1; i < size; i++)
 			{
 				int parent1 = rand() % start;
@@ -221,7 +221,9 @@ void cross_over(std::vector<std::tuple<int, int>>& coord,popvect& population, in
 				//std::cout << "après cross" << std::endl;
 				std::get<0>(population[i]) = getFitness(coord, std::get<1>(population[i]));
 			}
-		}
+		
+		
+	}
 
 	
 	

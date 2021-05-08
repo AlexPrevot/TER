@@ -8,6 +8,7 @@ import random
 
 import numpy as np
 
+import datetime
 
 
 import myModule
@@ -783,9 +784,9 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     tabPath =[]
     tabBestPath =[]
     print("NOUVELLE SELECTION")
-    import time
-    start = time.process_time()
-    
+    #import time
+    #start = time.process_time()
+    first_time = datetime.datetime.now()
     
     
     
@@ -937,7 +938,11 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     print(resultat)
     print(Map.pathLength(resultat))
     print("TEMPS")
-    print(time.process_time() - start)
+    #print(time.process_time() - start)
+    later_time = datetime.datetime.now()
+    difference = later_time - first_time
+    seconds_in_day = 24 * 60 * 60
+    print(difference.seconds)
     
     
     return resultat 
