@@ -211,7 +211,7 @@ void cross_over(std::vector<std::tuple<int, int>>& coord,popvect& population, in
 	
 	#pragma omp parallel
 	{	
-		#pragma omp parallel for
+		#pragma omp for
 		for (int i = start + 1; i < size; i++)
 		{
 			int parent1 = rand() % start;
