@@ -476,7 +476,7 @@ void FUSS(popvect& population, int nbr, std::vector<int>& props)
 //map position
 std::vector<int> Calgogen(std::vector<std::tuple<int,int>> &coordCities, int nbrPaths)
 {
-	//omp_set_num_threads(5);
+	omp_set_num_threads(5);
 	unsigned int seeds[8];
 	int my_thread_id;
 	unsigned int seed;
