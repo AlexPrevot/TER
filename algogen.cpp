@@ -172,19 +172,16 @@ void cross_over(std::vector<std::tuple<int, int>>& coord,popvect& population, in
 	//int nbrTown = std::get<0>(population[0]);
 	int size = population.size();
 
-	unsigned int seeds[8];
-	int my_thread_id;
-	unsigned int seed;
-	#pragma omp parallel
-	{
-	my_thread_id = omp_get_thread_num();
-	unsigned int seed = (unsigned) time(NULL);
-	srand(unsigned(time(NULL)) * omp_get_thread_num());
-	seeds[my_thread_id] = (seed & 0xFFFFFFF0) | (my_thread_id + 1);
+	srand(unsigned(time(NULL)));
 
-	unsigned int tid = omp_get_thread_num();   // my thread id
+	/*unsigned int tid;
+        unsigned int seed;
+	#pragma omp parallel private (seed, tid)
+	{
+	tid = omp_get_thread_num();   // my thread id
         seed = seeds[tid];            // it is much faster to keep a private copy of our seed
 		srand(seed);	
+	
 	#pragma omp for	
 	for (int i = start + 1; i < size; i++)
 	{
@@ -197,8 +194,18 @@ void cross_over(std::vector<std::tuple<int, int>>& coord,popvect& population, in
 		std::get<0>(population[i]) = getFitness(coord, std::get<1>(population[i]));
 	}
 	
+	}*/
+	
+	for (int i = start + 1; i < size; i++)
+	{
+		
+		int parent1 = rand() % start;
+		int parent2 = rand() % start;
+		cross(population, i, std::get<1>(population[parent1]), std::get<1>(population[parent2]));
+		
+		
+		std::get<0>(population[i]) = getFitness(coord, std::get<1>(population[i]));
 	}
-
 	
 	
 }
@@ -441,6 +448,18 @@ std::vector<int> Calgogen(std::vector<std::tuple<int,int>> &coordCities, int nbr
 	int generation = 0;
 
 
+	/*unsigned int seeds[8];
+	int my_thread_id;
+	unsigned int seed;
+	#pragma omp parallel private (seed, my_thread_id)
+	{
+		my_thread_id = omp_get_thread_num();
+		unsigned int seed = (unsigned) time(NULL);
+		//srand(unsigned(time(NULL)) * omp_get_thread_num());
+		seeds[my_thread_id] = (seed & 0xFFFFFFF0) | (my_thread_id + 1);
+	}*/
+
+
 
 	while (iterations < 200)
 	{
@@ -475,6 +494,8 @@ std::vector<int> Calgogen(std::vector<std::tuple<int,int>> &coordCities, int nbr
 	
 	return champion;
 }
+
+
 
 //-----------------------------------------------------------
 // send nbrPaths before
