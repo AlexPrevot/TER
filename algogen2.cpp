@@ -12,17 +12,18 @@
 #include <deque>
 
 #include <chrono>
-
+#include <omp.h>
+#include <future>
 
 #include "algogen.h"
 
 
-std::shared_ptr<std::vector<std::vector<int>>> makeMatrice(std::vector<int>& path1, std::vector<int>& path2)
+std::shared_ptr<std::vector<std::deque<int>>> makeMatrice(std::vector<int>& path1, std::vector<int>& path2)
 {
 	int size = path1.size();
-	std::shared_ptr<std::vector<std::vector<int>>> m(new std::vector<std::vector<int>>(size));
+	std::shared_ptr<std::vector<std::deque<int>>> m(new std::vector<std::deque<int>>(size));
 
-	std::vector<std::vector<int>> &matrice = *m;
+	std::vector<std::deque<int>> &matrice = *m;
 	
 	for (int i = 0; i < size; i++)
 	{
@@ -43,7 +44,7 @@ std::shared_ptr<std::vector<std::vector<int>>> makeMatrice(std::vector<int>& pat
 	{
 		
 		int pos = path2.at(i);
-		std::vector<int> e = matrice.at(pos);
+		std::deque<int> e = matrice.at(pos);
 
 		if (i + 1 < size)
 		{
@@ -88,9 +89,9 @@ std::shared_ptr<std::vector<std::vector<int>>> makeMatrice(std::vector<int>& pat
 void cross(popvect& pop, int position,std::vector<int>& path1, std::vector<int>& path2)
 {
 	
-	std::shared_ptr<std::vector<std::vector<int>>> m = makeMatrice(path1, path2);
+	std::shared_ptr<std::vector<std::deque<int>>> m = makeMatrice(path1, path2);
 	
-	std::vector<std::vector<int>>& matrice = *m;
+	std::vector<std::deque<int>>& matrice = *m;
 
 	int size = path1.size();
 
@@ -105,12 +106,12 @@ void cross(popvect& pop, int position,std::vector<int>& path1, std::vector<int>&
 	{
 
 		//push the node
-		std::vector<int> &currVec = matrice.at(N);
+		auto &currVec = matrice.at(N);
 
 		child.at(i) = N;
 
 		//delete the element from all tab in matrice
-		for (std::vector<int>& value : matrice)
+		for (std::deque<int>& value : matrice)
 			value.erase(std::remove(value.begin(), value.end(), N), value.end());
 
 
@@ -128,7 +129,7 @@ void cross(popvect& pop, int position,std::vector<int>& path1, std::vector<int>&
 
 			for(int j = 0; j < currVec.size() ; j++)
 			{
-				std::vector<int>& vec = matrice.at(currVec.at(j));
+				auto& vec = matrice.at(currVec.at(j));
 
 				if ((vec.size() < smallestNbr) && (vec.size() != 0))
 				{
@@ -160,78 +161,53 @@ void cross(popvect& pop, int position,std::vector<int>& path1, std::vector<int>&
 	}
 	
 	mutation(child, 0.02);
+
 	
 	std::get<1>(pop[position]) = child;
-	//std::cout << "faire matrice fin -----------" << std::endl;
-	/*
-	std::shared_ptr<std::vector<int>> child = std::make_shared<std::vector<int>>();
-
-	int size = path1.size();
-	
-	*child = path2;
-
-	std::deque<int> seen;
-	std::vector<int> tmp(size,-1);
-	std::deque<int> miss;
-
-	//copy half of path1 in path2
-	//std::copy(path1.begin(), path1.begin()+(size/2), (*child));
-	for (int i = 0; i < size / 2; i++)
-		child->at(i) = path1.at(i);
-
-
-	//find seen value
-	for (int i = 0; i < size; i++)
-	{
-		if (tmp.at(child->at(i)) == -1)
-			tmp.at(child->at(i)) = i;
-		else
-			seen.push_back(i);
-	}
-
-	//find missing value
-	for (int i = 0; i < size; i++)
-	{
-		if (tmp.at(path2.at(i)) == -1)
-			miss.push_back(path2.at(i));
-	}
-
-	//replace doubled value with missing value in the order of path2
-	for (int i = 0; i < seen.size(); i++)
-		child->at(seen.at(i)) = miss.at(i);
-	*/
 }
 
 void cross_over(std::vector<std::tuple<int, int>>& coord,popvect& population, int start)
 {
-
+	
 	//int nbrTown = std::get<0>(population[0]);
 	int size = population.size();
 
-	
-	
-	for (int i = start+1; i < size; i++)
+	//srand(unsigned(time(NULL)));
+
+	/*unsigned int tid;
+        unsigned int seed;
+	#pragma omp parallel private (seed, tid)
 	{
+	tid = omp_get_thread_num();   // my thread id
+        seed = seeds[tid];            // it is much faster to keep a private copy of our seed
+		srand(seed);	
+	
+	#pragma omp for	
+	for (int i = start + 1; i < size; i++)
+	{
+		
 		int parent1 = rand() % start;
 		int parent2 = rand() % start;
-		//std::cout << "avant cross" << std::endl;
-		cross(population,i,std::get<1>(population[parent1]), std::get<1>(population[parent2]));
-		//std::cout << "après cross" << std::endl;
+		cross(population, i, std::get<1>(population[parent1]), std::get<1>(population[parent2]));
+		
+		
 		std::get<0>(population[i]) = getFitness(coord, std::get<1>(population[i]));
 	}
 	
-	/*
-	for (int i = 0; i < start; i++)
-	{
-		for (int j = i; j < start; j++)
-		{
-			iteration += 1;
-			if ((start + iteration) < size)
-				population[start + iteration] = *cross(population[i], population[j]);
-			else
-				return;
-		}
 	}*/
+	
+	for (int i = start + 1; i < size; i++)
+	{
+		
+		int parent1 = rand() % start;
+		int parent2 = rand() % start;
+		cross(population, i, std::get<1>(population[parent1]), std::get<1>(population[parent2]));
+		
+		
+		std::get<0>(population[i]) = getFitness(coord, std::get<1>(population[i]));
+	}
+	
+	
 }
 
 
@@ -393,7 +369,6 @@ void BENCHtest(std::vector<std::tuple<int, int>>& co, std::shared_ptr<std::vecto
 //assume that population is already sort by fitness
 void FUSS(popvect& population, int nbr, std::vector<int>& props)
 {
-	
 	int size = population.size();
 	float chunk = population.size() / 10;
 	popvect v(nbr);
@@ -439,8 +414,7 @@ void FUSS(popvect& population, int nbr, std::vector<int>& props)
 		int element = rand() % int((a - b) + b);
 		v[i] = population[element];
 		//population[i] = population[element];
-	}
-	*/
+	}*/
 	for (int i = 0; i < nbr; i++)
 	{
 		population[i] = v[i];
@@ -457,106 +431,48 @@ void FUSS(popvect& population, int nbr, std::vector<int>& props)
 std::vector<int> Calgogen(std::vector<std::tuple<int,int>> &coordCities, int nbrPaths)
 {
 	srand(unsigned(time(NULL)));
+	//omp_set_num_threads(8);
 
 	int nbrCities = coordCities.size();
 
 
-	std::vector<int> props;
-
-	for (int i = 0; i < 61; i++)
-		props.push_back(0);
-
-	for (int i = 0; i < 10; i++)
-		props.push_back(1);
-
-	for (int i = 0; i < 9; i++)
-		props.push_back(2);
-
-	for (int i = 0; i < 8; i++)
-		props.push_back(3);
-
-	for (int i = 0; i < 7; i++)
-		props.push_back(4);
-
-	for (int i = 0; i < 5; i++)
-		props.push_back(5);
-
-	for (int i = 0; i < 4; i++)
-		props.push_back(6);
-
-	for (int i = 0; i < 3; i++)
-		props.push_back(7);
-
-
-	for (int i = 0; i < 2; i++)
-		props.push_back(8);
-
-	for (int i = 0; i < 1; i++)
-		props.push_back(9);
-
-
-
-
-
-	std::shared_ptr<popvect> chemins = generatePopulation(coordCities,nbrPaths, nbrCities);
+	std::shared_ptr<popvect> chemins = generatePopulation(coordCities, nbrPaths, nbrCities);
 	sortByFitness(*chemins);
-	
-	
-	
-	//---------------------------------
-	int k = 10;
-	/*
-	std::shared_ptr<surpop> chemins(new surpop(k));
 
-	for (int i = 0; i < k; i++)
-	{
-		(*chemins)[i] = *generatePopulation(coordCities, nbrPaths/k, nbrCities);
-		sortByFitness((*chemins)[i]);
-	}
-	
-	std::vector<int> champion = std::get<1>((*chemins)[0][0]);
-	float best = getFitness(coordCities, champion);
-	
-	for (int i = 0; i < k; i++)
-	{
-		if ((std::get<0>((*chemins)[i][0])) < best)
-		{
-			best = std::get<0>((*chemins)[i][0]);
-			champion = std::get<1>((*chemins)[i][0]);
-		}
-	}*/
 
-	//-------------------------------
-	
-	
-	
 	std::vector<int> champion = std::get<1>((*chemins)[0]);
+	
 	float best = getFitness(coordCities, champion);
-	
-	
-
 	int iterations = 0;
 
 	int generation = 0;
 
-	int subPopSize = nbrPaths / k;
 
-	int selectionSize = (0.5 * nbrPaths) / k;
+	/*unsigned int seeds[8];
+	int my_thread_id;
+	unsigned int seed;
+	#pragma omp parallel private (seed, my_thread_id)
+	{
+		my_thread_id = omp_get_thread_num();
+		unsigned int seed = (unsigned) time(NULL);
+		//srand(unsigned(time(NULL)) * omp_get_thread_num());
+		seeds[my_thread_id] = (seed & 0xFFFFFFF0) | (my_thread_id + 1);
+	}*/
 
-	std::vector<individuV> tmpMigrant(selectionSize);
+
+
 	while (iterations < 200)
 	{
-		
-		
-		//FUSS(*chemins, 0.5 * nbrPaths, props);
+
+
 
 		cross_over(coordCities, *chemins, 0.25 * nbrPaths);
 
 		sortByFitness(*chemins);
-			
-			
-			
-			
+
+
+
+
 		std::vector<int> currentChampion = std::get<1>((*chemins)[0]);
 		float currentBest = getFitness(coordCities, currentChampion);
 
@@ -565,48 +481,6 @@ std::vector<int> Calgogen(std::vector<std::tuple<int,int>> &coordCities, int nbr
 			best = currentBest;
 			champion = currentChampion;
 			iterations = 0;
-			
-		}
-		else
-			iterations++;
-
-		generation++;
-		
-		
-		//-------------------------
-		/*
-		for (int i = 0; i < k; i++)
-		{
-
-			FUSS((*chemins)[i], selectionSize, props);
-
-			cross_over(coordCities, (*chemins)[i], selectionSize);
-
-			sortByFitness((*chemins)[i]);
-
-		}
-
-		std::vector<int> currentChampion;//(nbrCities);
-		float currentBest = std::get<0>((*chemins)[0][subPopSize-1]);
-
-		for (int i = 0; i < k; i++)
-		{
-			if ((std::get<0>((*chemins)[i][0])) < best)
-			{
-				currentBest = std::get<0>((*chemins)[i][0]);
-				currentChampion = std::get<1>((*chemins)[i][0]);
-			}
-		}
-
-
-
-		
-
-		if (currentBest < best)
-		{
-			best = currentBest;
-			champion = currentChampion;
-			iterations = 0;
 
 		}
 		else
@@ -614,36 +488,8 @@ std::vector<int> Calgogen(std::vector<std::tuple<int,int>> &coordCities, int nbr
 
 		generation++;
 
-		if ((iterations % 100 == 0) && (iterations != 0))
-		{
-			
-			std::vector<int> tmp(selectionSize);
-			for (int i = 0; i < selectionSize; i++)
-				tmp[i] = rand() % (subPopSize);
-
-			for (int i = 0; i < k; i++)
-			{
-				short ind = rand() % k;
-				for (int j = 0; j < selectionSize; j++)
-				{
-					individuV2 mem = (*chemins)[i][tmp[j]];
-					(*chemins)[i][tmp[j]] = (*chemins)[ind][tmp[j]];
-					(*chemins)[ind][tmp[j]] = mem;
-				}
-			}
-
-			for(int i = 0; i < k; i++)
-				sortByFitness((*chemins)[i]);
-		}
-
-			
-		*/
-		
 
 
-		
-
-		
 	}
 	
 	return champion;
