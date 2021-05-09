@@ -25,7 +25,7 @@ float getFitness(std::vector<std::tuple<int, int>>& coord,
 std::shared_ptr< popvect> generatePopulation(std::vector<std::tuple<int, int>>& coord,
 																		int pop, int nbrCity);
 
-std::shared_ptr<std::vector<std::deque<int>>> makeMatrice(std::vector<int>& path1, std::vector<int>& path2);
+std::shared_ptr<std::vector<std::vector<int>>> makeMatrice(std::vector<int>& path1, std::vector<int>& path2);
 
 void cross_over(std::vector<std::tuple<int, int>>& coord,popvect& population, int start);
 

@@ -12,6 +12,10 @@
 #include <deque>
 
 #include <chrono>
+#include <omp.h>
+#include <future>
+
+#include <chrono>
 
 
 #include "algogen.h"
@@ -202,14 +206,14 @@ void cross(popvect& pop, int position,std::vector<int>& path1, std::vector<int>&
 	*/
 }
 
-void cross_over(std::vector<std::tuple<int, int>>& coord,popvect& population, int start)
+void cross_over(std::vector<std::tuple<int, int>>& coord,popvect& population, int start, unsigned int * seeds)
 {
 
 	//int nbrTown = std::get<0>(population[0]);
 	int size = population.size();
 
 	
-	
+	/*
 	for (int i = start+1; i < size; i++)
 	{
 		int parent1 = rand() % start;
@@ -218,20 +222,36 @@ void cross_over(std::vector<std::tuple<int, int>>& coord,popvect& population, in
 		cross(population,i,std::get<1>(population[parent1]), std::get<1>(population[parent2]));
 		//std::cout << "après cross" << std::endl;
 		std::get<0>(population[i]) = getFitness(coord, std::get<1>(population[i]));
+	}*/
+
+
+	
+	//unsigned int tid;
+        //unsigned int seed;
+	#pragma omp parallel
+	{
+	//tid = omp_get_thread_num();   // my thread id
+        //seed = seeds[tid];            // it is much faster to keep a private copy of our seed
+		//srand(seed);	
+	srand(unsigned(time(NULL) * omp_get_thread_num()));
+	
+	#pragma omp for	
+	for (int i = start + 1; i < size; i++)
+	{
+		
+		int parent1 = rand() % start;
+		int parent2 = rand() % start;
+		cross(population, i, std::get<1>(population[parent1]), std::get<1>(population[parent2]));
+		
+		
+		std::get<0>(population[i]) = getFitness(coord, std::get<1>(population[i]));
 	}
 	
-	/*
-	for (int i = 0; i < start; i++)
-	{
-		for (int j = i; j < start; j++)
-		{
-			iteration += 1;
-			if ((start + iteration) < size)
-				population[start + iteration] = *cross(population[i], population[j]);
-			else
-				return;
-		}
-	}*/
+	}
+
+
+	
+	
 }
 
 
@@ -456,6 +476,17 @@ void FUSS(popvect& population, int nbr, std::vector<int>& props)
 //map position
 std::vector<int> Calgogen(std::vector<std::tuple<int,int>> &coordCities, int nbrPaths)
 {
+	unsigned int seeds[8];
+	int my_thread_id;
+	unsigned int seed;
+	#pragma omp parallel private (seed, my_thread_id)
+	{
+		my_thread_id = omp_get_thread_num();
+		unsigned int seed = (unsigned) time(NULL);
+		//srand(unsigned(time(NULL) * omp_get_thread_num());
+		seeds[my_thread_id] = (seed & 0xFFFFFFF0) | (my_thread_id + 1);
+	}
+	
 	srand(unsigned(time(NULL)));
 
 	int nbrCities = coordCities.size();
@@ -544,13 +575,18 @@ std::vector<int> Calgogen(std::vector<std::tuple<int,int>> &coordCities, int nbr
 	int selectionSize = (0.5 * nbrPaths) / k;
 
 	std::vector<individuV> tmpMigrant(selectionSize);
+
+	
+
+
+
 	while (iterations < 200)
 	{
-		
+		omp_set_num_threads(8);
 		
 		//FUSS(*chemins, 0.5 * nbrPaths, props);
 
-		cross_over(coordCities, *chemins, 0.25 * nbrPaths);
+		cross_over(coordCities, *chemins, 0.25 * nbrPaths, seeds);
 
 		sortByFitness(*chemins);
 			
