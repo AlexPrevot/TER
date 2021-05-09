@@ -304,7 +304,7 @@ def crossOverLoopClassique(nbrPath, tab, Map):
 
 
 
-def combinaisonPointSingulier(nbrPath, tab,Map):
+def combinaisonPointSingulier(nbrPath, tab,Map,p):
     crossedTabs = []
     iteration = 0
     size = floor(len(tab[0])/2)
@@ -369,7 +369,7 @@ def RandomCrossMapping(nbrPath, tab,Map,p):
 
 
 #par pair au hasard
-def EdgeRecombination(nbrPath, tab,Map):
+def EdgeRecombination(nbrPath, tab,Map,p):
     crossedTabs = []
     iteration = 0
     for i in range(nbrPath - len(tab)):
@@ -859,7 +859,7 @@ def selectionPath(nbrPath, Map, bestElementsSize):
         
         average = average/len(tabPath)
     
-        p = (1 - ((average - minimum)/minimum))
+        p = (1 - ((average - minimum)/minimum))**2
         
         #best = tabPath[0][0]
 
@@ -871,7 +871,7 @@ def selectionPath(nbrPath, Map, bestElementsSize):
         #p = 0
         
         
-        genCrossed = EdgeRecombination(nbrPath, tabBestPath,Map)
+        genCrossed = RandomCrossMapping(nbrPath, tabBestPath,Map,p*10)
 
         
         #print(len(genCrossed))
@@ -920,11 +920,11 @@ def selectionPath(nbrPath, Map, bestElementsSize):
     print(path)
     print(bestScore)
     print("TEMPS")
-    print(time.process_time() - start)
+    #print(time.process_time() - start)
     print("Nombre de Generation : ")
     print(generation)
     
-    make_graph(generation, arrayProb, "lla", "lala")
+    make_graph(generation, arrayProb,0, "lala")
     pylab.show()
     return path
 
@@ -1227,9 +1227,16 @@ def etude(nbrPath,Map,bestElementsSize):
     combinateur = [RandomCrossMapping,EdgeRecombination,combinaisonPointSingulier] #ajouter le cycle cross over
     mutateur = [mutationDynamique,mutationStatique]"""
 
-    trieur = [selectionBrute]
-    combinateur = [EdgeRecombination]
-    mutateur = [mutationStatique]
+    trieur = [selectionBrute, FUSS]
+    combinateur = [RandomCrossMapping,EdgeRecombination,combinaisonPointSingulier]
+    mutateur = [mutationDynamique,mutationStatique]
+    
+    alg1 = [selectionBrute,combinaisonPointSingulier,mutationStatique]
+    alg2 = [FUSS,RandomCrossMapping,mutationStatique]
+    alg3 = [selectionBrute,RandomCrossMapping,mutationDynamique]
+    alg4 = [selectionBrute,EdgeRecombination,mutationStatique]
+    
+    alg = [alg1,alg2,alg3,alg4]
     
     generation = 0
     bestScore = float('inf')
@@ -1254,43 +1261,39 @@ def etude(nbrPath,Map,bestElementsSize):
     count = 0
     c = 0
     
-    for tri in trieur:
-        for combi in combinateur:
-            for mut in mutateur :
-                arr = []
-                score = [0] #faire la moyenne dessus
-                
-                for i in range(n):
-                    count += 1
-                    newScore = [] #mettre le nouveau score dedans et apres l'integrer dans currentScore
+
+    for algo in alg:
+        arr = []
+        score = [0] #faire la moyenne dessus
+        
+        for i in range(n):
+            count += 1
+            newScore = [] #mettre le nouveau score dedans et apres l'integrer dans currentScore
+            
                     
-                    
-                    arr.append(algoGene(nbrPath, Map, tabPath, bestElementsSize, 
-                                        newScore,mut,tri, combi))
+            arr.append(algoGene(nbrPath, Map, tabPath, bestElementsSize, 
+                                newScore,algo[2],algo[0],algo[1]))
                     
 
                     
-                    while len(score) < len(newScore):
-                        score.append(score[-1])
+        while len(score) < len(newScore):
+            score.append(score[-1])
                         
-                    while len(score) > len(newScore):
-                        newScore.append(newScore[-1])
+        while len(score) > len(newScore):
+            newScore.append(newScore[-1])
                       
-                    for k in range(len(score)):
-                        score[k] += newScore[k]
-                    print("pourcentage de fait : ", (count/total)*100)
+        for k in range(len(score)):
+            score[k] += newScore[k]
                    
-                for k in range(len(score)):
-                    score[k] = score[k]/n
-                name = ""
-                name += mut.__name__ + " "
-                name += combi.__name__ + " "
-                name += tri.__name__
-                print(name)
-                
-                c = (c + 1)%4
-                make_graph(len(score),score,c,name)
-                #faire la moyenne de arr et apres le plot
+        for k in range(len(score)):
+            score[k] = score[k]/n
+        name = ""
+        name += algo[2].__name__ + " "
+        name += algo[1].__name__ + " "
+        name += algo[0].__name__
+
+        make_graph(len(score),score,1,name)
+        #faire la moyenne de arr et apres le plot
     pylab.legend(fontsize=15)
     pylab.xlabel("Nombre de generation")
     pylab.ylabel("Score du meilleur individu")
@@ -1388,7 +1391,7 @@ def algoGene(nbrPath, Map,tabPath, bestElementsSize,array,mutator,selector,cross
         p = mutator(Map,tabBestPath)
         
         
-        genCrossed = crossOver(nbrPath, tabBestPath,Map)
+        genCrossed = crossOver(nbrPath, tabBestPath,Map,p)
 
         
         #print(len(genCrossed))
@@ -1397,7 +1400,7 @@ def algoGene(nbrPath, Map,tabPath, bestElementsSize,array,mutator,selector,cross
         
         
         
-        genMutated = mutation(newSet,p,Map)
+        genMutated = mutation(newSet,0,Map)
    
         
        

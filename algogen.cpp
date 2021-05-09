@@ -13,6 +13,7 @@
 
 #include <chrono>
 #include <omp.h>
+#include <future>
 
 #include "algogen.h"
 
@@ -160,85 +161,46 @@ void cross(popvect& pop, int position,std::vector<int>& path1, std::vector<int>&
 	}
 	
 	mutation(child, 0.02);
+
 	
 	std::get<1>(pop[position]) = child;
-	//std::cout << "faire matrice fin -----------" << std::endl;
-	/*
-	std::shared_ptr<std::vector<int>> child = std::make_shared<std::vector<int>>();
-
-	int size = path1.size();
-	
-	*child = path2;
-
-	std::deque<int> seen;
-	std::vector<int> tmp(size,-1);
-	std::deque<int> miss;
-
-	//copy half of path1 in path2
-	//std::copy(path1.begin(), path1.begin()+(size/2), (*child));
-	for (int i = 0; i < size / 2; i++)
-		child->at(i) = path1.at(i);
-
-
-	//find seen value
-	for (int i = 0; i < size; i++)
-	{
-		if (tmp.at(child->at(i)) == -1)
-			tmp.at(child->at(i)) = i;
-		else
-			seen.push_back(i);
-	}
-
-	//find missing value
-	for (int i = 0; i < size; i++)
-	{
-		if (tmp.at(path2.at(i)) == -1)
-			miss.push_back(path2.at(i));
-	}
-
-	//replace doubled value with missing value in the order of path2
-	for (int i = 0; i < seen.size(); i++)
-		child->at(seen.at(i)) = miss.at(i);
-	*/
 }
 
 void cross_over(std::vector<std::tuple<int, int>>& coord,popvect& population, int start)
 {
-
+	
 	//int nbrTown = std::get<0>(population[0]);
 	int size = population.size();
 
-	
+	unsigned int seeds[8];
+	int my_thread_id;
+	unsigned int seed;
 	#pragma omp parallel
 	{
-		#pragma omp for	
-			for (int i = start + 1; i < size; i++)
-			{
-				int parent1 = rand() % start;
-				int parent2 = rand() % start;
-				//std::cout << "avant cross" << std::endl;
-				cross(population, i, std::get<1>(population[parent1]), std::get<1>(population[parent2]));
-				//std::cout << "après cross" << std::endl;
-				std::get<0>(population[i]) = getFitness(coord, std::get<1>(population[i]));
-			}
+	my_thread_id = omp_get_thread_num();
+	unsigned int seed = (unsigned) time(NULL);
+	srand(unsigned(time(NULL)) * omp_get_thread_num());
+	seeds[my_thread_id] = (seed & 0xFFFFFFF0) | (my_thread_id + 1);
+
+	unsigned int tid = omp_get_thread_num();   // my thread id
+        seed = seeds[tid];            // it is much faster to keep a private copy of our seed
+		srand(seed);	
+	#pragma omp for	
+	for (int i = start + 1; i < size; i++)
+	{
+		
+		int parent1 = rand() % start;
+		int parent2 = rand() % start;
+		cross(population, i, std::get<1>(population[parent1]), std::get<1>(population[parent2]));
 		
 		
+		std::get<0>(population[i]) = getFitness(coord, std::get<1>(population[i]));
+	}
+	
 	}
 
 	
 	
-	/*
-	for (int i = 0; i < start; i++)
-	{
-		for (int j = i; j < start; j++)
-		{
-			iteration += 1;
-			if ((start + iteration) < size)
-				population[start + iteration] = *cross(population[i], population[j]);
-			else
-				return;
-		}
-	}*/
 }
 
 
