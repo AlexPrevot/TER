@@ -323,7 +323,7 @@ def combinaisonPointSingulier(nbrPath, tab,Map,p):
             #print("---")
             #print(P)
             #print(l)
-            if ( l < 2):
+            if ( l < 5):
                 #print("mutation")
                 pos = randint(0,len(child)-1)
                 swapPositions(child, j, pos)
@@ -461,8 +461,8 @@ def mutationDynamique(Map,tabBestPath):
         
     average = average/len(tabBestPath)
     
-    p = (1 - ((average - minimum)/minimum))**5
-    return p
+    p = (1 - ((average - minimum)/minimum))**2
+    return p*10
     
     
 def mutationStatique(Map,tabBestPath):
@@ -1256,7 +1256,7 @@ def etude(nbrPath,Map,bestElementsSize):
     print("moyenne de : " + str(m))
     pylab.figure(figsize=(20,10))
     pylab.grid()
-    n = 15
+    n = 4
     total = n * len(trieur)*len(combinateur)*len(mutateur)
     count = 0
     c = 0
@@ -1391,7 +1391,7 @@ def algoGene(nbrPath, Map,tabPath, bestElementsSize,array,mutator,selector,cross
         p = mutator(Map,tabBestPath)
         
         
-        genCrossed = crossOver(nbrPath, tabBestPath,Map,p)
+        genCrossed = crossOver(nbrPath, tabBestPath,Map,p/10)
 
         
         #print(len(genCrossed))

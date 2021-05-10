@@ -8,7 +8,7 @@ import Selector as slt
 class window:
     #----------------------function to place points
     def placePoint(self,coX,coY):
-        self.canvas.create_rectangle(coX + 0, coY + 0, coX + 5, coY + 5, fill='black')
+        self.canvas.create_oval(coX + 0, coY + 0, coX + 5, coY + 5, fill='black')
 
 
     #----------------------function to bind points with their coordon
@@ -98,19 +98,22 @@ class window:
     def __init__(self):
         #window creation
         self.root = Tk(className='Voyageur de Commerce - Bourmaud Paul, Prevot Alexandre')
-        self.root.geometry("700x600")
+        self.root.geometry("750x650")
+        self.root.configure(bg='grey')
+        
         
         #we set a canvas where we'll put useful things
         self.canvas = Canvas(self.root, width=500, height=500)
         self.canvas.pack()
         self.canvas.create_rectangle(0, 0, 500, 500, fill='white')
         
-        
         #the button of the window
         self.buttGenerationR = Button(self.root, text = "Generation Random", command = self.buttonGenerate, bg = 'red')
         self.buttGenerationR.pack()
+        self.buttGenerationR.place(x=0, y=20)
         self.buttGenerationC = Button(self.root, text = "Generation Circle", command = self.buttonGenerateCircle, bg = 'red')
         self.buttGenerationC.pack()
+        self.buttGenerationC.place(x=0, y=50)
         self.buttPath = Button(self.root, text = "Trouver un chemin", command = self.buttonPath, bg = 'red')
         self.buttPath.pack()
         #test zone saisie nbreVille
@@ -118,6 +121,7 @@ class window:
         self.L1.pack( side = RIGHT)
         self.nbreVille = Entry(self.root, bd=5)
         self.nbreVille.pack(side=RIGHT)
+
         
         #test zone saisie nbrePopu
         self.L1 = Label(self.root, text="Nombre de population")
