@@ -99,7 +99,7 @@ class window:
         #window creation
         self.root = Tk(className='Voyageur de Commerce - Bourmaud Paul, Prevot Alexandre')
         self.root.geometry("750x650")
-        self.root.configure(bg='grey')
+        self.root.configure(bg='light grey')
         
         
         #we set a canvas where we'll put useful things
@@ -108,13 +108,13 @@ class window:
         self.canvas.create_rectangle(0, 0, 500, 500, fill='white')
         
         #the button of the window
-        self.buttGenerationR = Button(self.root, text = "Generation Random", command = self.buttonGenerate, bg = 'red')
+        self.buttGenerationR = Button(self.root, text = "Generation Random", command = self.buttonGenerate, bg = 'grey')
         self.buttGenerationR.pack()
         self.buttGenerationR.place(x=0, y=20)
-        self.buttGenerationC = Button(self.root, text = "Generation Circle", command = self.buttonGenerateCircle, bg = 'red')
+        self.buttGenerationC = Button(self.root, text = "Generation Circle", command = self.buttonGenerateCircle, bg = 'grey')
         self.buttGenerationC.pack()
         self.buttGenerationC.place(x=0, y=50)
-        self.buttPath = Button(self.root, text = "Trouver un chemin", command = self.buttonPath, bg = 'red')
+        self.buttPath = Button(self.root, text = "Trouver un chemin", command = self.buttonPath, bg = 'grey')
         self.buttPath.pack()
         #test zone saisie nbreVille
         self.L1 = Label(self.root, text="Nombre de villes")
@@ -132,7 +132,7 @@ class window:
         #self.canvasText = Canvas(self.root, width=500, height=500)
         #self.canvasText.pack()
         self.stringVariable= StringVar()
-        self.textBestPath = Label(self.root, textvariable = self.stringVariable) 
+        self.textBestPath = Label(self.root ,textvariable = self.stringVariable) 
         self.textBestPath.pack()
         
         
