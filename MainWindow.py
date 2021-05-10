@@ -124,7 +124,7 @@ class window:
 
         
         #test zone saisie nbrePopu
-        self.L1 = Label(self.root, text="Nombre de population")
+        self.L1 = Label(self.root, text="Nombre d'individus")
         self.L1.pack( side = RIGHT)
         self.nbrePopu = Entry(self.root, bd=5)
         self.nbrePopu.pack(side=RIGHT)
