@@ -18,11 +18,12 @@ That way, square roots are avoided.
 typedef std::vector<int> coords;
 
 class Path
-{
+{ 
 	
 	public:
 		Path(std::vector<int> path)
 		{
+			//(!) DO A FUNCTION THAT MAKE THE PROGRAM CRASH IF THE PROVIDED PATH ISNT A PAIR
 			_path = path;
 			_computeFitness();
 		}
@@ -30,10 +31,15 @@ class Path
 		//---- getters
 		int		getSize();
 		int		getFitness();
-
+		
+		//---- setters
+		static void setCoordinates(coords coordinates)
+		{
+			_coordinates = coordinates;
+		}
 		
 	private:
-
+		static coords _coordinates;
 		void _setFitness(float fitness);
 		void _computeFitness();
 

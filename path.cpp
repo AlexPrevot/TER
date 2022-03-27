@@ -1,5 +1,11 @@
 #include "path.h"
 #include <cmath>
+#include <iostream>
+
+//=== static
+
+coords Path::_coordinates = coords();
+
 
 //================================= PUBLIC =====================
 int Path::getSize()
@@ -14,20 +20,39 @@ int Path::getFitness()
 
 
 
+
 //================================= PRIVATE =====================
 
 void Path::_setFitness(float fitness)
 {
-	_fitness = fitness + 1000;
+	_fitness = fitness;
 }
 
 void Path::_computeFitness()
 {
-	float length = 0;
-	for (int i = 2; i < _path.size(); i += 2)
-	{
-		length += std::pow(_path.at(i) - _path.at(i - 2),2) + std::pow(_path.at(i + 1) - _path.at(i - 1),2);
-	}
+	if (_path.size() <= 1)
+		_setFitness(0);
 
+	float length = 0;
+	for (int i = 1; i < _path.size(); i++)
+	{
+		int city1 = _path.at(i)*2;
+		int city2 = _path.at(i - 1)*2;
+
+
+
+		length += std::pow(_coordinates.at(city1) - _coordinates.at(city2),2) + 
+				  std::pow(_coordinates.at(city1 + 1) - _coordinates.at(city2 + 1),2);
+
+	}
+	if (_path.size() > 2)
+	{
+		int city1 = _path.front() * 2;
+		int city2 = _path.back() * 2;
+
+		length += std::pow(_coordinates.at(city1) - _coordinates.at(city2), 2) +
+			std::pow(_coordinates.at(city1 + 1) - _coordinates.at(city2 + 1), 2);
+
+	}
 	_setFitness(length);
 }
