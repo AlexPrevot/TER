@@ -23,10 +23,13 @@ class Path
 	public:
 		Path(std::vector<int> path)
 		{
-			//(!) DO A FUNCTION THAT MAKE THE PROGRAM CRASH IF THE PROVIDED PATH ISNT A PAIR
+			//(!) do a function that makes the program crash if path size isn't matched with coordinate size
 			_path = path;
 			_computeFitness();
 		}
+
+		void swap(int x1, int x2);
+
 
 		//---- getters
 		int		getSize();
@@ -35,6 +38,7 @@ class Path
 		//---- setters
 		static void setCoordinates(coords coordinates)
 		{
+			//(!) DO A FUNCTION THAT MAKE THE PROGRAM CRASH IF THE PROVIDED PATH ISNT EVEN LENGTH
 			_coordinates = coordinates;
 		}
 		
