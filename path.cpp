@@ -48,8 +48,6 @@ void Path::_computeFitness()
 		int city1 = _path.at(i)*2;
 		int city2 = _path.at(i - 1)*2;
 
-
-
 		length += std::pow(_coordinates.at(city1) - _coordinates.at(city2),2) + 
 				  std::pow(_coordinates.at(city1 + 1) - _coordinates.at(city2 + 1),2);
 
