@@ -34,6 +34,7 @@ class Path
 		//---- getters
 		int		getSize();
 		int		getFitness();
+		int		at(int i);
 		
 		//---- setters
 		static void setCoordinates(coords coordinates)

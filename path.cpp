@@ -18,6 +18,11 @@ int Path::getFitness()
 	return _fitness;
 }
 
+int Path::at(int i)
+{
+	return _path.at(i);
+}
+
 void Path::swap(int x1, int x2)
 {
 	int mem = _path.at(x1);
