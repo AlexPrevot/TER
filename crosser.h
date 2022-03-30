@@ -1,5 +1,5 @@
 #pragma once
-#include <vector>
+#include <unordered_set>
 #include "Path.h"
 class Crosser
 {
@@ -13,6 +13,8 @@ class Crosser
 
 	private:
 		double _mutation_rate; //chance of mutate the child
+
+		int getRandom(std::unordered_set<int> set);
 		
 };
 
