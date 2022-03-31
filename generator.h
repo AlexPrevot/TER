@@ -8,11 +8,10 @@ class Generator
 
 	public:
 
-		Generator(int individual_size, int population_size, std::vector<int> coordinates)
+		Generator(int individual_size, int population_size)
 		{
 			_individual_size = individual_size;
 			_population_size = population_size;
-			_coordinates = coordinates;
 		}
 
 		std::vector<Path> generate();
@@ -23,7 +22,6 @@ class Generator
 
 		int _individual_size;
 		int _population_size;
-		std::vector<int> _coordinates;
 
 };
 
