@@ -32,6 +32,14 @@ void Path::swap(int x1, int x2)
 	_computeFitness();
 }
 
+void Path::print()
+{
+	for (auto i : _path)
+		std::cout << i << " ";
+
+	std::cout << "\n";
+}
+
 
 
 

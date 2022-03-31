@@ -15,7 +15,12 @@ Path Crosser::cross(Path & path1, Path& path2)
 
 	vector<unordered_set<int>> adjacencies(size);
 
-	vector<int> ans_rep(size, -1);
+	unordered_set<int> rest;
+
+	for (int i = 0; i < size; i++)
+		rest.insert(i);
+
+	vector<int> ans(size,-1);
 
 	for (int i = 0; i < size-1; i++)
 	{
@@ -30,17 +35,39 @@ Path Crosser::cross(Path & path1, Path& path2)
 	}
 	
 
-	for (int i = 0; i < size; i++)
-	{
-		int node = getRandom(adjacencies.at(start));
+	int node = getRandom(adjacencies.at(start));
+	int i = 0;
+	while(i < size)
+	{	
+		rest.erase(node);
+
 		
 
-		ans_rep.at(start) = node;
+		auto adj = adjacencies.at(node);
 
+		int ran = getRandom(adj);
+
+		while (adj.size() > 1 && rest.find(ran) == rest.end())
+		{
+			adj.erase(ran);
+			ran = getRandom(adj);
+		}
+
+		if (rest.size() > 0 && rest.find(ran) == rest.end())
+		{
+			ran = getRandom(rest);
+		}
+		else
+		{
+			ans.at(i) = node;
+			i++;
+		}
+
+		node = ran;
 	}
 
 
-	Path ans({ 1,2,3 });
+	//Path ans({ 1,2,3 });
 	return ans;
 }
 

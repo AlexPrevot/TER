@@ -29,7 +29,7 @@ class Path
 		}
 
 		void swap(int x1, int x2);
-
+		void print();
 
 		//---- getters
 		int		getSize();
