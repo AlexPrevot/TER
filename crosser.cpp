@@ -18,7 +18,7 @@ struct comparator
 void Crosser::crossover(std::vector<Path> &population)
 {
 	int size = population.size();
-	int start_indice = _selection_rate * size;
+	int start_indice = _selection_rate * size ;
 
 	for (int i = start_indice; i < size; i++)
 	{
@@ -27,7 +27,7 @@ void Crosser::crossover(std::vector<Path> &population)
 
 		while(ip2 == ip1)
 			ip2 = rand() % start_indice;
-
+		
 		population.at(i) = cross(population.at(ip1), population.at(ip2));
 	}
 
@@ -62,9 +62,15 @@ Path Crosser::cross(Path & path1, Path& path2)
 		adjacencies.at(path2.at(i)).insert(path2.at(i-1));
 	}
 	
+	adjacencies.at(path1.at(0)).insert(path1.at(size - 1));
+	adjacencies.at(path2.at(0)).insert(path2.at(size - 1));
+	
+	adjacencies.at(path1.at(size - 1)).insert(path1.at(0));
+	adjacencies.at(path2.at(size - 1)).insert(path2.at(0));
 
 	int node = getRandom(adjacencies.at(start));
-	int i = 0;
+	ans.at(0) = node;
+	int i = 1;
 	while(i < size)
 	{	
 		rest.erase(node);
@@ -75,7 +81,7 @@ Path Crosser::cross(Path & path1, Path& path2)
 
 		int ran = getRandom(adj);
 
-		while (adj.size() > 1 && rest.find(ran) == rest.end())
+		while (adj.size() > 0 && rest.find(ran) == rest.end())
 		{
 			adj.erase(ran);
 			ran = getRandom(adj);
@@ -85,20 +91,21 @@ Path Crosser::cross(Path & path1, Path& path2)
 		{
 			ran = getRandom(rest);
 		}
-		else
-		{
-			ans.at(i) = node;
-			i++;
-		}
+		
+		
+		ans.at(i) = ran;
+		i++;
 
 		node = ran;
 	}
-
 	return ans;
 }
 
 int Crosser::getRandom(std::unordered_set<int> set)
 {
+	if (!set.size())
+		return -1;
+
 	int idx = rand() % set.size();
 	auto it = set.begin();
 	for (int i = 0; i < idx; i++)
