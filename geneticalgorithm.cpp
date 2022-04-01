@@ -1,6 +1,6 @@
 #include "geneticalgorithm.h"
 
-int GeneticAlgorithm::optimize()
+Path GeneticAlgorithm::optimize()
 {
 	int same_count = 0;
 	int best = _population[0].getFitness();
@@ -14,10 +14,11 @@ int GeneticAlgorithm::optimize()
 		{
 			same_count = 0;
 			best = _population.at(0).getFitness();
+			champion = _population.at(0);
 		}
 		else
 			same_count++;
 	}
 
-	return best;
+	return champion;
 }

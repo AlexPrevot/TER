@@ -13,7 +13,7 @@ int Path::getSize()
 	return _path.size();
 }
 
-int Path::getFitness()
+float Path::getFitness()
 {
 	return _fitness;
 }
@@ -29,6 +29,7 @@ void Path::swap(int x1, int x2)
 	_path.at(x1) = _path.at(x2);
 	_path.at(x2) = mem;
 
+	//no need to computeFitness from the start, can be done in costant time
 	_computeFitness();
 }
 
@@ -39,6 +40,31 @@ void Path::print()
 
 	std::cout << " fitness : " << getFitness();
 	std::cout << "\n";
+}
+
+float Path::getLength()
+{
+	float length = 0;
+	for (int i = 1; i < _path.size(); i++)
+	{
+		int city1 = _path.at(i) * 2;
+		int city2 = _path.at(i - 1) * 2;
+
+		length += sqrt(std::pow(_coordinates.at(city1) - _coordinates.at(city2), 2) +
+			std::pow(_coordinates.at(city1 + 1) - _coordinates.at(city2 + 1), 2));
+
+	}
+	if (_path.size() > 2)
+	{
+		int city1 = _path.front() * 2;
+		int city2 = _path.back() * 2;
+
+		length += sqrt(std::pow(_coordinates.at(city1) - _coordinates.at(city2), 2) +
+			std::pow(_coordinates.at(city1 + 1) - _coordinates.at(city2 + 1), 2));
+
+	}
+
+	return length;
 }
 
 

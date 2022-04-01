@@ -19,7 +19,7 @@ class GeneticAlgorithm
 			_crosser = crosser;
 		}
 
-		int optimize();
+		Path optimize();
 
 
 

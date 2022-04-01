@@ -35,7 +35,8 @@ class Path
 
 		//---- getters
 		int		getSize();
-		int		getFitness();
+		float	getFitness();
+		float   getLength();
 		int		at(int i);
 		
 		//---- setters
@@ -51,7 +52,7 @@ class Path
 		void _computeFitness();
 
 		coords _path;
-		int _fitness = -1;
+		float _fitness = -1;
 
 };
 
