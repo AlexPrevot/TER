@@ -45,23 +45,22 @@ void Path::print()
 float Path::getLength()
 {
 	float length = 0;
-	for (int i = 1; i < _path.size(); i++)
+	int size = 10;
+	for (int i = 0; i < size; i++)
 	{
+		int next = i + 1;
+
+		if (next >= size)
+			next = 0;
+
 		int city1 = _path.at(i) * 2;
-		int city2 = _path.at(i - 1) * 2;
+		int city2 = _path.at(next) * 2;
 
-		length += sqrt(std::pow(_coordinates.at(city1) - _coordinates.at(city2), 2) +
-			std::pow(_coordinates.at(city1 + 1) - _coordinates.at(city2 + 1), 2));
+		int val1 = std::pow(_coordinates.at(city1) - _coordinates.at(city2), 2);
+		int val2 = std::pow(_coordinates.at(city1 + 1) - _coordinates.at(city2 + 1), 2);
 
-	}
-	if (_path.size() > 2)
-	{
-		int city1 = _path.front() * 2;
-		int city2 = _path.back() * 2;
 
-		length += sqrt(std::pow(_coordinates.at(city1) - _coordinates.at(city2), 2) +
-			std::pow(_coordinates.at(city1 + 1) - _coordinates.at(city2 + 1), 2));
-
+		length += sqrt(val1 + val2);
 	}
 
 	return length;
@@ -83,23 +82,21 @@ void Path::_computeFitness()
 		_setFitness(0);
 
 	float length = 0;
-	for (int i = 1; i < _path.size(); i++)
+	int size = _path.size();
+	for (int i = 0; i < size; i++)
 	{
-		int city1 = _path.at(i)*2;
-		int city2 = _path.at(i - 1)*2;
+		int next = i + 1;
 
-		length += std::pow(_coordinates.at(city1) - _coordinates.at(city2),2) + 
-				  std::pow(_coordinates.at(city1 + 1) - _coordinates.at(city2 + 1),2);
+		if (next >= size)
+			next = 0;
 
+		int city1 = _path.at(i) * 2;
+		int city2 = _path.at(next) * 2;
+
+		length +=	std::pow(_coordinates.at(city1) - _coordinates.at(city2), 2) +
+					std::pow(_coordinates.at(city1 + 1) - _coordinates.at(city2 + 1), 2);
 	}
-	if (_path.size() > 2)
-	{
-		int city1 = _path.front() * 2;
-		int city2 = _path.back() * 2;
 
-		length += std::pow(_coordinates.at(city1) - _coordinates.at(city2), 2) +
-			std::pow(_coordinates.at(city1 + 1) - _coordinates.at(city2 + 1), 2);
-
-	}
+	
 	_setFitness(length);
 }

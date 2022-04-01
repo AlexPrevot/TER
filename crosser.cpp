@@ -27,11 +27,15 @@ void Crosser::crossover(std::vector<Path> &population)
 
 		while(ip2 == ip1)
 			ip2 = rand() % start_indice;
+
 		
 		population.at(i) = cross(population.at(ip1), population.at(ip2));
+
+		mutate(population.at(i));
 	}
 
 	std::sort(population.begin(), population.end(), comparator());
+
 }
 
 Path Crosser::cross(Path & path1, Path& path2)
@@ -50,23 +54,19 @@ Path Crosser::cross(Path & path1, Path& path2)
 
 	vector<int> ans(size,-1);
 
-	for (int i = 0; i < size-1; i++)
+	for (int i = 0; i < size; i++)
 	{
-		adjacencies.at(path1.at(i)).insert(path1.at(i+1));
-		adjacencies.at(path2.at(i)).insert(path2.at(i+1));
+
+		int before = (i - 1) + (i - 1 < 0) * (size);
+		int next = (i + 1) * (i + 1 < size);
+		adjacencies.at(path1.at(i)).insert(path1.at(next));
+		adjacencies.at(path2.at(i)).insert(path2.at(next));
+
+		adjacencies.at(path1.at(i)).insert(path1.at(before));
+		adjacencies.at(path2.at(i)).insert(path2.at(before));
+
 	}
 
-	for (int i = 1; i < size; i++)
-	{
-		adjacencies.at(path1.at(i)).insert(path1.at(i - 1));
-		adjacencies.at(path2.at(i)).insert(path2.at(i-1));
-	}
-	
-	adjacencies.at(path1.at(0)).insert(path1.at(size - 1));
-	adjacencies.at(path2.at(0)).insert(path2.at(size - 1));
-	
-	adjacencies.at(path1.at(size - 1)).insert(path1.at(0));
-	adjacencies.at(path2.at(size - 1)).insert(path2.at(0));
 
 	int node = getRandom(adjacencies.at(start));
 	ans.at(0) = node;
@@ -98,7 +98,21 @@ Path Crosser::cross(Path & path1, Path& path2)
 
 		node = ran;
 	}
-	return ans;
+	Path p(ans);
+
+	return p;
+}
+
+void Crosser::mutate(Path& p)
+{
+	for (int i = 0; i < p.getSize(); i++)
+	{
+		if (_mutation_rate >= rand() % 100)
+		{
+			int to = rand() % p.getSize();
+			p.swap(to, i);
+		}
+	}
 }
 
 int Crosser::getRandom(std::unordered_set<int> set)

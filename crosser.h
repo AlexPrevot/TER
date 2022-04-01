@@ -30,6 +30,7 @@ class Crosser
 
 		//cross the first part of the population and write children on others
 		void crossover(std::vector<Path> &population);
+		void mutate(Path& p);
 
 	private:
 		double _mutation_rate; //chance of mutate the child
