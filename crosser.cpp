@@ -4,7 +4,35 @@
 
 #include <iostream>
 #include <time.h>
-#include <unordered_map>
+#include <algorithm>
+
+struct comparator
+{
+	inline bool operator()(Path& p1, Path& p2)
+	{
+		return (p1.getFitness() < p2.getFitness());
+	}
+};
+
+
+void Crosser::crossover(std::vector<Path> &population)
+{
+	int size = population.size();
+	int start_indice = _selection_rate * size;
+
+	for (int i = start_indice; i < size; i++)
+	{
+		int ip1 = rand() % start_indice; // indice of parent 1
+		int ip2 = rand() % start_indice; // indice of parent 2
+
+		while(ip2 == ip1)
+			ip2 = rand() % start_indice;
+
+		population.at(i) = cross(population.at(ip1), population.at(ip2));
+	}
+
+	std::sort(population.begin(), population.end(), comparator());
+}
 
 Path Crosser::cross(Path & path1, Path& path2)
 {
@@ -66,8 +94,6 @@ Path Crosser::cross(Path & path1, Path& path2)
 		node = ran;
 	}
 
-
-	//Path ans({ 1,2,3 });
 	return ans;
 }
 

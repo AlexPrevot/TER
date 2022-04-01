@@ -37,6 +37,7 @@ void Path::print()
 	for (auto i : _path)
 		std::cout << i << " ";
 
+	std::cout << " fitness : " << getFitness();
 	std::cout << "\n";
 }
 
