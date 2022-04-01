@@ -21,6 +21,8 @@ class Path
 { 
 	
 	public:
+
+
 		Path(std::vector<int> path)
 		{
 			//(!) do a function that makes the program crash if path size isn't matched with coordinate size

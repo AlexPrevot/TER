@@ -13,6 +13,13 @@ It then writes theses children onto the 2nd part of the population to erase unse
 class Crosser
 {
 	public:
+
+		Crosser()
+		{
+			_mutation_rate = 0.25;
+			_selection_rate = 0.25;
+		}
+
 		Crosser(double selection_rate,double mutation_rate)
 		{
 			_mutation_rate = mutation_rate;
