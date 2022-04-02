@@ -45,7 +45,7 @@ void Path::print()
 float Path::getLength()
 {
 	float length = 0;
-	int size = 10;
+	int size = _path.size();
 	for (int i = 0; i < size; i++)
 	{
 		int next = i + 1;
@@ -56,8 +56,8 @@ float Path::getLength()
 		int city1 = _path.at(i) * 2;
 		int city2 = _path.at(next) * 2;
 
-		int val1 = std::pow(_coordinates.at(city1) - _coordinates.at(city2), 2);
-		int val2 = std::pow(_coordinates.at(city1 + 1) - _coordinates.at(city2 + 1), 2);
+		float val1 = std::pow(_coordinates.at(city1) - _coordinates.at(city2), 2);
+		float val2 = std::pow(_coordinates.at(city1 + 1) - _coordinates.at(city2 + 1), 2);
 
 
 		length += sqrt(val1 + val2);

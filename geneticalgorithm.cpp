@@ -29,6 +29,7 @@ Path GeneticAlgorithm::optimize()
 			p.print();*/
 
 		//std::cout << "step finished" << std::endl;
+		//std::cin.get();
 	}
 
 
