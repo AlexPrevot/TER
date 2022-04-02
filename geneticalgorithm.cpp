@@ -12,6 +12,11 @@ Path GeneticAlgorithm::optimize()
 	while (same_count < 100)
 	{
 		
+		if (count % 100 == 0 && _crosser.getMutationRate() > 0.1)
+			_crosser.setMutationRate(_crosser.getMutationRate() - 0.2);
+
+		
+		
 
 		_crosser.crossover(_population);
 

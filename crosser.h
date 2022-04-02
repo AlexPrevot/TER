@@ -27,18 +27,20 @@ class Crosser
 		}
 
 		Path cross(Path &path1, Path &path2);
+		
+
+		// cross the first part of the population and write children on others
+		void crossover(std::vector<Path> &population);
 
 		void setMutationRate(float rate);
 
-		//cross the first part of the population and write children on others
-		void crossover(std::vector<Path> &population);
-		void mutate(Path& p);
-
+		float getMutationRate();
 	private:
 		double _mutation_rate; //chance of mutate the child
 		double _selection_rate; //selected parent (the size in proportion of the first part
 
 		int getRandom(std::unordered_set<int> set);
+		void mutate(Path& p);
 		
 };
 

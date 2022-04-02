@@ -20,6 +20,8 @@ class GeneticAlgorithm
 	public:
 		GeneticAlgorithm(std::vector<int> coordinates, int pop_size, int max_iteration = -1)
 		{
+			srand(time(NULL));
+
 			Path::setCoordinates(coordinates);
 
 			Generator g(coordinates.size() / 2, pop_size);
