@@ -8,13 +8,13 @@ import Selector as slt
 class window:
     #----------------------function to place points
     def placePoint(self,coX,coY):
-        self.canvas.create_rectangle(coX + 0, coY + 0, coX + 5, coY + 5, fill='black')
+        self.canvas.create_rectangle(coX + 0, coY + 0, coX + 5, coY + 5, fill='white smoke')
 
 
     #----------------------function to bind points with their coordon
     #note : le truc ne marche pas pour l'instant
     def bindPoint(self,coX1,coY1,coX2,coY2):
-        self.canvas.create_line(coX1,coY1,coX2,coY2)
+        self.canvas.create_line(coX1,coY1,coX2,coY2, fill = 'white smoke')
      
   
     #----------------------function to bind points with their coordononate
@@ -32,7 +32,7 @@ class window:
         self.actualMap = Map(int(self.contenueVille,base=10),500,0) 
         tab = self.actualMap.refresh()
         self.canvas.delete("all")
-        self.canvas.create_rectangle(0, 0, 500, 500, fill='white')
+        self.canvas.create_rectangle(0, 0, 500, 500, fill='dark slate grey')
         
         for i in range(len(tab)):
             self.placePoint(tab[i][0],tab[i][1])
@@ -44,7 +44,7 @@ class window:
         self.actualMap = Map(int(self.contenueVille,base=10),500,0) 
         tab = self.actualMap.creatMapCircle()
         self.canvas.delete("all")
-        self.canvas.create_rectangle(0, 0, 500, 500, fill='white')
+        self.canvas.create_rectangle(0, 0, 500, 500, fill='dark slate grey')
         
         for i in range(len(tab)):
             self.placePoint(tab[i][0],tab[i][1])
@@ -64,7 +64,7 @@ class window:
         cities = self.actualMap.cities
         self.canvas.delete("all")
         #self.canvasText.delete("all")
-        self.canvas.create_rectangle(0, 0, 500, 500, fill='white')
+        self.canvas.create_rectangle(0, 0, 500, 500, fill='dark slate grey')
         for i in range(len(tab)):
             self.placePoint(cities[tab[i]][0],cities[tab[i]][1])
             
@@ -99,28 +99,29 @@ class window:
         #window creation
         self.root = Tk(className='Voyageur de Commerce - Bourmaud Paul, Prevot Alexandre')
         self.root.geometry("700x600")
+        self.root.configure(bg='grey9')
         
         #we set a canvas where we'll put useful things
         self.canvas = Canvas(self.root, width=500, height=500)
         self.canvas.pack()
-        self.canvas.create_rectangle(0, 0, 500, 500, fill='white')
+        self.canvas.create_rectangle(0, 0, 500, 500, fill='dark slate grey')
         
         
         #the button of the window
-        self.buttGenerationR = Button(self.root, text = "Generation Random", command = self.buttonGenerate, bg = 'red')
+        self.buttGenerationR = Button(self.root, text = "Generation Random", command = self.buttonGenerate, bg = 'dark red')
         self.buttGenerationR.pack()
-        self.buttGenerationC = Button(self.root, text = "Generation Circle", command = self.buttonGenerateCircle, bg = 'red')
+        self.buttGenerationC = Button(self.root, text = "Generation Circle", command = self.buttonGenerateCircle, bg = 'dark red')
         self.buttGenerationC.pack()
-        self.buttPath = Button(self.root, text = "Trouver un chemin", command = self.buttonPath, bg = 'red')
+        self.buttPath = Button(self.root, text = "find path", command = self.buttonPath, bg = 'dark red')
         self.buttPath.pack()
         #test zone saisie nbreVille
-        self.L1 = Label(self.root, text="Nombre de villes")
+        self.L1 = Label(self.root, text="City number", bg = "grey9", fg = "white smoke")
         self.L1.pack( side = RIGHT)
         self.nbreVille = Entry(self.root, bd=5)
         self.nbreVille.pack(side=RIGHT)
         
         #test zone saisie nbrePopu
-        self.L1 = Label(self.root, text="Nombre de population")
+        self.L1 = Label(self.root, text="Population size",bg = "grey9", fg = "white smoke")
         self.L1.pack( side = RIGHT)
         self.nbrePopu = Entry(self.root, bd=5)
         self.nbrePopu.pack(side=RIGHT)

@@ -33,7 +33,7 @@ class GeneticAlgorithm
 
 			std::cout << "start with : " << _population[0].getLength() <<std::endl;
 
-			Crosser crosser(0.25, 0.02);
+			Crosser crosser(0.1, 0.02);
 			_crosser = crosser;
 		}
 
