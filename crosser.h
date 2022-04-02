@@ -28,6 +28,8 @@ class Crosser
 
 		Path cross(Path &path1, Path &path2);
 
+		void setMutationRate(float rate);
+
 		//cross the first part of the population and write children on others
 		void crossover(std::vector<Path> &population);
 		void mutate(Path& p);

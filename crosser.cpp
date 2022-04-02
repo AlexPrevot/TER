@@ -136,3 +136,8 @@ int Crosser::getRandom(std::unordered_set<int> set)
 
 	return *it;
 }
+
+void Crosser::setMutationRate(float rate)
+{
+	_mutation_rate = rate;
+}

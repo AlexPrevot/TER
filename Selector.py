@@ -13,7 +13,7 @@ import datetime
 
 import myModule
 
-import pylab
+#import pylab
 
 from Map import Map
 

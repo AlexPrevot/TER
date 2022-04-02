@@ -16,6 +16,10 @@
 #include <future>
 
 #include "algogen.h"
+#include "path.h"
+#include "crosser.h"
+#include "generator.h"
+#include "geneticalgorithm.h"
 
 
 std::shared_ptr<std::vector<std::deque<int>>> makeMatrice(std::vector<int>& path1, std::vector<int>& path2)
@@ -238,8 +242,8 @@ float getFitness(std::vector<std::tuple<int, int>>& coord,
 
 
 
-//fonction qui sert potentiellement plus à rien
-//NOTE : Améliorer le sqrt pour augmenter les performances peut être utile ?
+//fonction qui sert potentiellement plus ï¿½ rien
+//NOTE : Amï¿½liorer le sqrt pour augmenter les performances peut ï¿½tre utile ?
 std::shared_ptr<std::vector<int>[]> fitness(std::vector<std::tuple<int,int>>						& coord,
 															 std::shared_ptr<std::vector<int>[]>	& paths,
 															 int									size)
@@ -496,6 +500,23 @@ std::vector<int> Calgogen(std::vector<std::tuple<int,int>> &coordCities, int nbr
 }
 
 
+std::vector<int> NewAlgogen(std::vector<int> coordCities, int nbrPaths)
+{	
+	GeneticAlgorithm ga(coordCities, 500);
+
+	Path p = ga.optimize();
+
+	std::vector<int> ans(p.getSize());
+
+	for(int i = 0; i < p.getSize(); i++)
+	{
+		ans.at(i) = p.at(i);
+	}
+
+	return ans;
+}
+
+
 
 //-----------------------------------------------------------
 // send nbrPaths before
@@ -516,7 +537,7 @@ static PyObject* genalgo(PyObject* self, PyObject* args)
 
 	int seqlen = PySequence_Fast_GET_SIZE(seq);
 		
-	std::vector<std::tuple<int,int>> Ccities;
+	std::vector<int> Ccities;
 
 
 
@@ -526,10 +547,11 @@ static PyObject* genalgo(PyObject* self, PyObject* args)
 		PyObject* tup = PyList_GetItem(cities, i);
 		int x = (int) PyLong_AsLong(PyList_GetItem(tup, 0));
 		int y = (int) PyLong_AsLong(PyList_GetItem(tup, 1));
-		Ccities.push_back(std::make_tuple(x,y));
+		Ccities.push_back(x);
+		Ccities.push_back(y);
 	}
 	
-	std::vector<int> bestPath = Calgogen(Ccities,CnbrPaths);
+	std::vector<int> bestPath = NewAlgogen(Ccities,CnbrPaths);
 	
 	//--
 

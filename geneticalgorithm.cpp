@@ -9,8 +9,10 @@ Path GeneticAlgorithm::optimize()
 	Path champion = _population[0];
 
 	int count = 0;
-	while (same_count < 50)
+	while (same_count < 100)
 	{
+		
+
 		_crosser.crossover(_population);
 
 		if (_population.at(0).getFitness() < best)
@@ -23,16 +25,9 @@ Path GeneticAlgorithm::optimize()
 			same_count++;
 		count++;
 
-		//std::cout << best << std::endl;
-		/*std::cout << "ALLOOOOOOOOOOOO" << std::endl;
-		for (auto& p : _population)
-			p.print();*/
-
-		//std::cout << "step finished" << std::endl;
-		//std::cin.get();
 	}
 
+	std::cout << "count : " << count << std::endl;
 
-	std::cout <<"count new one" << count << std::endl;
 	return champion;
 }
