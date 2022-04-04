@@ -116,7 +116,7 @@ void Crosser::mutate(Path& p)
 {
 	for (int i = 0; i < p.getSize(); i++)
 	{
-		if (0.01 >= rand() % 100)
+		if (0.02 >= rand() % 100)
 		{
 			int to = rand() % p.getSize();
 			p.swap(to, i);

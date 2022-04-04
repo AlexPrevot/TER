@@ -9,7 +9,7 @@ Path GeneticAlgorithm::optimize()
 	Path champion = _population[0];
 
 	int count = 0;
-	while (same_count < 100)
+	while (same_count < 50)
 	{
 
 
