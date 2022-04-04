@@ -19,6 +19,8 @@ void Crosser::crossover(std::vector<Path> &population)
 {
 	int size = population.size();
 	int start_indice = _selection_rate * size ;
+	
+	
 	for (int i = start_indice; i < size; i++)
 	{
 		int ip1 = rand() % start_indice; // indice of parent 1
@@ -33,8 +35,8 @@ void Crosser::crossover(std::vector<Path> &population)
 		mutate(population.at(i));
 	}
 
-	std::sort(population.begin(), population.end(), comparator());
 
+	std::sort(population.begin(), population.end(), comparator());
 }
 
 Path Crosser::cross(Path & path1, Path& path2)
@@ -114,6 +116,7 @@ Path Crosser::cross(Path & path1, Path& path2)
 
 void Crosser::mutate(Path& p)
 {
+	//faisable en temps constant
 	for (int i = 0; i < p.getSize(); i++)
 	{
 		if (0.02 >= rand() % 100)
