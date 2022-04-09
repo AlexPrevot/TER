@@ -20,7 +20,7 @@ float Path::getFitness()
 
 int Path::at(int i)
 {
-	return _path.at(i);
+	return _path[i];
 }
 
 

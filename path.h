@@ -38,6 +38,7 @@ class Path
 		float	getFitness();
 		float   getLength();
 		int		at(int i);
+		//coords& getPath(); //dangerous, SHOULD NOT MODIFY THE ARRAY WITH THIS FUNCTION READING ONLY
 		
 		//---- setters
 		static void setCoordinates(coords coordinates)
