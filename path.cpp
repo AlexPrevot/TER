@@ -106,7 +106,7 @@ void Path::_computeFitness()
 		if (next >= size)
 			next = 0;
 
-		length += _getCost(_path.at(i), _path.at(next));
+		length += _getCost(_path[i], _path[next]);
 	}
 
 	

@@ -8,10 +8,19 @@ Path GeneticAlgorithm::optimize()
 	int best = _population[0].getFitness();
 	Path champion = _population[0];
 
-	int count = 0;
+	int count = 1;
 	while (same_count < 200)
 	{
+		/*
+		if (count % 500 == 0)
+			_crosser.setMutationRate(_crosser.getMutationRate() + 0.05);
 
+		*/
+		if (count % 400 == 0)
+		{
+			if(_crosser.getSelectionRate() > 0.1)
+				_crosser.setSelectionRate(_crosser.getSelectionRate() - 0.05);
+		}
 
 		_crosser.crossover(_population);
 

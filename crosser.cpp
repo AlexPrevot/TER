@@ -19,25 +19,26 @@ void Crosser::crossover(std::vector<Path> &population)
 {
 	int size = population.size();
 	int start_indice = _selection_rate * size ;
-	
-	
-	for (int i = start_indice; i < size; i++)
+
+
+	for(int i = start_indice; i < size; i++)
 	{
-		int ip1 = rand() % start_indice; // indice of parent 1
-		int ip2 = rand() % start_indice; // indice of parent 2
+		int pot = rand() % 4;
+
+		int ip1 = rand() % (start_indice); // indice of parent 2
+		int ip2 = rand() % (start_indice); // indice of parent 1
 
 		while(ip2 == ip1)
 			ip2 = rand() % start_indice;
 
 		
-		population.at(i) = cross(population.at(ip1), population.at(ip2));
+		population[i] = cross(population[ip1], population[ip2]);
 
-		mutate(population.at(i));
+		mutate(population[i]);
 	}
 
 
 	std::sort(population.begin(), population.end(), comparator());
-
 
 }
 
@@ -255,7 +256,7 @@ void Crosser::mutate(Path& p)
 	//faisable en temps constant
 	for (int i = 0; i < p.getSize(); i++)
 	{
-		if (0.02 >= rand() % 100)
+		if (_mutation_rate * 10 >= rand() % 1000)
 		{
 			int to = rand() % p.getSize();
 			p.swap(to, i);
@@ -276,12 +277,23 @@ int Crosser::getRandom(std::unordered_set<int> set)
 	return *it;
 }
 
-float Crosser::getMutationRate()
+double Crosser::getMutationRate()
 {
 	return _mutation_rate;
 }
 
-void Crosser::setMutationRate(float rate)
+void Crosser::setMutationRate(double rate)
 {
 	_mutation_rate = rate;
+}
+
+
+double Crosser::getSelectionRate()
+{
+	return _selection_rate;
+}
+
+void Crosser::setSelectionRate(double rate)
+{
+	_selection_rate = rate;
 }

@@ -32,9 +32,11 @@ class Crosser
 		// cross the first part of the population and write children on others
 		void crossover(std::vector<Path> &population);
 
-		void setMutationRate(float rate);
+		void setMutationRate(double rate);
+		double getMutationRate();
 
-		float getMutationRate();
+		void setSelectionRate(double rate);
+		double getSelectionRate();
 	private:
 		double _mutation_rate; //chance of mutate the child
 		double _selection_rate; //selected parent (the size in proportion of the first part
