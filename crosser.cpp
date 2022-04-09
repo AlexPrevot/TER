@@ -23,8 +23,6 @@ void Crosser::crossover(std::vector<Path> &population)
 
 	for(int i = start_indice; i < size; i++)
 	{
-		int pot = rand() % 4;
-
 		int ip1 = rand() % (start_indice); // indice of parent 2
 		int ip2 = rand() % (start_indice); // indice of parent 1
 
@@ -37,6 +35,13 @@ void Crosser::crossover(std::vector<Path> &population)
 		mutate(population[i]);
 	}
 
+	/*
+	for (auto& p : population)
+	{
+		p.print();
+	}
+	std::cout << "-------------- \n";
+	*/
 
 	std::sort(population.begin(), population.end(), comparator());
 
@@ -253,15 +258,39 @@ Path Crosser::cross(Path & path1, Path& path2)
 
 void Crosser::mutate(Path& p)
 {
+	/*
+	
+	if (_mutation_rate * 10 >= rand() % 100)
+	{
+		int first = rand() % p.getSize();
+
+		for (int i = first; i < p.getSize()-1 && i < first + 5; i++)
+		{
+			int range = i + 5 < p.getSize() ? 5 : p.getSize() - i - 1;
+			//std::cout << range << std::endl;
+			//std::cout << i << std::endl;
+			int n1 = rand() % range;
+			int n2 = rand() % range;
+
+			p.swap(first + n1, first + n2);
+		}
+	}
+	*/
+	
 	//faisable en temps constant
 	for (int i = 0; i < p.getSize(); i++)
 	{
 		if (_mutation_rate * 10 >= rand() % 1000)
 		{
 			int to = rand() % p.getSize();
+			float score = p.getFitness();
 			p.swap(to, i);
+			if (p.getFitness() > score)
+				p.swap(i, to);
 		}
 	}
+	
+	
 }
 
 int Crosser::getRandom(std::unordered_set<int> set)
