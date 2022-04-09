@@ -49,7 +49,7 @@ Path Crosser::cross(Path& path1, Path& path2)
 	int size = path1.getSize();
 	int start = rand() % size;
 
-	vector<vector<int>> adjacencies(size);
+	vector<vector<int>> adjacencies(size, vector<int>(4,-1));
 	
 	unordered_set<int> rest;
 	for (int i = size - 1; i > - 1; i--)
@@ -57,7 +57,7 @@ Path Crosser::cross(Path& path1, Path& path2)
 
 	vector<int> ans(size, -1);
 
-	
+	vector<int> elem_nbr(size,0);
 
 	for (int i = 0; i < size; i++)
 	{
@@ -71,19 +71,45 @@ Path Crosser::cross(Path& path1, Path& path2)
 		auto& curr_vec2 = adjacencies[path2.at(i)];
 
 		
-		if(!count(curr_vec1.begin(), curr_vec1.end(), path1.at(next)))
-			curr_vec1.push_back(path1.at(next));
-
-		if (!count(curr_vec2.begin(), curr_vec2.end(), path2.at(next)))
-			curr_vec2.push_back(path2.at(next));
+		if (!count(curr_vec1.begin(), curr_vec1.end(), path1.at(next)))
+		{
+			curr_vec1[elem_nbr[path1.at(i)]] = path1.at(next);
+			elem_nbr[path1.at(i)]++;
+		}
 
 		if (!count(curr_vec1.begin(), curr_vec1.end(), path1.at(before)))
-			curr_vec1.push_back(path1.at(before));
+		{
+			curr_vec1[elem_nbr[path1.at(i)]] = path1.at(before);
+			elem_nbr[path1.at(i)]++;
+		}
+			//curr_vec1.push_back(path1.at(before));
+		
+
+		if (!count(curr_vec2.begin(), curr_vec2.end(), path2.at(next)))
+		{
+			curr_vec2[elem_nbr[path2.at(i)]] = path2.at(next);
+			elem_nbr[path2.at(i)]++;
+		}
+			//curr_vec2.push_back(path2.at(next));
 		
 		if (!count(curr_vec2.begin(), curr_vec2.end(), path2.at(before)))
-			curr_vec2.push_back(path2.at(before));
-
+		{
+			curr_vec2[elem_nbr[path2.at(i)]] = path2.at(before);
+			elem_nbr[path2.at(i)]++;
+		}
+			//curr_vec2.push_back(path2.at(before));
 	}
+
+
+	for (auto& v : adjacencies)
+	{
+		while (v.back() == -1)
+			v.pop_back();
+	}
+
+	//need to shuffle to break the order of the matrix. Otherwise bad results.
+	for(auto& v : adjacencies)
+		std::random_shuffle(v.begin(), v.end());
 
 
 	int node = adjacencies[start][rand() % adjacencies[start].size()]; 
@@ -222,6 +248,7 @@ Path Crosser::cross(Path & path1, Path& path2)
 	return ans;
 }
 */
+
 
 void Crosser::mutate(Path& p)
 {
