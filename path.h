@@ -30,7 +30,7 @@ class Path
 			_computeFitness();
 		}
 
-		void swap(int x1, int x2);
+		void swap(int x1, int x2); //swaps nodes at index x1 and x2
 		void print();
 
 		//---- getters
@@ -53,6 +53,10 @@ class Path
 
 		coords _path;
 		float _fitness = -1;
+
+		float _getCost(int p1, int p2); //returns the cost of the arc p1 - p2 (p1 and p2 are nodes, not index)
+		float _getLoss(int index); //returns the loss on the fitness if we delete the node at index x;
+		
 
 };
 

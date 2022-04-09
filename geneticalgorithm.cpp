@@ -27,7 +27,7 @@ Path GeneticAlgorithm::optimize()
 
 	}
 
-	std::cout << "count : " << count << std::endl;
+	std::cout << "number of generation : " << count << std::endl;
 
 	return champion;
 }
