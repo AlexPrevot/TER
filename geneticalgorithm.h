@@ -24,6 +24,9 @@ class GeneticAlgorithm
 
 			Path::setCoordinates(coordinates);
 
+
+			std::cout << "CA COMMENCE" << std::endl;;
+
 			Generator g(coordinates.size() / 2, pop_size);
 			_population = g.generate();
 

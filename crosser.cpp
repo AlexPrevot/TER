@@ -37,6 +37,8 @@ void Crosser::crossover(std::vector<Path> &population)
 
 
 	std::sort(population.begin(), population.end(), comparator());
+
+
 }
 
 
@@ -50,10 +52,12 @@ Path Crosser::cross(Path& path1, Path& path2)
 	vector<vector<int>> adjacencies(size);
 	
 	unordered_set<int> rest;
-	for (int i = 0; i < size; i++)
+	for (int i = size - 1; i > - 1; i--)
 		rest.insert(i);
 
 	vector<int> ans(size, -1);
+
+	
 
 	for (int i = 0; i < size; i++)
 	{
@@ -80,7 +84,6 @@ Path Crosser::cross(Path& path1, Path& path2)
 			curr_vec2.push_back(path2.at(before));
 
 	}
-
 
 
 	int node = adjacencies[start][rand() % adjacencies[start].size()]; 

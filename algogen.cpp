@@ -502,7 +502,7 @@ std::vector<int> Calgogen(std::vector<std::tuple<int,int>> &coordCities, int nbr
 
 std::vector<int> NewAlgogen(std::vector<int> coordCities, int nbrPaths)
 {	
-	GeneticAlgorithm ga(coordCities, 500);
+	GeneticAlgorithm ga(coordCities, nbrPaths);
 
 	Path p = ga.optimize();
 
