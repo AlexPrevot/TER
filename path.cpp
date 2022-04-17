@@ -27,17 +27,7 @@ int Path::at(int i)
 
 
 void Path::swap(int x1, int x2)
-{	
-	/*
-	int mem = _path.at(x1);
-	_path.at(x1) = _path.at(x2);
-	_path.at(x2) = mem;
-	
-
-	//no need to computeFitness from the start, can be done in costant time
-	_computeFitness();
-	*/
-	
+{		
 	float loss = _getLoss(x1) + _getLoss(x2);
 	
 	std::swap(_path[x1], _path[x2]);

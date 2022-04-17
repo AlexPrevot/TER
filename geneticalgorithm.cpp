@@ -9,7 +9,7 @@ Path GeneticAlgorithm::optimize()
 	Path champion = _population[0];
 
 	int count = 1;
-	while (same_count < 200)
+	while (same_count < 500)
 	{
 
 		
@@ -26,10 +26,6 @@ Path GeneticAlgorithm::optimize()
 		else
 			same_count++;
 		count++;
-
-		//std::cout << "lolol";
-		//std::cout << champion.getFitness() << "\n";
-
 	}
 
 	std::cout << "number of generation : " << count << std::endl;

@@ -88,22 +88,18 @@ Path Crosser::cross(Path& path1, Path& path2)
 			curr_vec1[elem_nbr[path1.at(i)]] = path1.at(before);
 			elem_nbr[path1.at(i)]++;
 		}
-			//curr_vec1.push_back(path1.at(before));
-		
 
 		if (!count(curr_vec2.begin(), curr_vec2.end(), path2.at(next)))
 		{
 			curr_vec2[elem_nbr[path2.at(i)]] = path2.at(next);
 			elem_nbr[path2.at(i)]++;
 		}
-			//curr_vec2.push_back(path2.at(next));
 		
 		if (!count(curr_vec2.begin(), curr_vec2.end(), path2.at(before)))
 		{
 			curr_vec2[elem_nbr[path2.at(i)]] = path2.at(before);
 			elem_nbr[path2.at(i)]++;
 		}
-			//curr_vec2.push_back(path2.at(before));
 	}
 
 
@@ -174,110 +170,8 @@ Path Crosser::cross(Path& path1, Path& path2)
 }
 
 
-
-/*
-Path Crosser::cross(Path & path1, Path& path2)
-{
-	using namespace std;
-
-	int size = path1.getSize();
-	int start = rand() % size;
-
-	vector<unordered_set<int>> adjacencies(size);
-
-	unordered_set<int> rest;
-
-	for (int i = 0; i < size; i++)
-		rest.insert(i);
-
-	vector<int> ans(size,-1);
-
-	for (int i = 0; i < size; i++)
-	{
-
-		int before = (i - 1) + (i - 1 < 0) * (size);
-		int next = i + 1;
-		if (next >= size)
-			next = 0;
-		adjacencies[path1.at(i)].insert(path1.at(next));
-		adjacencies[path2.at(i)].insert(path2.at(next));
-		//adjacencies.at(path2.at(i)).insert(path2.at(next));
-
-		adjacencies[path1.at(i)].insert(path1.at(before));
-		adjacencies[path2.at(i)].insert(path2.at(before));
-		//adjacencies.at(path1.at(i)).insert(path1.at(before));
-		//adjacencies.at(path2.at(i)).insert(path2.at(before));
-
-	}
-
-
-	int node = getRandom(adjacencies[start]);
-	ans.at(0) = node;
-	int i = 1;
-
-	while(i < size)
-	{	
-		rest.erase(node);
-
-		auto &adj = adjacencies[node];
-
-		//no more than 4 deletions
-		for (int v : adj)
-			adjacencies[v].erase(node);
-		
-		int new_node = node;
-		int max_neighboor = 4;
-
-		//no more than 4 comparisons
-		for (int v : adj)
-		{
-			auto &adjacent = adjacencies[v];
-			if (adjacent.size() < max_neighboor)
-			{
-				max_neighboor = adjacent.size();
-				new_node = v;
-			}
-		}
-		
-		if (adj.size() == 0)
-		{
-			new_node = getRandom(rest);
-		}
-
-		ans[i] = new_node;
-		i++;
-
-		node = new_node;
-	}
-	//Path p(ans);
-
-	return ans;
-}
-*/
-
-
 void Crosser::mutate(Path& p)
 {
-	/*
-	
-	if (_mutation_rate * 10 >= rand() % 100)
-	{
-		int first = rand() % p.getSize();
-
-		for (int i = first; i < p.getSize()-1 && i < first + 5; i++)
-		{
-			int range = i + 5 < p.getSize() ? 5 : p.getSize() - i - 1;
-			//std::cout << range << std::endl;
-			//std::cout << i << std::endl;
-			int n1 = rand() % range;
-			int n2 = rand() % range;
-
-			p.swap(first + n1, first + n2);
-		}
-	}
-	*/
-	
-	//faisable en temps constant
 	for (int i = 0; i < p.getSize(); i++)
 	{
 		if (_mutation_rate * 10 >= rand() % 1000)
@@ -289,8 +183,6 @@ void Crosser::mutate(Path& p)
 				p.swap(i, to);
 		}
 	}
-	
-	
 }
 
 int Crosser::getRandom(std::unordered_set<int> set)
