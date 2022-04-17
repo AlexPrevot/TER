@@ -1,7 +1,7 @@
 #include "crosser.h"
 #include <vector>
 #include <unordered_set>
-
+#include <omp.h>
 #include <iostream>
 #include <time.h>
 #include <algorithm>
@@ -17,10 +17,11 @@ struct comparator
 
 void Crosser::crossover(std::vector<Path> &population)
 {
+
 	int size = population.size();
 	int start_indice = _selection_rate * size ;
 
-
+	#pragma omp parallel for
 	for(int i = start_indice; i < size; i++)
 	{
 		int ip1 = rand() % (start_indice); // indice of parent 2
@@ -35,13 +36,6 @@ void Crosser::crossover(std::vector<Path> &population)
 		mutate(population[i]);
 	}
 
-	/*
-	for (auto& p : population)
-	{
-		p.print();
-	}
-	std::cout << "-------------- \n";
-	*/
 
 	std::sort(population.begin(), population.end(), comparator());
 
