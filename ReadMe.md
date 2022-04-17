@@ -17,10 +17,20 @@ It is then possible to approximate the optimal result on the TSP problem with ge
 
 #### The program
 ---
-The program offers a front_end developped with python. All calculations are performed on a C++ precompiled binary called by the python program when you ask too.
+The program offers a front_end developped with python. All calculations are performed on a C++ precompiled binary called by the python program when you ask it to.
 
 Computing is also performed on a multi-threaded environment using openMP to speed up the computation.
 
 ---
-## Installation
-To run the program you must have python3 installed
+## Run the program
+To run the program you must have python 3.10 installed.
+
+You then need to call ```python AlgoGen.py``` to see this window :
+![Program GUI](images/window.png)
+
+1. ```Generation Random``` Generates a random set of point with the number of cities you asked in ```city number```
+2. ```Generate Circle``` Generates it in circles.
+3. ```find path``` Finds a good path for the current set of points
+
+At the end, you should have a result similar to this :
+![Program Result Example](images/Results.png)
