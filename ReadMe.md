@@ -34,3 +34,18 @@ You then need to call ```python AlgoGen.py``` to see this window :
 
 At the end, you should have a result similar to this :
 ![Program Result Example](images/Results.png)
+
+
+### Research
+
+In order to provide good results, many methods have been tested among the most known algorithms in Genetic Algorithms applied on TSP problems.
+
+Our results are here :
+![Research results](images/comparisons.png)
+
+The best combination of methods we've found is :
+ 1. Elitisme with a strong selection pressure.
+ 2. Edge Recombination operator
+ 3. Simple swap mutation with a static mutation rate
+
+ Good results were obtained with weighted FUSS with a strong favority for fittest individuals too.

@@ -94,6 +94,7 @@ Path Crosser::cross(Path& path1, Path& path2)
 			curr_vec2[elem_nbr[path2.at(i)]] = path2.at(before);
 			elem_nbr[path2.at(i)]++;
 		}
+
 	}
 
 
@@ -166,17 +167,17 @@ Path Crosser::cross(Path& path1, Path& path2)
 
 void Crosser::mutate(Path& p)
 {
-	for (int i = 0; i < p.getSize(); i++)
-	{
-		if (_mutation_rate * 10 >= rand() % 1000)
-		{
-			int to = rand() % p.getSize();
-			float score = p.getFitness();
-			p.swap(to, i);
-			if (p.getFitness() > score)
-				p.swap(i, to);
-		}
+	int x = rand() % p.getSize();
+	int y = rand() % p.getSize();
+
+	if (x > y) std::swap(x, y);
+
+	while (x < y) {
+		p.swap(x, y);
+		x++;
+		y--;
 	}
+
 }
 
 int Crosser::getRandom(std::unordered_set<int> set)
